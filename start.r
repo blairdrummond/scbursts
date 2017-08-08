@@ -71,14 +71,14 @@ table <- read.evt(infile)
 
 
 
-correct_risetime <- function(Tr, ) {
+# correct_risetime <- function(Tr, ) {
+# 
+#     
+#     
+# 
+# }
 
-    
-    
-
-}
-
-split(d, ceiling(seq_along(d)/20))
+# split(d, ceiling(seq_along(d)/20))
 
 
 
