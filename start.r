@@ -189,43 +189,6 @@ write.dwt(table, "new-file-test.dwt")
 
 
 
-open_times   <- subset(table, state == 1, select=time)
-closed_times <- subset(table, state == 0, select=time)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### inverse error function
-###
-### invErf <- function(x) {
-###     ### argument x must lie between -1 and 1
-###     qnorm((1 + x) /2) / sqrt(2)
-### }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -266,8 +229,74 @@ plot_hist <- function (times,title) {
 
 
 
+
+
+
+
+open_times   <- subset(table, state == 1, select=time)
+closed_times <- subset(table, state == 0, select=time)
+
+
+
+
 plot_hist(open_times, "Open Times")
 plot_hist(closed_times, "Closed Times")
+
+
+
+
+
+
+
+
+
+
+
+
+
+chunk_bursts <- function(table, t_crit) {
+
+    break_func <- function(row) {
+        row$times > t_crit & row$state == 0
+    }
+    
+    pauses <- break_func(table)
+    
+    find_next <- function(n) {
+
+        if (!isTRUE(pauses[n])) {
+            return (NULL)
+        }
+            
+        if (n == length(pauses) | isTRUE(pauses[n+1])) {
+            return(NULL)
+        }
+       
+        for (i in (n+1):length(pauses)) {
+            if (pauses[i]) {
+                return (n+1:i-1)
+            }
+        }
+        return (c(n,length(pauses)))
+    }
+    
+
+    chunk_selectors <- Filter(Negate(is.null), sapply(1:length(pauses), find_next))
+
+    chunk <- function(sel) {
+        table[sel,]
+    }
+
+    sapply(chunk_selectors,chunk)
+    
+    # return(chunk(chunk_selectors))
+    
+
+}
+
+
+chunks <- chunk_bursts(table, 0.1)
+
 
 
 ### Now, fitting exponential models to the data ...
