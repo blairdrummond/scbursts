@@ -9,11 +9,13 @@
 ###    Correct Dwell times !!! NOTE : this might go inbetween current steps !!!
 ### 
 ### 
+ 
 
+# library("devtools")
 
-library("devtools")
+# infile="data/real data.evt"
+infile="files/60uM.evt"
 
-infile="data/real data.evt"
 outfile="out.txt"
 
 ###     args <- commandArgs(trailingOnly=TRUE)
@@ -49,12 +51,12 @@ read.evt <- function (infile) {
     FileInput = readLines(infile) 
     skip_line <- grep("^Events$",FileInput)
 
-    table <- read.csv(infile, skip=skip_line+1, sep="\t")
+    table <- read.csv(infile, skip=skip_line, sep="\t")
     
     states <- table[,5]
     times  <- table[,2]
 
-    data  <- data.frame(times, states)
+    data  <- data.frame(states, times)
     
     return(data)
 }
@@ -72,16 +74,13 @@ relative_time <- function(table) {
     states <- table$states
     times  <- table$times
 
-    ### To calculate the difference between
-    ### times need to add a 0 to the beginning
-    ###
-    ###    0.05027597	
-    ###    0.05032199
-    ###    0.05035479
-
-    times  <- diff(append(0,times))
     
-    data  <- data.frame(times, states)
+    times  <- diff(times)
+    
+    # remove the first pulse, and ignore the trailing end-state
+    states <- states[1:length(states)-1]
+    
+    data  <- data.frame(states, times)
     return(data)
 }
 
@@ -107,15 +106,18 @@ correct_risetime <- function(Tr, table) {
     ###     0.484633      (SIM no filter match)
     ###     4.92258194    (PC best match)
     ###     35.0052278    (Old match)
+
+    # Tr <- 14.77155587 
+
     
-    
-    Trm = Tr / 1000000           ### ASK ABOUT THIS CONSTANT!!! IT'S DIFFERENT IN THE TWO FILES
+    Trm = Tr / 1000           ### ASK ABOUT THIS CONSTANT!!! IT'S DIFFERENT IN THE TWO FILES
     a1  = 0.5382 * Trm
     a2  = 0.837  * Trm**(-2)
     a3  = 1.120  * Trm**(-3)
 
     rescale <- function(T) {
         ### undo the effect of a guassian filter to one time interval
+        T <- 1000 * T
 	return( T + a1 * exp(- T / a1 - a2 * T**2 - a3 * T**3) )
     }
 
@@ -125,9 +127,9 @@ correct_risetime <- function(Tr, table) {
     ### This is somewhat problematic, as the length of the whole file increases.
     ### In thi future, it's worth exploring more elegant solutions to this
 
-    new_times <- lapply(times, rescale)
+    times <- rescale(times)
     
-    data  <- data.frame(new_times, states)
+    data  <- data.frame(states, times)
     return(data)
 
 }
@@ -137,17 +139,29 @@ correct_risetime <- function(Tr, table) {
 
 
 
+correct_sigfig <- function(table) {
 
-write.dwt <- function(table, file) {
-
-    write(table, file) 
+    states <- table$states
+    times  <- table$times
     
+    times <- signif(times, 4)
+
+    data  <- data.frame(states, times)
+    return(data)
+
 }
 
 
 
 
+write.dwt <- function(table, file) {
 
+    header <- sprintf("Segment: %d   Dwells: %d\r", 1, length(table$states))
+
+    write(header, file) 
+    write.table(table, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n") 
+    
+}
 
 
 
@@ -160,10 +174,14 @@ write.dwt <- function(table, file) {
 
 
 table <- read.evt(infile)
-
 table <- relative_time(table)
+table <- correct_risetime(Tr=14.77155587,table)
+table <- correct_sigfig(table)
 
-table <- correct_risetime(Tr=14.748725 ,table)
+write.dwt(table, "new-file-test.dwt")
+
+
+
 
 
 
