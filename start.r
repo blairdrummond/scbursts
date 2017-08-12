@@ -16,7 +16,10 @@
 # infile="data/real data.evt"
 infile="files/60uM.evt"
 
-outfile="out.txt"
+
+file_prefix = "my-data"
+
+
 
 ###     args <- commandArgs(trailingOnly=TRUE)
 ###     
@@ -159,7 +162,15 @@ write.dwt <- function(table, file) {
     header <- sprintf("Segment: %d   Dwells: %d\r", 1, length(table$states))
 
     write(header, file) 
-    write.table(table, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n") 
+
+    states <- table$states
+    times  <- table$times
+
+    times <- sprintf("%.6f", times)
+    
+    data  <- data.frame(states, times)
+    
+    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
     
 }
 
@@ -264,38 +275,59 @@ chunk_bursts <- function(table, t_crit) {
     
     find_next <- function(n) {
 
+        ## Not on a pulse
         if (!isTRUE(pauses[n])) {
             return (NULL)
         }
             
-        if (n == length(pauses) | isTRUE(pauses[n+1])) {
+        if (n == length(pauses)) {
             return(NULL)
         }
        
-        for (i in (n+1):length(pauses)) {
+        for (i in (n+1):(length(pauses))) {
             if (pauses[i]) {
-                return (n+1:i-1)
+                return (n:i)
             }
         }
-        return (c(n,length(pauses)))
+        return(NULL)
     }
     
 
     chunk_selectors <- Filter(Negate(is.null), sapply(1:length(pauses), find_next))
 
     chunk <- function(sel) {
-        table[sel,]
+        data.frame(table[sel,,])
     }
 
-    sapply(chunk_selectors,chunk)
+    chunks <- sapply(chunk_selectors, chunk)
     
-    # return(chunk(chunk_selectors))
-    
+    return(chunks)
 
 }
 
 
 chunks <- chunk_bursts(table, 0.1)
+
+
+write_chunks_to_file <- function (chunks) {
+
+    len <- floor(log10(length(chunks)))
+    str <- sprintf("bursts/%%s/%%s-%%0%dd.dwt", len)
+
+    print(str)
+    
+    time <- format(Sys.time(), "%F-%H-%M")
+    dir.create("bursts")
+    dir.create(file.path("bursts", time))
+    for (i in 1:round(length(chunks)/2)) {
+        file_name <- sprintf(str, time, file_prefix, i)
+        write.dwt(chunks[,i], file_name)
+    }
+    
+}
+
+write_chunks_to_file(chunks)
+
 
 
 
