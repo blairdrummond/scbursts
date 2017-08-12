@@ -51,7 +51,26 @@ read.evt <- function (infile) {
 
     table <- read.csv(infile, skip=skip_line+1, sep="\t")
     
-    state <- table[,5]
+    states <- table[,5]
+    times  <- table[,2]
+
+    data  <- data.frame(times, states)
+    
+    return(data)
+}
+
+
+
+
+
+
+
+
+
+relative_time <- function(table) {
+
+    states <- table$states
+    times  <- table$times
 
     ### To calculate the difference between
     ### times need to add a 0 to the beginning
@@ -60,26 +79,91 @@ read.evt <- function (infile) {
     ###    0.05032199
     ###    0.05035479
 
-    time  <- diff(append(0,table[,2]))
-    data  <- data.frame(state, time)
-
+    times  <- diff(append(0,times))
+    
+    data  <- data.frame(times, states)
     return(data)
 }
 
+
+
+
+
+
+
+
+
+
+correct_risetime <- function(Tr, table) {
+
+
+    ### Tr = rise time (in µs!!)
+    ### 
+    ### Examples:
+    ### 
+    ###     14.72596465   (CDC match)
+    ###     14.77155587   (Narges match)
+    ###     14.748725     (HighRes Paper match)
+    ###     0.484633      (SIM no filter match)
+    ###     4.92258194    (PC best match)
+    ###     35.0052278    (Old match)
+    
+    
+    Trm = Tr / 1000000           ### ASK ABOUT THIS CONSTANT!!! IT'S DIFFERENT IN THE TWO FILES
+    a1  = 0.5382 * Trm
+    a2  = 0.837  * Trm**(-2)
+    a3  = 1.120  * Trm**(-3)
+
+    rescale <- function(T) {
+        ### undo the effect of a guassian filter to one time interval
+	return( T + a1 * exp(- T / a1 - a2 * T**2 - a3 * T**3) )
+    }
+
+    states <- table$states
+    times  <- table$times
+
+    ### This is somewhat problematic, as the length of the whole file increases.
+    ### In thi future, it's worth exploring more elegant solutions to this
+
+    new_times <- lapply(times, rescale)
+    
+    data  <- data.frame(new_times, states)
+    return(data)
+
+}
+
+
+
+
+
+
+
+write.dwt <- function(table, file) {
+
+    write(table, file) 
+    
+}
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
 table <- read.evt(infile)
 
+table <- relative_time(table)
 
-
-
-# correct_risetime <- function(Tr, ) {
-# 
-#     
-#     
-# 
-# }
-
-# split(d, ceiling(seq_along(d)/20))
-
+table <- correct_risetime(Tr=14.748725 ,table)
 
 
 
