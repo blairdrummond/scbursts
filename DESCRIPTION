@@ -1,0 +1,13 @@
+Package: uottawaionchannel
+Version: 0.1
+Date: 2017-08-12
+Title: UOttawa Ion Channel Analysis
+Description: Bunch of stuff!
+Author: Blair Drummond <bdrum047@uottawa.ca>
+Maintainer: Blair Drummond <bdrum047@uottawa.ca>
+License: MIT + file LICENSE
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
