@@ -1,25 +1,88 @@
 # Ask about significant figures
-
 - grep for sigfig and digits
 
 
-# to verify the files in bursts
 
-- note that the front and back of the sequence are removied. Count the missing entries.
+# to verify the files in bursts
+- note that the front and back of the sequence are removed. Count the missing entries.
 
 - DESTRUCTIVE:
 - sed -i '1d' the directory, cat it to a file, and send through uniq.
 - cat * | grep -v Dwell | uniq > ../big
 
-### https://www.researchgate.net/post/What_are_good_methods_for_fitting_a_sum_of_exponentials_to_data_without_an_initial_guess
-
-Add license?
 
 
+# Number of states
+- https://www.researchgate.net/post/What_are_good_methods_for_fitting_a_sum_of_exponentials_to_data_without_an_initial_guess
 
+
+
+
+# Build
 R CMD BUILD batch.R
 
-R CMD Rd2pdf man/
 
 
-Vignettes
+# Object
+
+http://adv-r.had.co.nz/OO-essentials.html
+
+Instead of using a dataframe, create an object that also stores all the metadata, including:
+
+	- Original filename   (then just convert evt -> dwt)
+	- Durations
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+ TODO: Sort bursts by P(Open)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+##############################################################################
+ 
+              Post a stack-overflow question to figure this out 
+                           - List of dataframes?                       
+  
+##############################################################################
+ 
+                                 License?
+ 
+##############################################################################
+ 
+                            Significant Figures?
+ 
+##############################################################################
+ 
+                              Documentation?
+ 
+##############################################################################
+ 
+                      How to deal with borders of bursts?
+ 
+##############################################################################
+ 
+ 
+ 
+ 
+ 
+     [~/d/b/N/e/files]$ diff -w 60uMc.dwt ../../../../tmp/new-file-test.dwt
+     1c1
+     < Segment: 1   Dwells: 13109
+     ---
+     > Segment: 1   Dwells: 13110
+     13110a13111
+     > 1     0.037720
+     
+ 
+ 
+ 
+     ** That last line 0.037720 is the last line of my file **
+ 
+ 
+ 
+ 
+##############################################################################

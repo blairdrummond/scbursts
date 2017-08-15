@@ -2,16 +2,18 @@
 #' Should ask about this. At the moment this has a hard-coded
 #' accuracy, because I don't understand significant figures.
 #'
+#' Writes DOS line endings. 
+#'
 #' @param table Table with $dwells and $states
-#' @param file Filename to write to
+#' @param filename Filename to write to
 #' @examples
 #' write.dwt(table, "file-test.dwt")
 #' @export
-write.dwt <- function(table, file) {
+write.dwt <- function(table, filename, segment=1) {
 
-    header <- sprintf("Segment: %d   Dwells: %d\r", 1, length(table$states))
+    header <- sprintf("Segment: %d   Dwells: %d\r", segment, length(table$states))
 
-    write(header, file) 
+    write(header, filename) 
 
     states <- table$states
     dwells <- table$dwells
@@ -20,6 +22,6 @@ write.dwt <- function(table, file) {
     
     data  <- data.frame(states, dwells)
     
-    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
+    write.table(data, filename, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
     
 }

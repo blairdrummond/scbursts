@@ -3,29 +3,75 @@ title: "Ion Channel Analysis"
 author: "Blair Drummond"
 date: "`r Sys.Date()`"
 output: pdf_document
+bibliography: bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Ion Channel Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+header-includes:
+    - \usepackage{tikz}
+    - \usetikzlibrary{shapes,arrows}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+\nocite{*}
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+This is a package designed to glean information on stochastic properties of a single ion channel. I'll write up a technical description of the package, but I think we should also fill this in with a short summary of the work we're using it for.
 
-## Vignette Info
+## Structure
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+This package is meant to form a simple pipeline. Most components are designed with the expectation that they can be swapped out if different methods become available.
 
-## Styles
+\vspace*{0.5cm}
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+\begin{minipage}{0.45\textwidth}  
+\begin{tikzpicture}[node distance = 3cm, auto]
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle]            (a) {Raw {\tt .evt} file};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=a] (b) {Table of transition times};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=b] (c) {Table of pulses \\(like a {\tt .dwt} file)};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=c] (d) {Table of "true" pulses};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=d] (e) {List of bursts};
+    \path [draw,very thick,->] (a) -- node [right] {Read} (b);
+    \path [draw,very thick,->] (b) -- node [right] {Difference data} (c);
+    \path [draw,very thick,->] (c) -- node [right] {Undo effect of guassian filter} (d);
+    \path [draw,very thick,->] (d) -- node [right] {Detect pauses and split} (e);
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.55\textwidth}
+The {\tt .evt} file is what comes off the machine. It contains a lot of information, and for us the only relavent data are the times at which the amperage transitions from one discrete state to another ($0$ or $1$, for open or closed. There are no subconductive states.) An evt file looks like this (modified to fit on page): \\
+\begin{verbatim}
+5
+File
+Exchange	D:\Data\[filename]
+Sweeps
+1	2.000000   0.000000   [some stuff]
+2	2.000000   0.000000   [some stuff]
+
+...
+
+Segments
+1	1	0.000000	2.000000	
+2	1	0.000000	2.000000	
+
+...
+
+Events
+1	0.00026904  ...  1  0.000000E+000
+1	0.00038115  ...  0  0.000000E+000
+1	0.00052394  ...  1  0.000000E+000
+1	0.00073063  ...  0  0.000000E+000
+
+...
+
+\end{verbatim}
+
+From this, we extract the {\tt Events} section, taking the second column -the transition times- and the states (0 or 1).
+
+\end{minipage}
+   
+
+## More information?
+
 
 ## Figures
 

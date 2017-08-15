@@ -3,12 +3,20 @@
 #'
 #' @param table Table with $states and $dwells
 #' @param t_crit Critical time (us) at which to divide bursts
-#' @return list of columns of dataframes (one per row)
+#' @return A FUNCTION!!! chunk that returns the chunk by its index
 #' @examples
-#' chunks <- chunk_bursts(table, 14.77155587)
+#' chunk <- chunk_bursts(table, 14.77155587)
+#' head(chunk(1))
+#' >     states      dwells
+#' > 427      0 15.16625000
+#' > 428      1  0.31105000
+#' > 429      0  0.01289401
+#' > 430      1  0.04823000
+#' > 431      0  0.04160000
+#' > 432      1  0.14415000
+#' 
 #' @export
 chunk_bursts <- function(table, t_crit) {
-
 
     ### Find all breakpoints
     break_func <- function(row) {
@@ -42,12 +50,24 @@ chunk_bursts <- function(table, t_crit) {
 
 
     ### Select the chunks using the indices
-    chunk <- function(sel) {
-        data.frame(table[sel,,])
+    chunk <- function(index) {
+
+
+        if (index > length(chunk_selectors) || index <= 0) {
+            warning("There aren't that many chunks. Returning NULL")
+            return(NULL)
+        }
+        
+        
+        df <- table[unlist(chunk_selectors[index]),]
+        attr(df, "segment") <- index
+        return(df)
     }
-    chunks <- t(sapply(chunk_selectors, chunk)) # Need to transpose (?)
     
-    return(chunks)
+    attr(chunk, "length")   <- length(chunk_selectors)
+    attr(chunk, "filename") <- attr(table, "filename")
+    
+    return(chunk)
 
 }
 
@@ -65,21 +85,33 @@ chunk_bursts <- function(table, t_crit) {
 #' @examples
 #' write_chunks_to_file(chunks)
 #' @export
-write_chunks_to_file <- function (chunks) {
+write_chunks_to_file <- function (chunks, directory="bursts") {
 
-    len <- floor(log10(length(chunks)))
-    str <- sprintf("bursts/%%s/%%s-%%0%dd.dwt", len)
-
-    print(str)
+    if (is.null(attr(chunks, "filename"))) {
+        file_prefix <- "burst"
+    } else {
+        file_prefix <- attr(chunks, "filename")
+    }
     
+    len <- ceiling(log10(attr(chunks, "length")))
+    str <- sprintf("%s/%%s/%s-%%0%dd.dwt", directory, file_prefix, len)
+
     time <- format(Sys.time(), "%F-%H-%M")
     dir.create("bursts")
     dir.create(file.path("bursts", time))
-    for (i in 1:round(length(chunks)/2)) {
-        file_name <- sprintf(str, time, file_prefix, i)
-        write.dwt(chunks[i,], file_name)
+    for (i in 1:attr(chunks, "length")) {
+        file_name <- sprintf(str, time, i)
+        write.dwt(chunks(i), file_name, segment=attr(chunks(i),"segment"))
     }
 
     return (time)
     
 }
+
+
+
+
+
+
+
+

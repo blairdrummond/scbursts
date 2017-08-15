@@ -6,17 +6,15 @@
 Should ask about this. At the moment this has a hard-coded
 accuracy, because I don't understand significant figures.}
 \usage{
-write.dwt(table, file)
+write.dwt(table, filename, segment = 1)
 }
 \arguments{
 \item{table}{Table with $dwells and $states}
 
-\item{file}{Filename to write to}
+\item{filename}{Filename to write to}
 }
 \description{
-Reformat the digits of data before writing to disk.
-Should ask about this. At the moment this has a hard-coded
-accuracy, because I don't understand significant figures.
+Writes DOS line endings.
 }
 \examples{
 write.dwt(table, "file-test.dwt")

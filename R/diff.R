@@ -1,6 +1,6 @@
 #' Calculate pulse lengths
 #'
-#' !!! TIMES becomes DWELLS !!!
+#' Converts transition times to dwell lengths
 #'
 #' @param table with columns "states" and "times"
 #' @return A table with one less row, where each row
@@ -10,6 +10,9 @@
 #'
 #' represents pulse in state 0 of duration 0.51231, instead
 #' of the time at which the state transitioned.
+#'
+#' Also, the output table preserves the attribute 
+#' 
 #' @examples
 #' table <- relative_time(table) # updated
 #' @export
@@ -25,5 +28,8 @@ relative_time <- function(table) {
     states <- states[1:length(states)-1]
     
     data  <- data.frame(states, dwells)
+
+    attr(data, "filename") <- attr(table, "filename")
+
     return(data)
 }

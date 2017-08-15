@@ -39,15 +39,13 @@ correct_risetime <- function(Tr, table) {
 	return( T + a1 * exp(- T / a1 - a2 * T**2 - a3 * T**3) )
     }
 
-    states <- table$states
-    dwells  <- table$dwells
 
     ### This is somewhat problematic, as the length of the whole file increases.
-    ### In thi future, it's worth exploring more elegant solutions to this
+    ### In the future, it's worth exploring more elegant solutions to this
 
-    dwells <- rescale(dwells)
+    dwells <- table$dwells
+    table$dwells <- rescale(dwells)
     
-    data  <- data.frame(states, dwells)
-    return(data)
+    return(table)
 
 }

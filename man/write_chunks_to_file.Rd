@@ -5,7 +5,7 @@
 \title{Write all the bursts to files. They will be placed in
 a timestamped subfolder of bursts/}
 \usage{
-write_chunks_to_file(chunks)
+write_chunks_to_file(chunks, directory = "bursts")
 }
 \arguments{
 \item{chunks}{list of dataframes corresponding to bursts}

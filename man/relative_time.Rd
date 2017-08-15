@@ -17,9 +17,11 @@ states    dwells
 
 represents pulse in state 0 of duration 0.51231, instead
 of the time at which the state transitioned.
+
+Also, the output table preserves the attribute
 }
 \description{
-!!! TIMES becomes DWELLS !!!
+Converts transition times to dwell lengths
 }
 \examples{
 table <- relative_time(table) # updated

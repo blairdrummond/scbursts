@@ -13,12 +13,21 @@ chunk_bursts(table, t_crit)
 \item{t_crit}{Critical time (us) at which to divide bursts}
 }
 \value{
-list of columns of dataframes (one per row)
+A FUNCTION!!! chunk that returns the chunk by its index
 }
 \description{
 Split record at long pauses, dividing the record
 into multiple -shorter- bursts.
 }
 \examples{
-chunks <- chunk_bursts(table, 14.77155587)
+chunk <- chunk_bursts(table, 14.77155587)
+head(chunk(1))
+>     states      dwells
+> 427      0 15.16625000
+> 428      1  0.31105000
+> 429      0  0.01289401
+> 430      1  0.04823000
+> 431      0  0.04160000
+> 432      1  0.14415000
+
 }
