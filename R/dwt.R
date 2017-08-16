@@ -11,7 +11,7 @@
 #' @export
 write.dwt <- function(table, filename, segment=1) {
 
-    header <- sprintf("Segment: %d   Dwells: %d\r", segment, length(table$states))
+    header <- sprintf("Segment: %d   Dwells: %d", segment, length(table$states))
 
     write(header, filename) 
 
@@ -19,9 +19,12 @@ write.dwt <- function(table, filename, segment=1) {
     dwells <- table$dwells
 
     dwells <- sprintf("%.6f", dwells)
+
+    # This forces a tab to be placed at the beginning
+    junk <- rep("",length(dwells))
     
-    data  <- data.frame(states, dwells)
+    data  <- data.frame(junk,states, dwells)
     
-    write.table(data, filename, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
+    write.table(data, filename, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
     
 }

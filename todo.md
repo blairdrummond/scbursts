@@ -1,8 +1,3 @@
-# Ask about significant figures
-- grep for sigfig and digits
-
-
-
 # to verify the files in bursts
 - note that the front and back of the sequence are removed. Count the missing entries.
 
@@ -40,23 +35,7 @@ Instead of using a dataframe, create an object that also stores all the metadata
   
 ##############################################################################
  
-                                 License?
- 
-##############################################################################
- 
-                            Significant Figures?
- 
-##############################################################################
- 
-                              Documentation?
- 
-##############################################################################
- 
                       How to deal with borders of bursts?
- 
-##############################################################################
- 
-                           FIGURE OUT FIRST BURST!!!
  
 ##############################################################################
   
@@ -71,10 +50,6 @@ Instead of using a dataframe, create an object that also stores all the metadata
 	    Filter bursts by P(Open):
 		    - Create a folder with all appropriate bursts
 		    - ALSO: Write a dwt with big zeros seperating the bursts.
- 
-##############################################################################
-   
-		        Add the Tabs to the dwt files
  
 ##############################################################################
  
