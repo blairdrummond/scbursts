@@ -2,7 +2,9 @@
 
 export(chunk_bursts)
 export(correct_risetime)
+export(popen)
 export(read.evt)
 export(relative_time)
+export(uic.plot_hist)
 export(write.dwt)
 export(write_chunks_to_file)

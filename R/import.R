@@ -32,7 +32,7 @@ read.evt <- function (filename) {
     skip_line <- grep("^Events$",FileInput)
   
     # Read everything past 'Events'
-    table <- read.csv(filename, skip=skip_line, sep="\t")
+    table <- read.csv(filename, skip=skip_line, sep="\t",header=FALSE)
     
     # extract the needed columns
     states <- table[,5]
