@@ -23,6 +23,7 @@ chunk_bursts <- function(table, t_crit) {
         row$dwells > t_crit & row$state == 0
     }
     pauses <- break_func(table)
+    pauses <- c(c(TRUE),pauses,c(TRUE)) ### Causes first and last chunk to be included
 
 
     ### Turn breakpoints into selected regions (indices only)
@@ -39,7 +40,9 @@ chunk_bursts <- function(table, t_crit) {
        
         for (i in (n+1):(length(pauses))) {
             if (pauses[i]) {
-                return (n:i)
+                # n is the n+1^nth index of the table, and i the i+1^st
+                # So (n+1:i-1) in the table -> (n:i-2)
+                return (n:(i-2))   
             }
         }
         return(NULL)
