@@ -6,15 +6,15 @@
 See section 4.1.1 of Colquhoun and Sigworth,
 "Fitting and Analysis of Single-Channel records"}
 \usage{
-correct_risetime(Tr, table)
+correct_risetime(Tr, segment)
 }
 \arguments{
 \item{Tr}{Rise time of the filter in (us)}
 
-\item{table}{table with $states and $dwells to correct.}
+\item{segment}{segment with $states and $dwells to correct.}
 }
 \value{
-Table with corrected risetimes.
+Segment with corrected risetimes.
 }
 \description{
 NOTE: This is potentially problematic, in that this unfiltering
@@ -23,5 +23,5 @@ account the infulence of the surroundings, as they impact the
 effects of the filter.
 }
 \examples{
-table <- correct_risetime(14.77155587, table)
+segment <- correct_risetime(14.77155587, segment)
 }

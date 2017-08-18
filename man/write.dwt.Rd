@@ -6,10 +6,10 @@
 Should ask about this. At the moment this has a hard-coded
 accuracy, because I don't understand significant figures.}
 \usage{
-write.dwt(table, filename, segment = 1)
+write.dwt(segment, filename, seg = 1)
 }
 \arguments{
-\item{table}{Table with $dwells and $states}
+\item{segment}{Segment with $dwells and $states}
 
 \item{filename}{Filename to write to}
 }
@@ -17,5 +17,5 @@ write.dwt(table, filename, segment = 1)
 Writes DOS line endings.
 }
 \examples{
-write.dwt(table, "file-test.dwt")
+write.dwt(segment, "file-test.dwt")
 }

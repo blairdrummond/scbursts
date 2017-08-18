@@ -1,12 +1,15 @@
 #' Split record at long pauses, dividing the record
 #' into multiple -shorter- bursts.
 #'
-#' @param table Table with $states and $dwells
+#' @param segment Segment with $states and $dwells
 #' @param t_crit Critical time (us) at which to divide bursts
-#' @return A FUNCTION!!! chunk that returns the chunk by its index
+#' @return A list of segments, one per burst.
 #' @examples
-#' chunk <- chunk_bursts(table, 14.77155587)
-#' head(chunk(1))
+#'
+#' # Note that lists are accessed with [[i]], not [i].
+#' 
+#' chunks <- chunk_bursts(segment, 14.77155587)
+#' head(chunks[[1]])
 #' >     states      dwells
 #' > 427      0 15.16625000
 #' > 428      1  0.31105000
@@ -16,13 +19,13 @@
 #' > 432      1  0.14415000
 #' 
 #' @export
-chunk_bursts <- function(table, t_crit) {
+chunk_bursts <- function(segment, t_crit) {
 
     ### Find all breakpoints
     break_func <- function(row) {
         row$dwells > t_crit & row$state == 0
     }
-    pauses <- break_func(table)
+    pauses <- break_func(segment)
     pauses <- c(c(TRUE),pauses,c(TRUE)) ### Causes first and last chunk to be included
 
 
@@ -40,8 +43,8 @@ chunk_bursts <- function(table, t_crit) {
        
         for (i in (n+1):(length(pauses))) {
             if (pauses[i]) {
-                # n is the n+1^nth index of the table, and i the i+1^st
-                # So (n+1:i-1) in the table -> (n:i-2)
+                # n is the n+1^nth index of the segment, and i the i+1^st
+                # So (n+1:i-1) in the segment -> (n:i-2)
                 return (n:(i-2))   
             }
         }
@@ -53,24 +56,33 @@ chunk_bursts <- function(table, t_crit) {
 
 
     ### Select the chunks using the indices
-    chunk <- function(index) {
+    chunks <- list()
 
-
-        if (index > length(chunk_selectors) || index <= 0) {
-            warning("There aren't that many chunks. Returning NULL")
-            return(NULL)
+    starting_time <- function(i) {
+        if (i == 1) {
+            return(0)
+        } else {
+            t <- segment.start_time(chunks[[i-1]]) + sum(chunks[[i-1]]$dwells)
+            return(t)
         }
+    }
+
+    for (i in seq_along(chunk_selectors)) {
+
+        df <- segment[unlist(chunk_selectors[i]),]
+
+        s <- segment.create(
+            df$states,
+            df$dwells,
+            seg=i,
+            start_time=starting_time(i),
+            name=segment.name(segment)
+        )
         
-        
-        df <- table[unlist(chunk_selectors[index]),]
-        attr(df, "segment") <- index
-        return(df)
+        chunks[[i]] <- s
     }
     
-    attr(chunk, "length")   <- length(chunk_selectors)
-    attr(chunk, "filename") <- attr(table, "filename")
-    
-    return(chunk)
+    return(chunks)
 
 }
 
@@ -88,33 +100,26 @@ chunk_bursts <- function(table, t_crit) {
 #' @examples
 #' write_chunks_to_file(chunks)
 #' @export
-write_chunks_to_file <- function (chunks, directory="bursts") {
+write_chunks_to_file <- function (chunks, directory="bursts", filename="burst") {
 
-    if (is.null(attr(chunks, "filename"))) {
-        file_prefix <- "burst"
-    } else {
-        file_prefix <- attr(chunks, "filename")
+    if (!is.null(segment.name(chunks[[1]]))) {
+        filename <- segment.name(chunks[[1]])
     }
-    
-    len <- ceiling(log10(attr(chunks, "length")))
-    str <- sprintf("%s/%%s/%s-%%0%dd.dwt", directory, file_prefix, len)
 
+    len <- ceiling(log10(length(chunks)))
+    str <- sprintf("%s-%%0%dd.dwt", filename, len)
     time <- format(Sys.time(), "%F-%H-%M")
+    subfolder <- file.path("bursts", paste(filename,time,sep='-'))
+    
     dir.create("bursts")
-    dir.create(file.path("bursts", time))
-    for (i in 1:attr(chunks, "length")) {
-        file_name <- sprintf(str, time, i)
-        write.dwt(chunks(i), file_name, segment=attr(chunks(i),"segment"))
+    dir.create(subfolder)
+
+    for (i in 1:length(chunks)) {
+        filename <- file.path(subfolder, sprintf(str, i))
+        write.dwt(segment=chunks[[i]], filename=filename, seg=i)
     }
 
     return (time)
     
 }
-
-
-
-
-
-
-
 

@@ -8,12 +8,12 @@
 #' effects of the filter.
 #'
 #' @param Tr Rise time of the filter in (us)
-#' @param table table with $states and $dwells to correct.
-#' @return Table with corrected risetimes.
+#' @param segment segment with $states and $dwells to correct.
+#' @return Segment with corrected risetimes.
 #' @examples
-#' table <- correct_risetime(14.77155587, table)
+#' segment <- correct_risetime(14.77155587, segment)
 #' @export
-correct_risetime <- function(Tr, table) {
+correct_risetime <- function(Tr, segment) {
 
 
     ### Tr = rise time (in us!!)
@@ -43,9 +43,9 @@ correct_risetime <- function(Tr, table) {
     ### This is somewhat problematic, as the length of the whole file increases.
     ### In the future, it's worth exploring more elegant solutions to this
 
-    dwells <- table$dwells
-    table$dwells <- rescale(dwells)
+    dwells <- segment$dwells
+    segment$dwells <- rescale(dwells)
     
-    return(table)
+    return(segment)
 
 }

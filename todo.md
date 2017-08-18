@@ -34,10 +34,6 @@ Instead of using a dataframe, create an object that also stores all the metadata
                            - List of dataframes?                       
   
 ##############################################################################
- 
-                      How to deal with borders of bursts?
- 
-##############################################################################
   
 	        	    add option to remove first and last burst
  
@@ -50,27 +46,6 @@ Instead of using a dataframe, create an object that also stores all the metadata
 	    Filter bursts by P(Open):
 		    - Create a folder with all appropriate bursts
 		    - ALSO: Write a dwt with big zeros seperating the bursts.
- 
-##############################################################################
- 
- 
- 
- 
-     [~/d/b/N/e/files]$ diff -w 60uMc.dwt ../../../../tmp/new-file-test.dwt
-     1c1
-     < Segment: 1   Dwells: 13109
-     ---
-     > Segment: 1   Dwells: 13110
-     13110a13111
-     > 1     0.037720
-     
- 
- 
- 
-     ** That last line 0.037720 is the last line of my file **
- 
- 
- 
  
 ##############################################################################
 

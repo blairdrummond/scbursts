@@ -40,7 +40,7 @@ read.evt <- function (filename) {
 
     data  <- data.frame(states, times)
 
-    attr(data, "filename") <- get_basename(filename)
+    attr(data, "name") <- get_basename(filename)
     
     return(data)
 }
@@ -51,4 +51,48 @@ read.evt <- function (filename) {
 get_basename <- function(filename) {
     ### Remove the .evt from filename
     substr(basename(filename), 1, nchar(basename(filename)) - 4) 
+}
+
+
+
+
+#' Calculate pulse lengths
+#'
+#' Converts transition times to dwell lengths
+#'
+#' @param table with columns "states" and "times"
+#' @return A "segment" with one less row, where each row
+#'
+#' states    dwells
+#' 0         0.016010
+#'
+#' represents pulse in state 0 of duration 0.51231, instead
+#' of the time at which the state transitioned.
+#'
+#' Also, the output table preserves the attributes
+#'
+#' See "segment" for more info
+#' 
+#' @examples
+#' segment <- relative_time(table)
+#' @export
+relative_time <- function(table) {
+
+    states <- table$states
+    times  <- table$times
+    
+    # Calculate the durations, the last one gets thrown away
+    dwells <- diff(times)
+    
+    # remove the first pulse, and ignore the trailing end-state
+    states <- states[1:length(states)-1]
+    
+    # NOTE: the use of "name" here, is kinda an abuse.
+    if (!is.null(segment.name(table))) {
+        segment <- segment.create(states, dwells, name=segment.name(table))
+    } else {
+        segment <- segment.create(states, dwells)
+    }
+
+    return(segment)
 }

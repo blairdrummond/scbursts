@@ -5,23 +5,26 @@
 \title{Split record at long pauses, dividing the record
 into multiple -shorter- bursts.}
 \usage{
-chunk_bursts(table, t_crit)
+chunk_bursts(segment, t_crit)
 }
 \arguments{
-\item{table}{Table with $states and $dwells}
+\item{segment}{Segment with $states and $dwells}
 
 \item{t_crit}{Critical time (us) at which to divide bursts}
 }
 \value{
-A FUNCTION!!! chunk that returns the chunk by its index
+A list of segments, one per burst.
 }
 \description{
 Split record at long pauses, dividing the record
 into multiple -shorter- bursts.
 }
 \examples{
-chunk <- chunk_bursts(table, 14.77155587)
-head(chunk(1))
+
+# Note that lists are accessed with [[i]], not [i].
+
+chunks <- chunk_bursts(segment, 14.77155587)
+head(chunks[[1]])
 >     states      dwells
 > 427      0 15.16625000
 > 428      1  0.31105000
