@@ -11,9 +11,9 @@
 #' @param segment segment with $states and $dwells to correct.
 #' @return Segment with corrected risetimes.
 #' @examples
-#' segment <- correct_risetime(14.77155587, segment)
+#' segment <- risetime.correct_guassian(14.77155587, segment)
 #' @export
-correct_risetime <- function(Tr, segment) {
+risetime.correct_guassian <- function(Tr, segment) {
 
 
     ### Tr = rise time (in us!!)

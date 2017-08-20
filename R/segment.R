@@ -66,6 +66,17 @@ segment.start_time <- function(segment) {attr(segment, "start_time")}
 segment.name <- function(segment) {attr(segment, "name")}
 
 
+#' Get duration of a segment
+#'
+#' @param segment the segment object
+#' @return the duration
+#' @examples
+#' segment.duration(data)
+#' > 2.11
+#' @export
+segment.duration <- function(segment) {
+    sum(segement$dwells)
+}
 
 
 
@@ -74,22 +85,39 @@ segment.name <- function(segment) {attr(segment, "name")}
 
 #' Calculate empirical P(Open) of a segment
 #'
-#' NOTE: Removing first and last state, as they are pauses.
+#' NOTE: Assuming that burst starts and ends with 1
 #'
 #' @param segment The dwells and states table
 #' @return The ratio of open time to total time
 #' @examples
-#' popen(segment)
+#' segment.popen(segment)
 #' > 0.22
 #' @export
-popen <- function (segment) {
+segment.popen <- function (segment) {
 
-    open_times   <- subset(segment, states == 1, select=dwells)
+    open_times <- subset(segment, states == 1, select=dwells)
 
-    dwells <- segment$dwells
-
-    ### NOTE: Removing first and last state, as they are pauses.
-    total_duration <- sum(dwells[2:(length(dwells)-1)])
-
+    total_duration <- sum(segment$dwells)
+    
     return (sum(open_times) / total_duration)
+}
+
+
+
+
+#' Calculate empirical P(Closed) of a segment
+#'
+#' NOTE: Assuming that burst starts and ends with 1
+#'
+#' @param segment The dwells and states table
+#' @return The ratio of closed time to total time
+#' @examples
+#' segment.pclosed(segment)
+#' > 0.78
+#' @export
+segment.pclosed <- function (segment) {
+
+    popen <- segment.popen(segment)
+    
+    return ( 1 - popen )
 }

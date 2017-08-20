@@ -3,14 +3,14 @@
 #' @param filename The filename
 #' @return A table with columns "states" and "times"
 #' @examples
-#' table <- read.evt("data/60uM.evt")
+#' table <- evt.read("data/60uM.evt")
 #'
 #' # import some of the data included with the package
 #' infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
-#' table <- read.evt(infile)
+#' table <- evt.read(infile)
 #'
 #' @export
-read.evt <- function (filename) {
+evt.read <- function (filename) {
     
     ### Assumes file has the format
 
@@ -40,18 +40,11 @@ read.evt <- function (filename) {
 
     data  <- data.frame(states, times)
 
-    attr(data, "name") <- get_basename(filename)
+    attr(data, "name") <- util.basename(filename)
     
     return(data)
 }
 
-
-
-
-get_basename <- function(filename) {
-    ### Remove the .evt from filename
-    substr(basename(filename), 1, nchar(basename(filename)) - 4) 
-}
 
 
 
@@ -74,9 +67,9 @@ get_basename <- function(filename) {
 #' See "segment" for more info
 #' 
 #' @examples
-#' segment <- relative_time(table)
+#' segment <- evt.to_dwells(table)
 #' @export
-relative_time <- function(table) {
+evt.to_dwells <- function(table) {
 
     states <- table$states
     times  <- table$times

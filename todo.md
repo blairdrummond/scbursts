@@ -27,16 +27,6 @@ Instead of using a dataframe, create an object that also stores all the metadata
 
 # TODO: Sort bursts by P(Open)
 
-
-##############################################################################
- 
-              Post a stack-overflow question to figure this out 
-                           - List of dataframes?                       
-  
-##############################################################################
-  
-	        	    add option to remove first and last burst
- 
 ##############################################################################
    
 		  Mixture of exponentials + Laplace transform

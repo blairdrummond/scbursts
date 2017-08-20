@@ -7,13 +7,13 @@
 #' @param segment Segment with $dwells and $states
 #' @param filename Filename to write to
 #' @examples
-#' write.dwt(segment, "file-test.dwt")
+#' dwt.write(segment, "file-test.dwt")
 #' @export
-write.dwt <- function(segment, filename, seg=1) {
+dwt.write <- function(segment, file="", seg=1) {
 
     header <- sprintf("Segment: %d   Dwells: %d", seg, length(segment$states))
 
-    write(header, filename) 
+    write(header, file) 
 
     states <- segment$states
     dwells <- segment$dwells
@@ -25,7 +25,7 @@ write.dwt <- function(segment, filename, seg=1) {
     
     data  <- data.frame(junk,states, dwells)
     
-    write.table(data, filename, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
+    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
     
 }
 
@@ -37,9 +37,9 @@ write.dwt <- function(segment, filename, seg=1) {
 #'
 #' @param filename Filename to read from
 #' @examples
-#' seg <- read.dwt(segment, "file-test.dwt")
+#' seg <- dwt.read(segment, "file-test.dwt")
 #' @export
-read.dwt <- function (filename) {
+dwt.read <- function (filename) {
 
     # load lines
     FileInput <- readLines(filename) 
@@ -51,10 +51,11 @@ read.dwt <- function (filename) {
 
     table <- read.csv(filename, skip=1, sep="\t",header=FALSE)
 
-    dwells <- table[,2]
-    states <- table[,1]
+    # NOTE: Column 1 is empty, and thats how we get the spacing right.
+    dwells <- table[,3]
+    states <- table[,2]
 
-    return(segment(states, dwells, seg=seg, start_time=0, name=get_basename(filename)))
+    return(segment.create(states, dwells, seg=seg, start_time=0, name=util.basename(filename)))
     
 }
 
@@ -62,9 +63,89 @@ read.dwt <- function (filename) {
 
 
 
-get_basename <- function(filename) {
-    ### Remove the .dwt from filename
-    substr(basename(filename), 1, nchar(basename(filename)) - 4) 
+
+
+#' Read chunks from a folder.
+#'
+#' @param folder list of dataframes corresponding to bursts
+#' @return A pair (chunks,breaks), where the chunks are segements
+#' starting and ending in 1 states, and breaks is a vector of 0s which sit
+#' inbetween the bursts. There will be n chunks and n-1 breaks.
+#' @examples
+#' pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
+#' chunks <- pair$chunks
+#' breaks <- pair$breaks
+#' @export
+dwt.read_bursts <- function (folder) {
+
+    filenames <- sort(list.files(folder, pattern="*.dwt", full.names = TRUE))
+    chunks <- lapply(filenames, dwt.read)
+
+
+    breaks <- file.path(folder,"breaks.csv")
+    if (file.exists(breaks)) {
+        breaks <- read.table(breaks)$V1  # read as vector
+    } else {
+        warning("No Breaks File Found! Starting times will not be accurate!")
+        breaks <- rep(0, length(chunks)) # otherwise set them to zero
+    }
+    
+    chunks <- bursts.start_times_update(chunks, breaks)
+
+    return(list(chunks=chunks,breaks=breaks))
+
 }
 
+
+
+
+
+#' Write all the bursts to dwt. They will be placed in
+#' a timestamped subfolder of bursts/
+#'
+#' All bursts will be written out as .dwt files, labeled
+#' in temporal order.
+#'
+#' @param chunks list of dataframes corresponding to bursts
+#' @return Name of folder containing contents.
+#' @examples
+#' dwt.write_chunks(chunks)
+#' @export
+dwt.write_bursts <- function (chunks, breaks=c(), directory="bursts", filename="burst", timestamp=TRUE) {
+
+
+
+    ### Write the bursts
+    if (!is.null(segment.name(chunks[[1]]))) {
+        filename <- segment.name(chunks[[1]])
+    }
+
+    len <- ceiling(log10(length(chunks)))
+    str <- sprintf("%s-%%0%dd.dwt", filename, len)
+
+    if (timestamp) {
+        time <- format(Sys.time(), "%F-%H-%M")
+        subfolder <- file.path("bursts", paste(filename,time,sep='-'))
+    } else {
+        subfolder <- file.path("bursts", filename)
+    }
+
+    
+    dir.create("bursts")
+    dir.create(subfolder)
+
+    for (i in 1:length(chunks)) {
+        filename <- file.path(subfolder, sprintf(str, i))
+        dwt.write(segment=chunks[[i]], file=filename, seg=i)
+    }
+
+
+    ### Add a .csv containing all of the breaks.
+    if (length(breaks) != 0) {
+        write.table(breaks, file=file.path(subfolder,"breaks.csv"), col.names = FALSE, row.names = FALSE)
+    }
+
+    return (subfolder)
+    
+}
 
