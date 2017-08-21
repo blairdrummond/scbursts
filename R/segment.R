@@ -75,7 +75,7 @@ segment.name <- function(segment) {attr(segment, "name")}
 #' > 2.11
 #' @export
 segment.duration <- function(segment) {
-    sum(segement$dwells)
+    sum(segment$dwells)
 }
 
 

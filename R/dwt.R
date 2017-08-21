@@ -68,7 +68,7 @@ dwt.read <- function (filename) {
 #' Read chunks from a folder.
 #'
 #' @param folder list of dataframes corresponding to bursts
-#' @return A pair (chunks,breaks), where the chunks are segements
+#' @return A pair (chunks,breaks), where the chunks are segments
 #' starting and ending in 1 states, and breaks is a vector of 0s which sit
 #' inbetween the bursts. There will be n chunks and n-1 breaks.
 #' @examples
@@ -112,7 +112,6 @@ dwt.read_bursts <- function (folder) {
 #' dwt.write_chunks(chunks)
 #' @export
 dwt.write_bursts <- function (chunks, breaks=c(), directory="bursts", filename="burst", timestamp=TRUE) {
-
 
 
     ### Write the bursts

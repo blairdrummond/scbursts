@@ -94,6 +94,7 @@ cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform
     main=title
     xlab="P(Closed)"
     ylab="Frequency"
+    
 
     tabulate <- hist(pcloseds, plot = FALSE)
 

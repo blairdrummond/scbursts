@@ -3,7 +3,7 @@
 #'
 #' @param segment Segment with $states and $dwells
 #' @param t_crit Critical time (us) at which to divide bursts
-#' @return A pair (chunks,breaks), where the chunks are segements
+#' @return A pair (chunks,breaks), where the chunks are segments
 #' starting and ending in 1 states, and breaks is a vector of 0s which sit
 #' inbetween the bursts. There will be n chunks and n-1 breaks.
 #' @examples
@@ -158,6 +158,52 @@ bursts.start_times_update <- function (chunks, breaks) {
 
 
 
+
+#' Extract vector of breaks from the chunks
+#'
+#' This is done using the start_time attribute, which
+#' is mostly hidden in the data.
+#'
+#' @param chunks The list of segments
+#' @return A vector of break times
+#' @examples
+#' 
+#' breaks <- bursts.get_breaks(chunks)
+#' 
+#' @export
+bursts.get_breaks <- function (chunks) {
+
+
+    start_times <- sapply(chunks, segment.start_time)
+    durations   <- sapply(chunks, segment.duration)
+    
+    breaks <- diff(start_times) - durations[1:length(durations)-1]
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #' Remove the first and last burst from the list
 #'
 #' @param chunks The list of all bursts
@@ -169,4 +215,129 @@ bursts.start_times_update <- function (chunks, breaks) {
 #' @export
 bursts.remove_first_and_last <- function (chunks) {
     chunks[2:length(chunks)-1]
+}
+
+
+
+
+
+
+
+
+#' From a list of bursts, extract those that interest you by
+#' passing a selecting function. See the examples.
+#'
+#' @param func A function of a segment that returns either TRUE or FALSE
+#' @param chunks The list of all bursts
+#' @return A shorter list of bursts OR if one_file is passed one segment
+#' with zeros where the other bursts might have been originally.
+#' @examples
+#'
+#' high_popen <- function (seg) {
+#'
+#'     segment.popen(seg) > 0.7
+#' 
+#' }
+#'
+#' length(chunks)
+#' > 733
+#'
+#' subset <- bursts.filter(high_popen, chunks)
+#'
+#' length(subset)
+#' > 721
+#'
+#' 
+#' # To export to one .dwt file
+#' subset_f <- bursts.filter(high_popen, chunks, one_file=TRUE)
+#' 
+#' 
+#' @export
+bursts.filter <- function (func, chunks, one_file=FALSE) {
+
+
+    filtered <- Filter(func, chunks)
+    
+    if (!one_file) {
+        return(filtered)
+    }
+
+    ## else
+
+    gaps <- diff(sapply(filtered, segment.start_time))
+    lengths <- sapply(filtered, segment.duration)
+
+    ## this is the time following one burst preceding another
+    break_lengths <- gaps - lengths[1:length(lengths)-1]
+
+
+
+    ##### We MIGHT be missing the first and last gap. #####
+
+    ## Add the first gap (if necessary)
+    start <- segment.start_time(filtered[[1]])
+    if (start != 0) {
+
+        break_lengths <- append(start, break_lengths)
+
+        interleave_breaks_first <- TRUE
+        
+    } else {
+
+        interleave_breaks_first <- FALSE
+
+    }
+    
+
+
+    ## Add the last gap (if necessary)
+    last_burst    <-   chunks[[length(chunks)]]
+    last_filtered <- filtered[[length(filtered)]]
+    if (segment.start_time(last_filtered) != segment.start_time(last_burst)) {
+
+        end <- segment.start_time(last_burst) + segment.duration(last_burst)
+        
+        len <- end - segment.duration(last_filtered)
+        
+        break_lengths <- append(break_lengths, end)
+        
+    } 
+    
+ 
+    
+
+    
+    faux_segment <- function (dwell) {
+        segment.create(c(0),c(dwell))
+    }
+
+    ## list of size one dataframes
+    faux_segs <- lapply(break_lengths, faux_segment)
+
+
+    ## https://stackoverflow.com/questions/16443260/interleave-lists-in-r
+    if (interleave_breaks_first) {
+        a <- faux_segs
+        b <- filtered
+    } else {
+        a <- filtered
+        b <- faux_segs
+    }
+    
+    ## interleave the lists
+    idx <- order(c(seq_along(a), seq_along(b)))
+    super_list <- (c(a,b))[idx]
+
+    
+    ## super list is now a list of segments - which are just dataframes.
+    ## We're going to fold all these dataframes up into one big one.
+    flat <- Reduce(rbind, super_list, data.frame())
+
+    ## NOTE: I should probably be doing this in a better way
+    attr(flat, "name") <- attr(chunks[[1]], "name")
+    attr(flat, "seg")  <- 1
+    attr(flat, "start_time")  <- 0
+
+    return (flat)
+    
 }

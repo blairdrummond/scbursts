@@ -13,7 +13,7 @@ bursts.separate_tcrit(segment, t_crit)
 \item{t_crit}{Critical time (us) at which to divide bursts}
 }
 \value{
-A pair (chunks,breaks), where the chunks are segements
+A pair (chunks,breaks), where the chunks are segments
 starting and ending in 1 states, and breaks is a vector of 0s which sit
 inbetween the bursts. There will be n chunks and n-1 breaks.
 }
