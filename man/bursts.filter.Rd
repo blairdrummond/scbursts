@@ -5,12 +5,12 @@
 \title{From a list of bursts, extract those that interest you by
 passing a selecting function. See the examples.}
 \usage{
-bursts.filter(func, chunks, one_file = FALSE)
+bursts.filter(chunks, func, one_file = FALSE)
 }
 \arguments{
-\item{func}{A function of a segment that returns either TRUE or FALSE}
-
 \item{chunks}{The list of all bursts}
+
+\item{func}{A function of a segment that returns either TRUE or FALSE}
 }
 \value{
 A shorter list of bursts OR if one_file is passed one segment

@@ -227,8 +227,8 @@ bursts.remove_first_and_last <- function (chunks) {
 #' From a list of bursts, extract those that interest you by
 #' passing a selecting function. See the examples.
 #'
-#' @param func A function of a segment that returns either TRUE or FALSE
 #' @param chunks The list of all bursts
+#' @param func A function of a segment that returns either TRUE or FALSE
 #' @return A shorter list of bursts OR if one_file is passed one segment
 #' with zeros where the other bursts might have been originally.
 #' @examples
@@ -253,7 +253,7 @@ bursts.remove_first_and_last <- function (chunks) {
 #' 
 #' 
 #' @export
-bursts.filter <- function (func, chunks, one_file=FALSE) {
+bursts.filter <- function (chunks, func, one_file=FALSE) {
 
 
     filtered <- Filter(func, chunks)
@@ -339,5 +339,36 @@ bursts.filter <- function (func, chunks, one_file=FALSE) {
     attr(flat, "start_time")  <- 0
 
     return (flat)
+    
+}
+
+
+
+
+
+
+
+
+#' Order a list of bursts by some function. For instance, popen.
+#'
+#' @param chunks The list of all bursts
+#' @param func A function of a segment that returns a numeric value
+#' @return A list sorted by func. By default in ascending order (unless reversed)
+#' @examples
+#'
+#' sorted <- bursts.sort(segment.popen, chunks)
+#'
+#' @export
+bursts.sort <- function (chunks, func, reverse=FALSE) {
+
+    vec_order <- order(sapply(chunks, func))
+    
+    sorted <- chunks[vec_order]
+
+    if (reverse) {
+        sorted <- rev(sorted)
+    }
+
+    return (sorted)
     
 }

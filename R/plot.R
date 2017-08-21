@@ -69,7 +69,7 @@ cplot.popen_hist <- function (chunks, title="P(Open) Histogram", y_transform=ide
 
     counts <- tabulate$counts
 
-    plot(breaks, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main)
+    plot(breaks, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main, xlim=c(0,1))
 
 }
 
@@ -103,7 +103,7 @@ cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform
 
     counts <- tabulate$counts
 
-    plot(breaks, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main)
+    plot(breaks, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main, xlim=c(0,1))
 
 }
 
@@ -125,7 +125,7 @@ cplot.popen_ts <- function(chunks, title="P(Open) Time Series") {
     times  <- sapply(chunks, segment.start_time)
     popens <- sapply(chunks, segment.popen)
 
-    plot(times,popens, main=title, ylab="P(Open)", xlab="time (us)", ylim=c(0,1))
+    plot(times,popens, main=title, ylab="P(Open)", xlab="time", ylim=c(0,1))
     lines(times, popens)
 
 }
@@ -147,7 +147,7 @@ cplot.pclosed_ts <- function(chunks,title="P(Closed) Time Series") {
     times  <- sapply(chunks, segment.start_time)
     pcloseds <- sapply(chunks, segment.pclosed)
 
-    plot(times,pcloseds, main=title, ylab="P(Closed)", xlab="time (us)", ylim=c(0,1))
+    plot(times,pcloseds, main=title, ylab="P(Closed)", xlab="time", ylim=c(0,1))
     lines(times, pcloseds)
     
 }

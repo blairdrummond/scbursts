@@ -17,7 +17,7 @@ header-includes:
 
 This is a package designed to glean information on stochastic properties of a single ion channel. I'll write up a technical description of the package, but I think we should also fill this in with a short summary of the work we're using it for.
 
-## Structure
+# Structure
 
 This package is meant to form a simple pipeline. Most components are designed with the expectation that they can be swapped out if different methods become available.
 
@@ -70,35 +70,140 @@ From this, we extract the {\tt Events} section, taking the second column -the tr
 \end{minipage}
    
 
-## More information?
+# Example scripts
+
+## Converting a `.evt` file to a corrected `.dwt` file
+
+This is a simple example script showing some of the formats, and how to load and transform data.
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Load the library
+library(uottawaionchannel)
+
+# Import a pre-packaged file
+infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
+
+# Alternatively, you can add your own file
+# infile <- "data/100uM.evt"
+
+# Import the evt as a table
+table <- evt.read(infile)
 
 
-## Figures
+# Just transition times and states
+head(table)
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+# Turn the transition times into dwells
+segment <- evt.to_dwells(table)
+
+
+# A segment is just a sequence of dwells
+head(segment)
+
+
+# Correct the risetime
+segment <- risetime.correct_guassian(Tr=14.77155587,segment)
+
+
+# Write the corrected dwells to a .dwt file
+dwt.write(segment, "new-file-test.dwt")
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## Seperating a segment into bursts
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Splitting a segment into subcomponents
+chunks_and_breaks <- bursts.separate_tcrit(segment, 0.1)
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+# Extract the two parts
+chunks <- chunks_and_breaks$chunks
+breaks <- chunks_and_breaks$breaks
 
-## More Examples
+# Note that you need two brackets to access list elements.
+# Also note that each chunk begins and ends with a 1 state
+# The gaps seperating them are the elements of breaks.
+chunks[[1]]
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+# Write all the bursts to separate `.dwt` files + a `bursts.csv` file
+dwt.write_bursts(chunks=chunks, breaks=breaks)
+```
+
+\newpage
+
+## Plotting
+
+A few examples of plots you can make.
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+cplot.pclosed_hist(chunks)
+```
+
+\newpage
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+cplot.pclosed_hist(chunks, y_transform=sqrt, title="P(Closed) sqrt(frequency)")
+```
+
+\newpage
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# To make this more visible, you can also export it as a large `.png` file
+cplot.popen_ts(chunks)
+```
+
+## Filtering and Sorting Bursts
+
+### Filtering 
+
+```{r, eval=FALSE, include = TRUE}
+# Create a function to select with. 
+# It's a map from a SEGMENT to {TRUE,FALSE}
+high_popen <- function (seg) { 
+
+	segment.popen(seg) > 0.5
+
+}
+
+# select filtered bursts as a list
+filtered <- bursts.filter(high_popen, chunks)
+
+
+length(chunks)
+```
+```
+## [1] 733
+```
+```{r, eval=FALSE, include = TRUE}
+length(filtered)
+```
+```
+## [1] 728
+```
+ 
+ If you want to write these bursts to file, with the space *inbetween these bursts* zeroed out,
+ 
+```{r, eval=FALSE, include = TRUE}
+# This is just one big segment, not a list of segments.
+filtered_file <- bursts.filter(high_popen, chunks, one_file=TRUE)
+
+# Can be written directly to one file
+dwt.write(filtered_file, "high-popen.dwt")
+```
+
+
+### Sorting
+
+```{r, eval=TRUE, include = TRUE}
+# Create a list of bursts, sorted by your chosen function
+sorted <- bursts.sort(chunks, segment.popen, reverse=TRUE)
+
+# In some cases, it might be that multiple bursts share the same value
+# and so the "order" is a bit arbitrary in those cases.
+sorted[[1]]
+```
+
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(head(mtcars, 10))
 ```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
