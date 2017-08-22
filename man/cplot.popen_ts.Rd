@@ -4,7 +4,7 @@
 \alias{cplot.popen_ts}
 \title{Plot Time Series of P(Open)}
 \usage{
-cplot.popen_ts(chunks, title = "P(Open) Time Series")
+cplot.popen_ts(chunks, title = "P(Open) Time Series", xlim = NULL)
 }
 \arguments{
 \item{chunks}{List of multiple segments}

@@ -4,7 +4,7 @@
 \alias{cplot.pclosed_ts}
 \title{Plot Time Series of P(Closed)}
 \usage{
-cplot.pclosed_ts(chunks, title = "P(Closed) Time Series")
+cplot.pclosed_ts(chunks, title = "P(Closed) Time Series", xlim = NULL)
 }
 \arguments{
 \item{chunks}{List of multiple segments}

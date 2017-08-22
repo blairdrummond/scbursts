@@ -120,12 +120,14 @@ cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform
 #' cplot.popen_ts(chunks, "P(Open) Time Series, 2017-09-14")
 #'
 #' @export
-cplot.popen_ts <- function(chunks, title="P(Open) Time Series") {
+cplot.popen_ts <- function(chunks, title="P(Open) Time Series", xlim=NULL) {
 
+    XLIM <- xlim
+    
     times  <- sapply(chunks, segment.start_time)
     popens <- sapply(chunks, segment.popen)
 
-    plot(times,popens, main=title, ylab="P(Open)", xlab="time", ylim=c(0,1))
+    plot(times,popens, main=title, ylab="P(Open)", xlab="time", ylim=c(0,1), xlim = XLIM)
     lines(times, popens)
 
 }
@@ -142,12 +144,14 @@ cplot.popen_ts <- function(chunks, title="P(Open) Time Series") {
 #' cplot.pclosed_ts(chunks, "P(Closed) Time Series, 2017-09-14")
 #'
 #' @export
-cplot.pclosed_ts <- function(chunks,title="P(Closed) Time Series") {
+cplot.pclosed_ts <- function(chunks,title="P(Closed) Time Series", xlim=NULL) {
+
+    XLIM <- xlim
 
     times  <- sapply(chunks, segment.start_time)
     pcloseds <- sapply(chunks, segment.pclosed)
 
-    plot(times,pcloseds, main=title, ylab="P(Closed)", xlab="time", ylim=c(0,1))
+    plot(times,pcloseds, main=title, ylab="P(Closed)", xlab="time", ylim=c(0,1), xlim=XLIM)
     lines(times, pcloseds)
     
 }

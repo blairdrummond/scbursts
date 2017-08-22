@@ -135,6 +135,29 @@ dwt.write_bursts(chunks=chunks, breaks=breaks)
 
 A few examples of plots you can make.
 
+### Open times and closed times
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+open_times <- subset(segment, states == 1, select=dwells)$dwells
+
+cplot.log_root_hist(open_times, "Open Times")
+```
+
+\newpage
+
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+closed_times <- subset(segment, states == 0, select=dwells)$dwells
+
+cplot.log_root_hist(closed_times, "Closed Times")
+```
+
+
+\newpage
+
+
+### P(Open) and P(Closed)
+
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 cplot.pclosed_hist(chunks)
 ```
@@ -151,6 +174,15 @@ cplot.pclosed_hist(chunks, y_transform=sqrt, title="P(Closed) sqrt(frequency)")
 # To make this more visible, you can also export it as a large `.png` file
 cplot.popen_ts(chunks)
 ```
+
+
+\newpage
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Or, so look at a subregion 
+cplot.popen_ts(chunks, xlim=c(0,250))
+```
+
 
 ## Filtering and Sorting Bursts
 
