@@ -33,38 +33,62 @@ library(uottawaionchannel)
 
 ## From Source 
 
-1. Clone this git repository. 
+### If you have LaTeX
 
-You may do this by whatever means you like. For example, by hitting the clone button and downloading (and then unpacking) the zip file. Alternatively, on mac or linux, this can be accomplished by opening a terminal in your directory of choice and running 
+You can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
 
-```
-git clone https://github.com/blairdrummond/bio
-```
+1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
 
-2. Open a terminal and navigate to this folder
-
-3. Build the package: 
-	- If you have [LaTeX](https://www.latex-project.org/) and [knitr](https://github.com/yihui/knitr) installed, run
-	  
-	~~~
-	R CMD build .
-	~~~
-	
-	to build the package.
-	
-	- If you don't have these, you can still build the package, you just won't get a copy of the manual. You can still run
-	
-	~~~
-	R CMD build --no-build-vignettes .
-	~~~
-	
-4. You'll notice that there is now a `tar.gz` package. That's what we need: you can install it with
+2. Open a terminal in the directory, and run
 
 ~~~
-R CMD INSTALL uottawaionchannel_*.tar.gz
+make
 ~~~
 
-You should then have the package
+to prepare the package. This will build it and download all the dependencies that you need.
+
+3. To install, then just run
+
+~~~
+make install
+~~~
+
+or possibly
+
+~~~
+sudo make install
+~~~
+
+And then the package should be installed.
+
+
+### If you don't have LaTeX
+
+You can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
+
+1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
+
+2. Open a terminal in the directory, and run
+
+~~~
+make all-no-doc
+~~~
+
+to prepare the package. This will build it and download all the dependencies that you need.
+
+3. To install, then just run
+
+~~~
+make install-no-doc
+~~~
+
+or possibly
+
+~~~
+sudo make install-no-doc
+~~~
+
+And then the package should be installed. (though it won't have a manual)
 
 
 ### All Together
