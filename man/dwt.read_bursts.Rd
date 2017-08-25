@@ -18,7 +18,9 @@ inbetween the bursts. There will be n chunks and n-1 breaks.
 Read chunks from a folder.
 }
 \examples{
+\dontrun{
 pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
 chunks <- pair$chunks
 breaks <- pair$breaks
+}
 }

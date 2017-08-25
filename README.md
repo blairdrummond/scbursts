@@ -12,7 +12,48 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 
 # Installation
 
-More on this later ... 
+Requires:
+	- LaTeX
+	- texinfo
+
+
+## With `devtools` (Recommended) (**WILL NOT WORK UNTIL REPO IS PUBLIC!!!**)
+
+Open an R console, and run the following lines
+
+```{.R}
+install.package("devtools")
+install.package("knitr")
+install.package("rmarkdown")
+install.package("roxygen2")
+library(devtools)
+install_github("blairdrummond/bio")
+```
+
+~~~
+R CMD BUILD install.R
+~~~
+
+(This will just run those lines above for you.)
+
+## From Source 
+
+1. Clone this git repository. 
+
+You may do this by whatever means you like. For example, by hitting the clone button and downloading (and then unpacking) the zip file. Alternatively, on mac or linux, this can be accomplished by opening a terminal in your directory of choice and running 
+
+```
+git clone https://github.com/blairdrummond/bio
+```
+
+2. Run the build script.
+Execute the contents of the `build.R` file. Either with `R CMD BUILD build.r` or by copy-pasting the code into an R-console.
+
+
+
+## From CRAN
+
+Not possible yet, but maybe at some point in the future...
 
 # How To:
 

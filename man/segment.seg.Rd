@@ -16,6 +16,8 @@ Segment number (integer)
 Extract segment number from segment
 }
 \examples{
+\dontrun{
 segment.seg(data)
 > 12
+}
 }

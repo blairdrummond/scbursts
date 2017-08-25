@@ -10,6 +10,14 @@ dwt.write_bursts(chunks, breaks = c(), directory = "bursts",
 }
 \arguments{
 \item{chunks}{list of dataframes corresponding to bursts}
+
+\item{breaks}{vector of breaks to write as csv}
+
+\item{directory}{folder to create for bursts}
+
+\item{filename}{label for the files}
+
+\item{timestamp}{Put the date and time in the folder-name}
 }
 \value{
 Name of folder containing contents.
@@ -19,5 +27,7 @@ All bursts will be written out as .dwt files, labeled
 in temporal order.
 }
 \examples{
+\dontrun{
 dwt.write_chunks(chunks)
+}
 }

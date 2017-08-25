@@ -16,6 +16,8 @@ The ratio of closed time to total time
 NOTE: Assuming that burst starts and ends with 1
 }
 \examples{
+\dontrun{
 segment.pclosed(segment)
 > 0.78
+}
 }

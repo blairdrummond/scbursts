@@ -16,6 +16,8 @@ The ratio of open time to total time
 NOTE: Assuming that burst starts and ends with 1
 }
 \examples{
+\dontrun{
 segment.popen(segment)
 > 0.22
+}
 }

@@ -17,7 +17,7 @@ This is done using the start_time attribute, which
 is mostly hidden in the data.
 }
 \examples{
-
+\dontrun{
 breaks <- bursts.get_breaks(chunks)
-
+}
 }

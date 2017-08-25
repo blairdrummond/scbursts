@@ -18,10 +18,12 @@ Segment with corrected risetimes.
 }
 \description{
 NOTE: This is potentially problematic, in that this unfiltering
-lengthens every state. A less naïve algorithm would take into
+lengthens every state. A less naive algorithm would take into
 account the infulence of the surroundings, as they impact the
 effects of the filter.
 }
 \examples{
+\dontrun{
 segment <- risetime.correct_guassian(14.77155587, segment)
+}
 }

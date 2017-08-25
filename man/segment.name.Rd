@@ -16,6 +16,8 @@ Segment name (string)
 Extract name from segment
 }
 \examples{
+\dontrun{
 segment.name(data)
 > "60uMc"
+}
 }

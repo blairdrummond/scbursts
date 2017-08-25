@@ -16,6 +16,8 @@ Segment start_time (float)
 Extract start_time from segment
 }
 \examples{
+\dontrun{
 segment.start_time(data)
 > 17.123295
+}
 }

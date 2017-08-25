@@ -16,6 +16,8 @@ Plot Time Series of P(Open)
 }
 \examples{
 
+\dontrun{
 cplot.popen_ts(chunks, "P(Open) Time Series, 2017-09-14")
+}
 
 }

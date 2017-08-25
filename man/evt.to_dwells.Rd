@@ -26,5 +26,7 @@ See "segment" for more info
 Converts transition times to dwell lengths
 }
 \examples{
+\dontrun{
 segment <- evt.to_dwells(table)
+}
 }

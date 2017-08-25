@@ -2,37 +2,23 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.start_times_update}
 \alias{bursts.start_times_update}
-\title{Take an ORDERED list of bursts, and find the starting
-time of every 
-into multiple -shorter- bursts.}
+\title{Attach the meta-data to each segment saying when it began.}
 \usage{
 bursts.start_times_update(chunks, breaks)
 }
 \arguments{
-\item{segment}{Segment with $states and $dwells}
+\item{chunks}{List of segments}
 
-\item{t_crit}{Critical time (us) at which to divide bursts}
+\item{breaks}{vector of break times.}
 }
 \value{
-A list of segments, one per burst.
+A list of segments, one per burst, with updated start_times
 }
 \description{
-Take an ORDERED list of bursts, and find the starting
-time of every 
-into multiple -shorter- bursts.
+It interleaves the durations of the chunks and gaps, and
+assigns the sum of those durations up to a point as the
+starting time
 }
-\examples{
-
-# Note that lists are accessed with [[i]], not [i].
-
-chunks <- bursts.separate_tcrit(segment, 14.77155587)
-head(chunks[[1]])
->     states      dwells
-> 427      0 15.16625000
-> 428      1  0.31105000
-> 429      0  0.01289401
-> 430      1  0.04823000
-> 431      0  0.04160000
-> 432      1  0.14415000
-
+\details{
+You probably won't ever have to call this directly.
 }

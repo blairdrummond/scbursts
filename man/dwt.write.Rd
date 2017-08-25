@@ -11,11 +11,15 @@ dwt.write(segment, file = "", seg = 1)
 \arguments{
 \item{segment}{Segment with $dwells and $states}
 
-\item{filename}{Filename to write to}
+\item{file}{Filename to write to}
+
+\item{seg}{Segment to write in .dwt header.}
 }
 \description{
 Writes DOS line endings.
 }
 \examples{
+\dontrun{
 dwt.write(segment, "file-test.dwt")
+}
 }

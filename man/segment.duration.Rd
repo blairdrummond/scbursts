@@ -16,6 +16,8 @@ the duration
 Get duration of a segment
 }
 \examples{
+\dontrun{
 segment.duration(data)
 > 2.11
+}
 }

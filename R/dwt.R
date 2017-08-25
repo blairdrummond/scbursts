@@ -5,10 +5,14 @@
 #' Writes DOS line endings. 
 #'
 #' @param segment Segment with $dwells and $states
-#' @param filename Filename to write to
+#' @param file Filename to write to
+#' @param seg Segment to write in .dwt header.
 #' @examples
+#' \dontrun{
 #' dwt.write(segment, "file-test.dwt")
+#' }
 #' @export
+#' @importFrom utils write.table
 dwt.write <- function(segment, file="", seg=1) {
 
     header <- sprintf("Segment: %d   Dwells: %d", seg, length(segment$states))
@@ -37,8 +41,11 @@ dwt.write <- function(segment, file="", seg=1) {
 #'
 #' @param filename Filename to read from
 #' @examples
+#' \dontrun{
 #' seg <- dwt.read(segment, "file-test.dwt")
+#' }
 #' @export
+#' @importFrom utils read.csv
 dwt.read <- function (filename) {
 
     # load lines
@@ -72,10 +79,13 @@ dwt.read <- function (filename) {
 #' starting and ending in 1 states, and breaks is a vector of 0s which sit
 #' inbetween the bursts. There will be n chunks and n-1 breaks.
 #' @examples
+#' \dontrun{
 #' pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
 #' chunks <- pair$chunks
 #' breaks <- pair$breaks
+#' }
 #' @export
+#' @importFrom utils read.table
 dwt.read_bursts <- function (folder) {
 
     filenames <- sort(list.files(folder, pattern="*.dwt", full.names = TRUE))
@@ -107,10 +117,17 @@ dwt.read_bursts <- function (folder) {
 #' in temporal order.
 #'
 #' @param chunks list of dataframes corresponding to bursts
+#' @param breaks vector of breaks to write as csv
+#' @param directory folder to create for bursts
+#' @param filename label for the files
+#' @param timestamp Put the date and time in the folder-name
 #' @return Name of folder containing contents.
 #' @examples
+#' \dontrun{
 #' dwt.write_chunks(chunks)
+#' }
 #' @export
+#' @importFrom utils write.table
 dwt.write_bursts <- function (chunks, breaks=c(), directory="bursts", filename="burst", timestamp=TRUE) {
 
 

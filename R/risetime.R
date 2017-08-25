@@ -3,7 +3,7 @@
 #' "Fitting and Analysis of Single-Channel records"
 #'
 #' NOTE: This is potentially problematic, in that this unfiltering
-#' lengthens every state. A less naïve algorithm would take into
+#' lengthens every state. A less naive algorithm would take into
 #' account the infulence of the surroundings, as they impact the
 #' effects of the filter.
 #'
@@ -11,7 +11,9 @@
 #' @param segment segment with $states and $dwells to correct.
 #' @return Segment with corrected risetimes.
 #' @examples
+#' \dontrun{
 #' segment <- risetime.correct_guassian(14.77155587, segment)
+#' }
 #' @export
 risetime.correct_guassian <- function(Tr, segment) {
 

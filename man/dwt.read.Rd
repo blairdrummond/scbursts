@@ -15,5 +15,7 @@ Read a .dwt file. Result is a "segment", which is a
 dataframe extra data. See "segment" for more details.
 }
 \examples{
+\dontrun{
 seg <- dwt.read(segment, "file-test.dwt")
+}
 }

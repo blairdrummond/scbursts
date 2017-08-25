@@ -16,10 +16,12 @@ Plot points as a histogram after log transforming
 }
 \examples{
 
+\dontrun{
 open_times   <- subset(table, states == 1)$dwells
 closed_times <- subset(table, states == 0)$dwells
 
 cplot.log_root_hist(open_times, "Open Times")
 cplot.log_root_hist(closed_times, "Closed Times")
+}
 
 }

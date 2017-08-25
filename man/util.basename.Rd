@@ -6,6 +6,9 @@
 \usage{
 util.basename(filename)
 }
+\arguments{
+\item{filename}{string to extract basename from}
+}
 \value{
 Name with suffix and path removed
 }
@@ -14,5 +17,4 @@ Remove suffix and path from filename.
 }
 \examples{
 util.basename("bursts/60uM-2017-08-18-16-32/60uM-712.dwt")
-> "60uM-712"
 }

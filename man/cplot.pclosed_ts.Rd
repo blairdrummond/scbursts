@@ -16,6 +16,8 @@ Plot Time Series of P(Closed)
 }
 \examples{
 
+\dontrun{
 cplot.pclosed_ts(chunks, "P(Closed) Time Series, 2017-09-14")
+}
 
 }

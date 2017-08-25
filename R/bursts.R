@@ -7,6 +7,7 @@
 #' starting and ending in 1 states, and breaks is a vector of 0s which sit
 #' inbetween the bursts. There will be n chunks and n-1 breaks.
 #' @examples
+#' \dontrun{
 #' pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
 #' chunks <- pair$chunks
 #' breaks <- pair$breaks
@@ -21,7 +22,7 @@
 #' > 430      1  0.04823000
 #' > 431      0  0.04160000
 #' > 432      1  0.14415000
-#' 
+#' }
 #' @export
 bursts.separate_tcrit <- function(segment, t_crit) {
 
@@ -113,27 +114,17 @@ bursts.separate_tcrit <- function(segment, t_crit) {
 
 
 
-#' Take an ORDERED list of bursts, and find the starting
-#' time of every 
-#' into multiple -shorter- bursts.
+#' Attach the meta-data to each segment saying when it began.
 #'
-#' @param segment Segment with $states and $dwells
-#' @param t_crit Critical time (us) at which to divide bursts
-#' @return A list of segments, one per burst.
-#' @examples
+#' It interleaves the durations of the chunks and gaps, and
+#' assigns the sum of those durations up to a point as the
+#' starting time
 #'
-#' # Note that lists are accessed with [[i]], not [i].
-#' 
-#' chunks <- bursts.separate_tcrit(segment, 14.77155587)
-#' head(chunks[[1]])
-#' >     states      dwells
-#' > 427      0 15.16625000
-#' > 428      1  0.31105000
-#' > 429      0  0.01289401
-#' > 430      1  0.04823000
-#' > 431      0  0.04160000
-#' > 432      1  0.14415000
-#' 
+#' You probably won't ever have to call this directly.
+#'
+#' @param chunks List of segments
+#' @param breaks vector of break times.
+#' @return A list of segments, one per burst, with updated start_times
 #' @export
 bursts.start_times_update <- function (chunks, breaks) {
 
@@ -167,9 +158,9 @@ bursts.start_times_update <- function (chunks, breaks) {
 #' @param chunks The list of segments
 #' @return A vector of break times
 #' @examples
-#' 
+#' \dontrun{
 #' breaks <- bursts.get_breaks(chunks)
-#' 
+#' }
 #' @export
 bursts.get_breaks <- function (chunks) {
 
@@ -210,7 +201,9 @@ bursts.get_breaks <- function (chunks) {
 #' @return A shorter list of bursts
 #' @examples
 #'
+#' \dontrun{
 #' chunks <- bursts.remove_first_and_last(chunks)
+#' }
 #' 
 #' @export
 bursts.remove_first_and_last <- function (chunks) {
@@ -229,29 +222,23 @@ bursts.remove_first_and_last <- function (chunks) {
 #'
 #' @param chunks The list of all bursts
 #' @param func A function of a segment that returns either TRUE or FALSE
-#' @return A shorter list of bursts OR if one_file is passed one segment
-#' with zeros where the other bursts might have been originally.
+#' @param one_file TRUE or FALSE: Return a single file to disk, or a list of bursts.
+#' The one_file will return a file with all filtered bursts zeroed out.
+#' @return A shorter list of bursts OR if one_file is passed one segment with zeros where the other bursts might have been originally. Defaults to FALSE.
 #' @examples
-#'
+#' \dontrun{
 #' high_popen <- function (seg) {
 #'
 #'     segment.popen(seg) > 0.7
 #' 
 #' }
 #'
-#' length(chunks)
-#' > 733
-#'
 #' subset <- bursts.filter(high_popen, chunks)
-#'
-#' length(subset)
-#' > 721
 #'
 #' 
 #' # To export to one .dwt file
 #' subset_f <- bursts.filter(high_popen, chunks, one_file=TRUE)
-#' 
-#' 
+#' }
 #' @export
 bursts.filter <- function (chunks, func, one_file=FALSE) {
 
@@ -353,11 +340,12 @@ bursts.filter <- function (chunks, func, one_file=FALSE) {
 #'
 #' @param chunks The list of all bursts
 #' @param func A function of a segment that returns a numeric value
+#' @param reverse By default, return in ascending order. Use reverse=TRUE to change that.
 #' @return A list sorted by func. By default in ascending order (unless reversed)
 #' @examples
-#'
+#' \dontrun{
 #' sorted <- bursts.sort(segment.popen, chunks)
-#'
+#' }
 #' @export
 bursts.sort <- function (chunks, func, reverse=FALSE) {
 

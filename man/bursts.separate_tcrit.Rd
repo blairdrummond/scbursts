@@ -22,6 +22,7 @@ Split record at long pauses, dividing the record
 into multiple -shorter- bursts.
 }
 \examples{
+\dontrun{
 pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
 chunks <- pair$chunks
 breaks <- pair$breaks
@@ -36,5 +37,5 @@ head(chunks[[11]])
 > 430      1  0.04823000
 > 431      0  0.04160000
 > 432      1  0.14415000
-
+}
 }

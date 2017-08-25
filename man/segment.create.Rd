@@ -30,9 +30,9 @@ metadata can be accessed with the functions
 - segment.filename
 }
 \examples{
-
+\dontrun{
 segment <- segment.create(states, dwells, seg=12, start_time=0, name="60uMc")
 segment.name(segment)
 > "60uMc"
-
+}
 }

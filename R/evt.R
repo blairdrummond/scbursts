@@ -3,13 +3,16 @@
 #' @param filename The filename
 #' @return A table with columns "states" and "times"
 #' @examples
+#' \dontrun{
 #' table <- evt.read("data/60uM.evt")
 #'
 #' # import some of the data included with the package
 #' infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
 #' table <- evt.read(infile)
 #'
+#' }
 #' @export
+#' @importFrom utils read.csv
 evt.read <- function (filename) {
     
     ### Assumes file has the format
@@ -67,7 +70,9 @@ evt.read <- function (filename) {
 #' See "segment" for more info
 #' 
 #' @examples
+#' \dontrun{
 #' segment <- evt.to_dwells(table)
+#' }
 #' @export
 evt.to_dwells <- function(table) {
 

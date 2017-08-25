@@ -11,34 +11,29 @@ bursts.filter(chunks, func, one_file = FALSE)
 \item{chunks}{The list of all bursts}
 
 \item{func}{A function of a segment that returns either TRUE or FALSE}
+
+\item{one_file}{TRUE or FALSE: Return a single file to disk, or a list of bursts.
+The one_file will return a file with all filtered bursts zeroed out.}
 }
 \value{
-A shorter list of bursts OR if one_file is passed one segment
-with zeros where the other bursts might have been originally.
+A shorter list of bursts OR if one_file is passed one segment with zeros where the other bursts might have been originally. Defaults to FALSE.
 }
 \description{
 From a list of bursts, extract those that interest you by
 passing a selecting function. See the examples.
 }
 \examples{
-
+\dontrun{
 high_popen <- function (seg) {
 
     segment.popen(seg) > 0.7
 
 }
 
-length(chunks)
-> 733
-
 subset <- bursts.filter(high_popen, chunks)
-
-length(subset)
-> 721
 
 
 # To export to one .dwt file
 subset_f <- bursts.filter(high_popen, chunks, one_file=TRUE)
-
-
+}
 }

@@ -18,8 +18,8 @@ cplot.pclosed_hist(chunks, title = "P(Closed) Histogram",
 Plot Histogram of P(Closed)
 }
 \examples{
-
+\dontrun{
 cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14")
 cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14", y_transform=log10)
-
+}
 }

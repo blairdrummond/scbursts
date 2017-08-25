@@ -17,6 +17,8 @@ Remove the first and last burst from the list
 }
 \examples{
 
+\dontrun{
 chunks <- bursts.remove_first_and_last(chunks)
+}
 
 }

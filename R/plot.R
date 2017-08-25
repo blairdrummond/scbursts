@@ -4,13 +4,16 @@
 #' @param title The title of the plot. Defaults to blank 
 #' @examples
 #' 
+#' \dontrun{
 #' open_times   <- subset(table, states == 1)$dwells
 #' closed_times <- subset(table, states == 0)$dwells
 #' 
 #' cplot.log_root_hist(open_times, "Open Times")
 #' cplot.log_root_hist(closed_times, "Closed Times")
+#' }
 #'
 #' @export
+#' @importFrom graphics plot hist
 cplot.log_root_hist <- function (points,title="") {
 
     ### x - log
@@ -49,10 +52,13 @@ cplot.log_root_hist <- function (points,title="") {
 #' @param y_transform Transform the y_axis (for instance, log10 it)
 #' @examples
 #' 
+#' \dontrun{
 #' cplot.popen_hist(chunks, "P(Open) Histogram, 2017-09-14")
 #' cplot.popen_hist(chunks, "P(Open) Histogram, 2017-09-14", y_transform=log10)
+#' }
 #'
 #' @export
+#' @importFrom graphics plot hist
 cplot.popen_hist <- function (chunks, title="P(Open) Histogram", y_transform=identity) {
 
     popens <- sapply(chunks, segment.popen)
@@ -82,11 +88,12 @@ cplot.popen_hist <- function (chunks, title="P(Open) Histogram", y_transform=ide
 #' @param title The title of the plot. 
 #' @param y_transform Transform the y_axis (for instance, log10 it)
 #' @examples
-#' 
+#' \dontrun{
 #' cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14")
 #' cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14", y_transform=log10)
-#'
+#' }
 #' @export
+#' @importFrom graphics plot hist
 cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform=identity) {
 
     pcloseds <- sapply(chunks, segment.pclosed)
@@ -117,9 +124,12 @@ cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform
 #' @param title The title of the plot. 
 #' @examples
 #' 
+#' \dontrun{
 #' cplot.popen_ts(chunks, "P(Open) Time Series, 2017-09-14")
+#' }
 #'
 #' @export
+#' @importFrom graphics plot lines
 cplot.popen_ts <- function(chunks, title="P(Open) Time Series", xlim=NULL) {
 
     XLIM <- xlim
@@ -141,9 +151,12 @@ cplot.popen_ts <- function(chunks, title="P(Open) Time Series", xlim=NULL) {
 #' @param title The title of the plot. 
 #' @examples
 #' 
+#' \dontrun{
 #' cplot.pclosed_ts(chunks, "P(Closed) Time Series, 2017-09-14")
+#' }
 #'
 #' @export
+#' @importFrom graphics plot lines
 cplot.pclosed_ts <- function(chunks,title="P(Closed) Time Series", xlim=NULL) {
 
     XLIM <- xlim

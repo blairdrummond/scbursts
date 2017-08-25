@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: pdf_document
 bibliography: bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Ion Channel Analysis}
+  %\VignetteIndexEntry{uottawaionchannel}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 header-includes:
@@ -236,6 +236,8 @@ sorted[[1]]
 ```
 
 
+<!--
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(head(mtcars, 10))
 ```
+-->

@@ -10,6 +10,8 @@ bursts.sort(chunks, func, reverse = FALSE)
 \item{chunks}{The list of all bursts}
 
 \item{func}{A function of a segment that returns a numeric value}
+
+\item{reverse}{By default, return in ascending order. Use reverse=TRUE to change that.}
 }
 \value{
 A list sorted by func. By default in ascending order (unless reversed)
@@ -18,7 +20,7 @@ A list sorted by func. By default in ascending order (unless reversed)
 Order a list of bursts by some function. For instance, popen.
 }
 \examples{
-
+\dontrun{
 sorted <- bursts.sort(segment.popen, chunks)
-
+}
 }

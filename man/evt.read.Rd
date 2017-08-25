@@ -16,10 +16,12 @@ A table with columns "states" and "times"
 Read a .evt file to a table
 }
 \examples{
+\dontrun{
 table <- evt.read("data/60uM.evt")
 
 # import some of the data included with the package
 infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
 table <- evt.read(infile)
 
+}
 }

@@ -14,11 +14,11 @@
 #' @param name Suffix-less version of the original filename. 60uM.dwt -> '60uM'
 #' @return The segment object: A dataframe with extra metadata.
 #' @examples
-#' 
+#' \dontrun{
 #' segment <- segment.create(states, dwells, seg=12, start_time=0, name="60uMc")
 #' segment.name(segment)
 #' > "60uMc"
-#' 
+#' }
 #' @export
 segment.create <- function (states, dwells, seg=1, start_time=0, name="burst") {
 
@@ -38,8 +38,10 @@ segment.create <- function (states, dwells, seg=1, start_time=0, name="burst") {
 #' @param segment the segment object
 #' @return Segment number (integer)
 #' @examples
+#' \dontrun{
 #' segment.seg(data)
 #' > 12
+#' }
 #' @export
 segment.seg <- function(segment) {attr(segment, "seg")}
 
@@ -49,8 +51,10 @@ segment.seg <- function(segment) {attr(segment, "seg")}
 #' @param segment the segment object
 #' @return Segment start_time (float)
 #' @examples
+#' \dontrun{
 #' segment.start_time(data)
 #' > 17.123295
+#' }
 #' @export
 segment.start_time <- function(segment) {attr(segment, "start_time")}
 
@@ -60,8 +64,10 @@ segment.start_time <- function(segment) {attr(segment, "start_time")}
 #' @param segment the segment object
 #' @return Segment name (string)
 #' @examples
+#' \dontrun{
 #' segment.name(data)
 #' > "60uMc"
+#' }
 #' @export
 segment.name <- function(segment) {attr(segment, "name")}
 
@@ -71,8 +77,10 @@ segment.name <- function(segment) {attr(segment, "name")}
 #' @param segment the segment object
 #' @return the duration
 #' @examples
+#' \dontrun{
 #' segment.duration(data)
 #' > 2.11
+#' }
 #' @export
 segment.duration <- function(segment) {
     sum(segment$dwells)
@@ -90,8 +98,10 @@ segment.duration <- function(segment) {
 #' @param segment The dwells and states table
 #' @return The ratio of open time to total time
 #' @examples
+#' \dontrun{
 #' segment.popen(segment)
 #' > 0.22
+#' }
 #' @export
 segment.popen <- function (segment) {
 
@@ -112,8 +122,10 @@ segment.popen <- function (segment) {
 #' @param segment The dwells and states table
 #' @return The ratio of closed time to total time
 #' @examples
+#' \dontrun{
 #' segment.pclosed(segment)
 #' > 0.78
+#' }
 #' @export
 segment.pclosed <- function (segment) {
 
