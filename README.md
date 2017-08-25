@@ -12,12 +12,7 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 
 # Installation
 
-Requires:
-	- LaTeX
-	- texinfo
-
-
-## With `devtools` (Recommended) (**WILL NOT WORK UNTIL REPO IS PUBLIC!!!**)
+## With `devtools` (**WILL NOT WORK UNTIL REPO IS PUBLIC!!!**)
 
 Open an R console, and run the following lines
 
@@ -30,11 +25,11 @@ library(devtools)
 install_github("blairdrummond/bio")
 ```
 
-~~~
-R CMD BUILD install.R
-~~~
+You should then be able to call
 
-(This will just run those lines above for you.)
+```{.R}
+library(uottawaionchannel)
+```
 
 ## From Source 
 
@@ -46,19 +41,45 @@ You may do this by whatever means you like. For example, by hitting the clone bu
 git clone https://github.com/blairdrummond/bio
 ```
 
-2. Run the build script.
-Execute the contents of the `build.R` file. Either with `R CMD BUILD build.r` or by copy-pasting the code into an R-console.
+2. Open a terminal and navigate to this folder
 
+3. Build the package: 
+	- If you have [LaTeX](https://www.latex-project.org/) and [knitr](https://github.com/yihui/knitr) installed, run
+	  
+	~~~
+	R CMD build .
+	~~~
+	
+	to build the package.
+	
+	- If you don't have these, you can still build the package, you just won't get a copy of the manual. You can still run
+	
+	~~~
+	R CMD build --no-build-vignettes .
+	~~~
+	
+4. You'll notice that there is now a `tar.gz` package. That's what we need: you can install it with
 
+~~~
+R CMD INSTALL uottawaionchannel_*.tar.gz
+~~~
+
+You should then have the package
 
 ## From CRAN
 
-Not possible yet, but maybe at some point in the future...
+We don't have the package up yet, but should be easy to do when the time comes.
 
-# How To:
+## RStudio might have a fancy way too. Not sure.
 
-After installing, there will be included documentation in the form of a pdf automatically included in the package root directory. **Discuss how to find that**
+TODO: Look into this.
 
-For a *not-necessarily up-to-date* pdf, click here **Provide a link to a reasonably up-to-date pdf**.
+# Manual
 
+You can view the soft-documentation for this package by calling
 
+```{.R}
+vignette("uottawaionchannel")
+```
+
+from an R console.
