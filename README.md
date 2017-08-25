@@ -90,20 +90,6 @@ sudo make install-no-doc
 
 And then the package should be installed. (though it won't have a manual)
 
-
-### All Together
-
-All assembled, this is all you need to running
-
-```{.bash}
-#!/bin/bash
-git clone https://github.com/blairdrummond/bio
-cd bio
-R CMD build                     .   # If you have LaTeX and knitr 
-R CMD build --no-build-vignette .   # Otherwise
-R CMD INSTALL uottawaionchannel_*.tar.gz
-```
-
 ## From CRAN
 
 We don't have the package up yet, but should be easy to do when the time comes.
