@@ -15,11 +15,12 @@ header-includes:
 
 \nocite{*}
 
-This is a package designed to glean information on stochastic properties of a single ion channel. I'll write up a technical description of the package, but I think we should also fill this in with a short summary of the work we're using it for.
+This is a package designed to extract information on the stochastic properties of single molecules. It was originally designed for dwell time analysis of single channel data derived from patch clamp experiments. It contains functions for importing and exporting idealized stochastic events, as well as for displaying, analyzing and sorting dwells.
+
 
 # Structure
 
-This package is meant to form a simple pipeline. Most components are designed with the expectation that they can be swapped out if different methods become available.
+This package is meant to form a simple pipeline. Most components are designed with the expectation that they can be swapped out as different methods are developed and become available.
 
 \vspace*{0.5cm}
 
