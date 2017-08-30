@@ -2,7 +2,7 @@
 % Please edit documentation in R/dwt.R
 \name{dwt.read_bursts}
 \alias{dwt.read_bursts}
-\title{Read chunks from a folder.}
+\title{Read bursts from a folder.}
 \usage{
 dwt.read_bursts(folder)
 }
@@ -10,17 +10,17 @@ dwt.read_bursts(folder)
 \item{folder}{list of dataframes corresponding to bursts}
 }
 \value{
-A pair (chunks,breaks), where the chunks are segments
-starting and ending in 1 states, and breaks is a vector of 0s which sit
-inbetween the bursts. There will be n chunks and n-1 breaks.
+A pair (bursts,gaps), where the bursts are records
+starting and ending in 1 states, and gaps is a vector of 0s which sit
+inbetween the bursts. There will be n bursts and n-1 gaps.
 }
 \description{
-Read chunks from a folder.
+Read bursts from a folder.
 }
 \examples{
 \dontrun{
 pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
-chunks <- pair$chunks
-breaks <- pair$breaks
+bursts <- pair$bursts
+gaps <- pair$gaps
 }
 }

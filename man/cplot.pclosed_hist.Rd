@@ -4,11 +4,11 @@
 \alias{cplot.pclosed_hist}
 \title{Plot Histogram of P(Closed)}
 \usage{
-cplot.pclosed_hist(chunks, title = "P(Closed) Histogram",
+cplot.pclosed_hist(bursts, title = "P(Closed) Histogram",
   y_transform = identity)
 }
 \arguments{
-\item{chunks}{List of multiple segments}
+\item{bursts}{List of multiple records}
 
 \item{title}{The title of the plot.}
 
@@ -19,7 +19,7 @@ Plot Histogram of P(Closed)
 }
 \examples{
 \dontrun{
-cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14")
-cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14", y_transform=log10)
+cplot.pclosed_hist(bursts, "P(Closed) Histogram, 2017-09-14")
+cplot.pclosed_hist(bursts, "P(Closed) Histogram, 2017-09-14", y_transform=log10)
 }
 }

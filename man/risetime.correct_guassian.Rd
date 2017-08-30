@@ -6,15 +6,15 @@
 See section 4.1.1 of Colquhoun and Sigworth,
 "Fitting and Analysis of Single-Channel records"}
 \usage{
-risetime.correct_guassian(Tr, segment)
+risetime.correct_guassian(Tr, record)
 }
 \arguments{
 \item{Tr}{Rise time of the filter in (us)}
 
-\item{segment}{segment with $states and $dwells to correct.}
+\item{record}{record with $states and $dwells to correct.}
 }
 \value{
-Segment with corrected risetimes.
+Record with corrected risetimes.
 }
 \description{
 NOTE: This is potentially problematic, in that this unfiltering
@@ -24,6 +24,6 @@ effects of the filter.
 }
 \examples{
 \dontrun{
-segment <- risetime.correct_guassian(14.77155587, segment)
+record <- risetime.correct_guassian(14.77155587, record)
 }
 }

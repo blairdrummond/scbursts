@@ -1,7 +1,8 @@
-#' Plot points as a histogram after log transforming 
+#' Plot dwells as a histogram after log transforming 
 #'
-#' @param points The data to plot
-#' @param title The title of the plot. Defaults to blank 
+#' @param dwells The data to plot
+#' @param main The title of the plot. Defaults to blank 
+#' @param ... Any and options you can pass to plot, except for
 #' @examples
 #' 
 #' \dontrun{
@@ -13,24 +14,37 @@
 #' }
 #'
 #' @export
+#' @seealso plot
 #' @importFrom graphics plot hist
-cplot.log_root_hist <- function (points,title="") {
+cplot.log_root_hist <- function (dwells, ...) {
 
-    ### x - log
-    ### y - sqrt
+    tabulate <- hist(log10(dwells), plot = FALSE)
 
-    main=paste(title, "histogram (sqrt frequency)", sep=" ")
-    xlab=paste(title, "(log10)", sep=" ")
-    ylab="Frequency (sqrt)"
-
-    tabulate <- hist(log10(points), plot = FALSE)
-
-    breaks <- tabulate$breaks
-    breaks <- breaks[-length(breaks)] # remove last break (fencepost thing)
+    gaps <- tabulate$breaks
+    gaps <- gaps[-length(gaps)] # remove last gap (fencepost thing)
 
     counts <- tabulate$counts
 
-    plot(breaks, sqrt(counts), type='s', xlab=xlab, ylab=ylab, main=main)
+    v <- 0:ceiling(sqrt(max( counts )))
+    y_ticks <- v*v
+
+    l <- floor(min(gaps))
+    u <- ceiling(max(gaps))
+
+    f <- function(v) {
+
+        range <- log10(1:10)
+        return(range + v)
+
+    }
+
+    x_ticks <- unlist(sapply(l:u, f))
+
+    plot(gaps, counts, type='s', axes=FALSE, ... )
+
+    axis(side = 1, at = x_ticks)
+    axis(side = 2, at = y_ticks)
+    box()
 
 }
 
@@ -47,35 +61,34 @@ cplot.log_root_hist <- function (points,title="") {
 
 #' Plot Histogram of P(Open)
 #'
-#' @param chunks List of multiple segments
-#' @param title The title of the plot. 
+#' @param bursts List of multiple records
+#' @param main The title of the plot. 
 #' @param y_transform Transform the y_axis (for instance, log10 it)
 #' @examples
 #' 
 #' \dontrun{
-#' cplot.popen_hist(chunks, "P(Open) Histogram, 2017-09-14")
-#' cplot.popen_hist(chunks, "P(Open) Histogram, 2017-09-14", y_transform=log10)
+#' cplot.popen_hist(bursts, "P(Open) Histogram, 2017-09-14")
+#' cplot.popen_hist(bursts, "P(Open) Histogram, 2017-09-14", y_transform=log10)
 #' }
 #'
 #' @export
 #' @importFrom graphics plot hist
-cplot.popen_hist <- function (chunks, title="P(Open) Histogram", y_transform=identity) {
+cplot.popen_hist <- function (bursts, main="P(Open) Histogram", y_transform=identity) {
 
-    popens <- sapply(chunks, segment.popen)
+    popens <- sapply(bursts, record.popen)
 
 
-    main=title
     xlab="P(Open)"
     ylab="Frequency"
 
     tabulate <- hist(popens, plot = FALSE)
 
-    breaks <- tabulate$breaks
-    breaks <- breaks[-length(breaks)] # remove last break (fencepost thing)
+    gaps <- tabulate$breaks
+    gaps <- gaps[-length(gaps)] # remove last gap (fencepost thing)
 
     counts <- tabulate$counts
 
-    plot(breaks, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main, xlim=c(0,1))
+    plot(gaps, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main, xlim=c(0,1))
 
 }
 
@@ -84,33 +97,32 @@ cplot.popen_hist <- function (chunks, title="P(Open) Histogram", y_transform=ide
 
 #' Plot Histogram of P(Closed)
 #'
-#' @param chunks List of multiple segments
-#' @param title The title of the plot. 
+#' @param bursts List of multiple records
+#' @param main The title of the plot. 
 #' @param y_transform Transform the y_axis (for instance, log10 it)
 #' @examples
 #' \dontrun{
-#' cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14")
-#' cplot.pclosed_hist(chunks, "P(Closed) Histogram, 2017-09-14", y_transform=log10)
+#' cplot.pclosed_hist(bursts, "P(Closed) Histogram, 2017-09-14")
+#' cplot.pclosed_hist(bursts, "P(Closed) Histogram, 2017-09-14", y_transform=log10)
 #' }
 #' @export
 #' @importFrom graphics plot hist
-cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform=identity) {
+cplot.pclosed_hist <- function (bursts, main="P(Closed) Histogram", y_transform=identity) {
 
-    pcloseds <- sapply(chunks, segment.pclosed)
+    pcloseds <- sapply(bursts, record.pclosed)
 
-    main=title
     xlab="P(Closed)"
     ylab="Frequency"
     
 
     tabulate <- hist(pcloseds, plot = FALSE)
 
-    breaks <- tabulate$breaks
-    breaks <- breaks[-length(breaks)] # remove last break (fencepost thing)
+    gaps <- tabulate$breaks
+    gaps <- gaps[-length(gaps)] # remove last gap (fencepost thing)
 
     counts <- tabulate$counts
 
-    plot(breaks, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main, xlim=c(0,1))
+    plot(gaps, y_transform(counts), type='s', xlab=xlab, ylab=ylab, main=main, xlim=c(0,1))
 
 }
 
@@ -120,24 +132,24 @@ cplot.pclosed_hist <- function (chunks, title="P(Closed) Histogram", y_transform
 
 #' Plot Time Series of P(Open)
 #'
-#' @param chunks List of multiple segments
-#' @param title The title of the plot. 
+#' @param bursts List of multiple records
+#' @param main The title of the plot. 
 #' @examples
 #' 
 #' \dontrun{
-#' cplot.popen_ts(chunks, "P(Open) Time Series, 2017-09-14")
+#' cplot.popen_ts(bursts, "P(Open) Time Series, 2017-09-14")
 #' }
 #'
 #' @export
 #' @importFrom graphics plot lines
-cplot.popen_ts <- function(chunks, title="P(Open) Time Series", xlim=NULL) {
+cplot.popen_ts <- function(bursts, main="P(Open) Time Series", xlim=NULL) {
 
     XLIM <- xlim
     
-    times  <- sapply(chunks, segment.start_time)
-    popens <- sapply(chunks, segment.popen)
+    times  <- sapply(bursts, record.start_time)
+    popens <- sapply(bursts, record.popen)
 
-    plot(times,popens, main=title, ylab="P(Open)", xlab="time", ylim=c(0,1), xlim = XLIM)
+    plot(times,popens, main=main, ylab="P(Open)", xlab="time", ylim=c(0,1), xlim = XLIM)
     lines(times, popens)
 
 }
@@ -147,24 +159,24 @@ cplot.popen_ts <- function(chunks, title="P(Open) Time Series", xlim=NULL) {
 
 #' Plot Time Series of P(Closed)
 #'
-#' @param chunks List of multiple segments
-#' @param title The title of the plot. 
+#' @param bursts List of multiple records
+#' @param main The title of the plot. 
 #' @examples
 #' 
 #' \dontrun{
-#' cplot.pclosed_ts(chunks, "P(Closed) Time Series, 2017-09-14")
+#' cplot.pclosed_ts(bursts, "P(Closed) Time Series, 2017-09-14")
 #' }
 #'
 #' @export
 #' @importFrom graphics plot lines
-cplot.pclosed_ts <- function(chunks,title="P(Closed) Time Series", xlim=NULL) {
+cplot.pclosed_ts <- function(bursts, main="P(Closed) Time Series", xlim=NULL) {
 
     XLIM <- xlim
 
-    times  <- sapply(chunks, segment.start_time)
-    pcloseds <- sapply(chunks, segment.pclosed)
+    times  <- sapply(bursts, record.start_time)
+    pcloseds <- sapply(bursts, record.pclosed)
 
-    plot(times,pcloseds, main=title, ylab="P(Closed)", xlab="time", ylim=c(0,1), xlim=XLIM)
+    plot(times,pcloseds, main=main, ylab="P(Closed)", xlab="time", ylim=c(0,1), xlim=XLIM)
     lines(times, pcloseds)
     
 }

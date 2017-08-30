@@ -29,12 +29,12 @@ This package is meant to form a simple pipeline. Most components are designed wi
 \begin{tikzpicture}[node distance = 3cm, auto]
     \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle]            (a) {Raw {\tt .evt} file};
     \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=a] (b) {Table of transition times};
-    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=b] (c) {Table of pulses \\(like a {\tt .dwt} file)};
-    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=c] (d) {Table of "true" pulses};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=b] (c) {Table of dwells \\(like a {\tt .dwt} file)};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=c] (d) {Table of corrected dwells};
     \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=d] (e) {List of bursts};
     \path [draw,very thick,->] (a) -- node [right] {Read} (b);
     \path [draw,very thick,->] (b) -- node [right] {Difference data} (c);
-    \path [draw,very thick,->] (c) -- node [right] {Undo effect of guassian filter} (d);
+    \path [draw,very thick,->] (c) -- node [right] {Correct durations based on filter} (d);
     \path [draw,very thick,->] (d) -- node [right] {Detect pauses and split} (e);
 \end{tikzpicture}
 \end{minipage}
@@ -81,7 +81,7 @@ This is a simple example script showing some of the formats, and how to load and
 # Load the library
 library(uottawaionchannel)
 
-# Import a pre-packaged file
+# Import a pre-packaged file (stored inside the folder extdata)
 infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
 
 # Alternatively, you can add your own file
@@ -96,38 +96,38 @@ head(table)
 
 
 # Turn the transition times into dwells
-segment <- evt.to_dwells(table)
+record <- evt.to_dwells(table)
 
 
-# A segment is just a sequence of dwells
-head(segment)
+# a record is just a sequence of dwells
+head(record)
 
 
 # Correct the risetime
-segment <- risetime.correct_guassian(Tr=14.77155587,segment)
+record_c <- risetime.correct_guassian(Tr=14.77155587,record)
 
 
-# Write the corrected dwells to a .dwt file
-dwt.write(segment, "new-file-test.dwt")
+# Write the corrected record to a .dwt file
+dwt.write(record_c, file="60uMc.dwt")
 ```
 
-## Seperating a segment into bursts
+## Seperating a record into bursts
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-# Splitting a segment into subcomponents
-chunks_and_breaks <- bursts.separate_tcrit(segment, 0.1)
+# Splitting record into smaller records 
+bursts_and_gaps <- bursts.separate_tcrit(record_c , 0.1)
 
 # Extract the two parts
-chunks <- chunks_and_breaks$chunks
-breaks <- chunks_and_breaks$breaks
+bursts <- bursts_and_gaps$bursts
+gaps <- bursts_and_gaps$gaps
 
 # Note that you need two brackets to access list elements.
-# Also note that each chunk begins and ends with a 1 state
-# The gaps seperating them are the elements of breaks.
-chunks[[1]]
+# Also note that each burst begins and ends with a 1 state
+# The gaps seperating them are the elements of gaps.
+bursts[[1]]
 
 # Write all the bursts to separate `.dwt` files + a `bursts.csv` file
-dwt.write_bursts(chunks=chunks, breaks=breaks)
+dwt.write_bursts(bursts=bursts, gaps=gaps)
 ```
 
 \newpage
@@ -138,19 +138,20 @@ A few examples of plots you can make.
 
 ### Open times and closed times
 
-```{r, fig.show='hold', eval=TRUE, include = TRUE}
-open_times <- subset(segment, states == 1, select=dwells)$dwells
 
-cplot.log_root_hist(open_times, "Open Times")
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+open_times <- subset(record_c, states == 1, select=dwells)$dwells
+
+cplot.log_root_hist(open_times, main="Open Times")
 ```
 
 \newpage
 
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-closed_times <- subset(segment, states == 0, select=dwells)$dwells
+closed_times <- subset(record_c, states == 0, select=dwells)$dwells / 1000
 
-cplot.log_root_hist(closed_times, "Closed Times")
+cplot.log_root_hist(closed_times, main="Closed Times")
 ```
 
 
@@ -160,20 +161,20 @@ cplot.log_root_hist(closed_times, "Closed Times")
 ### P(Open) and P(Closed)
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-cplot.pclosed_hist(chunks)
+cplot.pclosed_hist(bursts)
 ```
 
 \newpage
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-cplot.pclosed_hist(chunks, y_transform=sqrt, title="P(Closed) sqrt(frequency)")
+cplot.pclosed_hist(bursts, y_transform=sqrt, main="P(Closed) sqrt(frequency)")
 ```
 
 \newpage
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # To make this more visible, you can also export it as a large `.png` file
-cplot.popen_ts(chunks)
+cplot.popen_ts(bursts)
 ```
 
 
@@ -181,7 +182,7 @@ cplot.popen_ts(chunks)
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Or, so look at a subregion 
-cplot.popen_ts(chunks, xlim=c(0,250))
+cplot.popen_ts(bursts, xlim=c(0,250))
 ```
 
 
@@ -191,18 +192,18 @@ cplot.popen_ts(chunks, xlim=c(0,250))
 
 ```{r, eval=FALSE, include = TRUE}
 # Create a function to select with. 
-# It's a map from a SEGMENT to {TRUE,FALSE}
-high_popen <- function (seg) { 
+# It's a map from a record to {TRUE,FALSE}
+high_popen <- function (rec) { 
 
-	segment.popen(seg) > 0.5
+	record.popen(rec) > 0.5
 
 }
 
 # select filtered bursts as a list
-filtered <- bursts.filter(high_popen, chunks)
+filtered <- bursts.filter(high_popen, bursts)
 
 
-length(chunks)
+length(bursts)
 ```
 ```
 ## [1] 733
@@ -217,8 +218,8 @@ length(filtered)
  If you want to write these bursts to file, with the space *inbetween these bursts* zeroed out,
  
 ```{r, eval=FALSE, include = TRUE}
-# This is just one big segment, not a list of segments.
-filtered_file <- bursts.filter(high_popen, chunks, one_file=TRUE)
+# This is just one big dwell list, not a list of lists of record.
+filtered_file <- bursts.filter(high_popen, bursts, one_file=TRUE)
 
 # Can be written directly to one file
 dwt.write(filtered_file, "high-popen.dwt")
@@ -229,7 +230,7 @@ dwt.write(filtered_file, "high-popen.dwt")
 
 ```{r, eval=TRUE, include = TRUE}
 # Create a list of bursts, sorted by your chosen function
-sorted <- bursts.sort(chunks, segment.popen, reverse=TRUE)
+sorted <- bursts.sort(bursts, record.popen, reverse=TRUE)
 
 # In some cases, it might be that multiple bursts share the same value
 # and so the "order" is a bit arbitrary in those cases.

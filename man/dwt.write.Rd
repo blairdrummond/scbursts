@@ -6,20 +6,20 @@
 Should ask about this. At the moment this has a hard-coded
 accuracy, because I don't understand significant figures.}
 \usage{
-dwt.write(segment, file = "", seg = 1)
+dwt.write(record, file = "", rec = 1)
 }
 \arguments{
-\item{segment}{Segment with $dwells and $states}
+\item{record}{record with $dwells and $states}
 
 \item{file}{Filename to write to}
 
-\item{seg}{Segment to write in .dwt header.}
+\item{rec}{Record to write in .dwt header.}
 }
 \description{
 Writes DOS line endings.
 }
 \examples{
 \dontrun{
-dwt.write(segment, "file-test.dwt")
+dwt.write(record, "file-test.dwt")
 }
 }

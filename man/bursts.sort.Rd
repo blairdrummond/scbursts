@@ -4,12 +4,12 @@
 \alias{bursts.sort}
 \title{Order a list of bursts by some function. For instance, popen.}
 \usage{
-bursts.sort(chunks, func, reverse = FALSE)
+bursts.sort(bursts, func, reverse = FALSE)
 }
 \arguments{
-\item{chunks}{The list of all bursts}
+\item{bursts}{The list of all bursts}
 
-\item{func}{A function of a segment that returns a numeric value}
+\item{func}{A function of a record that returns a numeric value}
 
 \item{reverse}{By default, return in ascending order. Use reverse=TRUE to change that.}
 }
@@ -21,6 +21,6 @@ Order a list of bursts by some function. For instance, popen.
 }
 \examples{
 \dontrun{
-sorted <- bursts.sort(segment.popen, chunks)
+sorted <- bursts.sort(record.popen, bursts)
 }
 }

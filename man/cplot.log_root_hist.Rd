@@ -2,17 +2,19 @@
 % Please edit documentation in R/plot.R
 \name{cplot.log_root_hist}
 \alias{cplot.log_root_hist}
-\title{Plot points as a histogram after log transforming}
+\title{Plot dwells as a histogram after log transforming}
 \usage{
-cplot.log_root_hist(points, title = "")
+cplot.log_root_hist(dwells, ...)
 }
 \arguments{
-\item{points}{The data to plot}
+\item{dwells}{The data to plot}
+
+\item{...}{Any and options you can pass to plot, except for}
 
 \item{title}{The title of the plot. Defaults to blank}
 }
 \description{
-Plot points as a histogram after log transforming
+Plot dwells as a histogram after log transforming
 }
 \examples{
 
@@ -24,4 +26,7 @@ cplot.log_root_hist(open_times, "Open Times")
 cplot.log_root_hist(closed_times, "Closed Times")
 }
 
+}
+\seealso{
+plot
 }

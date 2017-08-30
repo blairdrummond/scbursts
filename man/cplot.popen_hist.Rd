@@ -4,11 +4,11 @@
 \alias{cplot.popen_hist}
 \title{Plot Histogram of P(Open)}
 \usage{
-cplot.popen_hist(chunks, title = "P(Open) Histogram",
+cplot.popen_hist(bursts, title = "P(Open) Histogram",
   y_transform = identity)
 }
 \arguments{
-\item{chunks}{List of multiple segments}
+\item{bursts}{List of multiple records}
 
 \item{title}{The title of the plot.}
 
@@ -20,8 +20,8 @@ Plot Histogram of P(Open)
 \examples{
 
 \dontrun{
-cplot.popen_hist(chunks, "P(Open) Histogram, 2017-09-14")
-cplot.popen_hist(chunks, "P(Open) Histogram, 2017-09-14", y_transform=log10)
+cplot.popen_hist(bursts, "P(Open) Histogram, 2017-09-14")
+cplot.popen_hist(bursts, "P(Open) Histogram, 2017-09-14", y_transform=log10)
 }
 
 }

@@ -5,13 +5,13 @@
 \title{Write all the bursts to dwt. They will be placed in
 a timestamped subfolder of bursts/}
 \usage{
-dwt.write_bursts(chunks, breaks = c(), directory = "bursts",
+dwt.write_bursts(bursts, gaps = c(), directory = "bursts",
   filename = "burst", timestamp = TRUE)
 }
 \arguments{
-\item{chunks}{list of dataframes corresponding to bursts}
+\item{bursts}{list of dataframes corresponding to bursts}
 
-\item{breaks}{vector of breaks to write as csv}
+\item{gaps}{vector of gaps to write as csv}
 
 \item{directory}{folder to create for bursts}
 
@@ -28,6 +28,6 @@ in temporal order.
 }
 \examples{
 \dontrun{
-dwt.write_chunks(chunks)
+dwt.write_bursts(bursts)
 }
 }

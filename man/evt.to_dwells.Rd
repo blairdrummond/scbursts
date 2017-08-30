@@ -10,7 +10,7 @@ evt.to_dwells(table)
 \item{table}{with columns "states" and "times"}
 }
 \value{
-A "segment" with one less row, where each row
+A "record" with one less row, where each row
 
 states    dwells
 0         0.016010
@@ -20,13 +20,13 @@ of the time at which the state transitioned.
 
 Also, the output table preserves the attributes
 
-See "segment" for more info
+See "record" for more info
 }
 \description{
 Converts transition times to dwell lengths
 }
 \examples{
 \dontrun{
-segment <- evt.to_dwells(table)
+record <- evt.to_dwells(table)
 }
 }

@@ -57,7 +57,7 @@ evt.read <- function (filename) {
 #' Converts transition times to dwell lengths
 #'
 #' @param table with columns "states" and "times"
-#' @return A "segment" with one less row, where each row
+#' @return A "record" with one less row, where each row
 #'
 #' states    dwells
 #' 0         0.016010
@@ -67,11 +67,11 @@ evt.read <- function (filename) {
 #'
 #' Also, the output table preserves the attributes
 #'
-#' See "segment" for more info
+#' See "record" for more info
 #' 
 #' @examples
 #' \dontrun{
-#' segment <- evt.to_dwells(table)
+#' record <- evt.to_dwells(table)
 #' }
 #' @export
 evt.to_dwells <- function(table) {
@@ -86,11 +86,11 @@ evt.to_dwells <- function(table) {
     states <- states[1:length(states)-1]
     
     # NOTE: the use of "name" here, is kinda an abuse.
-    if (!is.null(segment.name(table))) {
-        segment <- segment.create(states, dwells, name=segment.name(table))
+    if (!is.null(record.name(table))) {
+        record <- record.create(states, dwells, name=record.name(table))
     } else {
-        segment <- segment.create(states, dwells)
+        record <- record.create(states, dwells)
     }
 
-    return(segment)
+    return(record)
 }

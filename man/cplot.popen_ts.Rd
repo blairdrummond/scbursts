@@ -4,10 +4,10 @@
 \alias{cplot.popen_ts}
 \title{Plot Time Series of P(Open)}
 \usage{
-cplot.popen_ts(chunks, title = "P(Open) Time Series", xlim = NULL)
+cplot.popen_ts(bursts, title = "P(Open) Time Series", xlim = NULL)
 }
 \arguments{
-\item{chunks}{List of multiple segments}
+\item{bursts}{List of multiple records}
 
 \item{title}{The title of the plot.}
 }
@@ -17,7 +17,7 @@ Plot Time Series of P(Open)
 \examples{
 
 \dontrun{
-cplot.popen_ts(chunks, "P(Open) Time Series, 2017-09-14")
+cplot.popen_ts(bursts, "P(Open) Time Series, 2017-09-14")
 }
 
 }

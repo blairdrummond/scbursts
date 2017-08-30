@@ -5,17 +5,17 @@
 \title{Split record at long pauses, dividing the record
 into multiple -shorter- bursts.}
 \usage{
-bursts.separate_tcrit(segment, t_crit)
+bursts.separate_tcrit(record, t_crit)
 }
 \arguments{
-\item{segment}{Segment with $states and $dwells}
+\item{record}{Record with $states and $dwells}
 
 \item{t_crit}{Critical time (us) at which to divide bursts}
 }
 \value{
-A pair (chunks,breaks), where the chunks are segments
-starting and ending in 1 states, and breaks is a vector of 0s which sit
-inbetween the bursts. There will be n chunks and n-1 breaks.
+A pair (bursts,gaps), where the bursts are records
+starting and ending in 1 states, and gaps is a vector of 0s which sit
+inbetween the bursts. There will be n bursts and n-1 gaps.
 }
 \description{
 Split record at long pauses, dividing the record
@@ -24,12 +24,12 @@ into multiple -shorter- bursts.
 \examples{
 \dontrun{
 pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
-chunks <- pair$chunks
-breaks <- pair$breaks
+bursts <- pair$bursts
+gaps <- pair$gaps
 
 # Note that lists are accessed with [[i]], not [i].
 
-head(chunks[[11]])
+head(bursts[[11]])
 >     states      dwells
 > 427      0 15.16625000
 > 428      1  0.31105000

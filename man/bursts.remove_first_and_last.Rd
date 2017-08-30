@@ -4,10 +4,10 @@
 \alias{bursts.remove_first_and_last}
 \title{Remove the first and last burst from the list}
 \usage{
-bursts.remove_first_and_last(chunks)
+bursts.remove_first_and_last(bursts)
 }
 \arguments{
-\item{chunks}{The list of all bursts}
+\item{bursts}{The list of all bursts}
 }
 \value{
 A shorter list of bursts
@@ -18,7 +18,7 @@ Remove the first and last burst from the list
 \examples{
 
 \dontrun{
-chunks <- bursts.remove_first_and_last(chunks)
+bursts <- bursts.remove_first_and_last(bursts)
 }
 
 }

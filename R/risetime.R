@@ -8,14 +8,14 @@
 #' effects of the filter.
 #'
 #' @param Tr Rise time of the filter in (us)
-#' @param segment segment with $states and $dwells to correct.
-#' @return Segment with corrected risetimes.
+#' @param record record with $states and $dwells to correct.
+#' @return Record with corrected risetimes.
 #' @examples
 #' \dontrun{
-#' segment <- risetime.correct_guassian(14.77155587, segment)
+#' record <- risetime.correct_guassian(14.77155587, record)
 #' }
 #' @export
-risetime.correct_guassian <- function(Tr, segment) {
+risetime.correct_guassian <- function(Tr, record) {
 
 
     ### Tr = rise time (in us!!)
@@ -45,9 +45,9 @@ risetime.correct_guassian <- function(Tr, segment) {
     ### This is somewhat problematic, as the length of the whole file increases.
     ### In the future, it's worth exploring more elegant solutions to this
 
-    dwells <- segment$dwells
-    segment$dwells <- rescale(dwells)
+    dwells <- record$dwells
+    record$dwells <- rescale(dwells)
     
-    return(segment)
+    return(record)
 
 }

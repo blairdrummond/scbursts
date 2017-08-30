@@ -4,10 +4,10 @@
 \alias{cplot.pclosed_ts}
 \title{Plot Time Series of P(Closed)}
 \usage{
-cplot.pclosed_ts(chunks, title = "P(Closed) Time Series", xlim = NULL)
+cplot.pclosed_ts(bursts, title = "P(Closed) Time Series", xlim = NULL)
 }
 \arguments{
-\item{chunks}{List of multiple segments}
+\item{bursts}{List of multiple records}
 
 \item{title}{The title of the plot.}
 }
@@ -17,7 +17,7 @@ Plot Time Series of P(Closed)
 \examples{
 
 \dontrun{
-cplot.pclosed_ts(chunks, "P(Closed) Time Series, 2017-09-14")
+cplot.pclosed_ts(bursts, "P(Closed) Time Series, 2017-09-14")
 }
 
 }
