@@ -360,3 +360,33 @@ bursts.sort <- function (bursts, func, reverse=FALSE) {
     return (sorted)
     
 }
+
+#' Return popens of every burst.
+#'
+#'
+#' @param bursts The list of all bursts
+#' @return The popen values
+#' @examples
+#' \dontrun{
+#' popens <- bursts.popens(bursts)
+#' hist(popens)
+#' }
+#' @export
+bursts.popens <- function (bursts) {sapply(bursts, record.popen)}
+
+
+
+
+
+#' Return pcloseds of every burst.
+#'
+#'
+#' @param bursts The list of all bursts
+#' @return The pclosed values
+#' @examples
+#' \dontrun{
+#' pcloseds <- bursts.popens(bursts)
+#' hist(pcloseds)
+#' }
+#' @export
+bursts.pcloseds <- function (bursts) {sapply(bursts, record.pclosed)}

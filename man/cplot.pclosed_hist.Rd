@@ -4,13 +4,13 @@
 \alias{cplot.pclosed_hist}
 \title{Plot Histogram of P(Closed)}
 \usage{
-cplot.pclosed_hist(bursts, title = "P(Closed) Histogram",
+cplot.pclosed_hist(bursts, main = "P(Closed) Histogram",
   y_transform = identity)
 }
 \arguments{
 \item{bursts}{List of multiple records}
 
-\item{title}{The title of the plot.}
+\item{main}{The title of the plot.}
 
 \item{y_transform}{Transform the y_axis (for instance, log10 it)}
 }

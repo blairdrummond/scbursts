@@ -142,7 +142,9 @@ A few examples of plots you can make.
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 open_times <- subset(record_c, states == 1, select=dwells)$dwells
 
-cplot.log_root_hist(open_times, main="Open Times")
+hist(log10(open_times), axes=FALSE, breaks=30)
+
+cplot.log_root_axes(open_times)
 ```
 
 \newpage
@@ -150,8 +152,8 @@ cplot.log_root_hist(open_times, main="Open Times")
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 closed_times <- subset(record_c, states == 0, select=dwells)$dwells / 1000
-
-cplot.log_root_hist(closed_times, main="Closed Times")
+hist(log10(closed_times), axes=FALSE, breaks=30)
+cplot.log_root_axes(closed_times)
 ```
 
 
@@ -161,13 +163,15 @@ cplot.log_root_hist(closed_times, main="Closed Times")
 ### P(Open) and P(Closed)
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-cplot.pclosed_hist(bursts)
+popens <- bursts.popens(bursts)
+hist(popens, breaks=20)
 ```
 
 \newpage
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-cplot.pclosed_hist(bursts, y_transform=sqrt, main="P(Closed) sqrt(frequency)")
+pcloseds <-bursts.pcloseds(bursts)
+hist(pcloseds, breaks=20)
 ```
 
 \newpage

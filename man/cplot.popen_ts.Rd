@@ -2,17 +2,17 @@
 % Please edit documentation in R/plot.R
 \name{cplot.popen_ts}
 \alias{cplot.popen_ts}
-\title{Plot Time Series of P(Open)}
+\title{Plot Time Series (ts) of P(Open)}
 \usage{
-cplot.popen_ts(bursts, title = "P(Open) Time Series", xlim = NULL)
+cplot.popen_ts(bursts, main = "P(Open) Time Series", xlim = NULL)
 }
 \arguments{
 \item{bursts}{List of multiple records}
 
-\item{title}{The title of the plot.}
+\item{main}{The title of the plot.}
 }
 \description{
-Plot Time Series of P(Open)
+Plot Time Series (ts) of P(Open)
 }
 \examples{
 

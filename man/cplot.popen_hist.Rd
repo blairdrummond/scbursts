@@ -4,13 +4,12 @@
 \alias{cplot.popen_hist}
 \title{Plot Histogram of P(Open)}
 \usage{
-cplot.popen_hist(bursts, title = "P(Open) Histogram",
-  y_transform = identity)
+cplot.popen_hist(bursts, main = "P(Open) Histogram", y_transform = identity)
 }
 \arguments{
 \item{bursts}{List of multiple records}
 
-\item{title}{The title of the plot.}
+\item{main}{The title of the plot.}
 
 \item{y_transform}{Transform the y_axis (for instance, log10 it)}
 }

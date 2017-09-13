@@ -58,10 +58,6 @@ evt.read <- function (filename) {
 #'
 #' @param table with columns "states" and "times"
 #' @return A "record" with one less row, where each row
-#'
-#' states    dwells
-#' 0         0.016010
-#'
 #' represents pulse in state 0 of duration 0.51231, instead
 #' of the time at which the state transitioned.
 #'
@@ -70,6 +66,11 @@ evt.read <- function (filename) {
 #' See "record" for more info
 #' 
 #' @examples
+#' 
+#' # Example rows
+#' # states    dwells
+#' # 0         0.016010
+#'
 #' \dontrun{
 #' record <- evt.to_dwells(table)
 #' }

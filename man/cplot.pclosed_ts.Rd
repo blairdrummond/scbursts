@@ -2,17 +2,17 @@
 % Please edit documentation in R/plot.R
 \name{cplot.pclosed_ts}
 \alias{cplot.pclosed_ts}
-\title{Plot Time Series of P(Closed)}
+\title{Plot Time Series (ts) of P(Closed)}
 \usage{
-cplot.pclosed_ts(bursts, title = "P(Closed) Time Series", xlim = NULL)
+cplot.pclosed_ts(bursts, main = "P(Closed) Time Series", xlim = NULL)
 }
 \arguments{
 \item{bursts}{List of multiple records}
 
-\item{title}{The title of the plot.}
+\item{main}{The title of the plot.}
 }
 \description{
-Plot Time Series of P(Closed)
+Plot Time Series (ts) of P(Closed)
 }
 \examples{
 
