@@ -2,24 +2,22 @@
 % Please edit documentation in R/dwt.R
 \name{dwt.write}
 \alias{dwt.write}
-\title{Reformat the digits of data before writing to disk.
-Should ask about this. At the moment this has a hard-coded
-accuracy, because I don't understand significant figures.}
+\title{Reformat the digits of data before writing to disk.}
 \usage{
-dwt.write(record, file = "", rec = 1)
+dwt.write(segment, file = "", seg = 1)
 }
 \arguments{
-\item{record}{record with $dwells and $states}
+\item{segment}{segment with $dwells and $states}
 
 \item{file}{Filename to write to}
 
-\item{rec}{Record to write in .dwt header.}
+\item{seg}{Segment to write in .dwt header.}
 }
 \description{
 Writes DOS line endings.
 }
 \examples{
 \dontrun{
-dwt.write(record, "file-test.dwt")
+dwt.write(segment, "file-test.dwt")
 }
 }

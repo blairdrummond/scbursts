@@ -2,8 +2,8 @@
 % Please edit documentation in R/dwt.R
 \name{dwt.read}
 \alias{dwt.read}
-\title{Read a .dwt file. Result is a "record", which is a
-dataframe extra data. See "record" for more details.}
+\title{Read a .dwt file. Result is a "segment", which is a
+dataframe extra data. See "segment" for more details.}
 \usage{
 dwt.read(filename)
 }
@@ -11,11 +11,11 @@ dwt.read(filename)
 \item{filename}{Filename to read from}
 }
 \description{
-Read a .dwt file. Result is a "record", which is a
-dataframe extra data. See "record" for more details.
+Read a .dwt file. Result is a "segment", which is a
+dataframe extra data. See "segment" for more details.
 }
 \examples{
 \dontrun{
-rec <- dwt.read(record, "file-test.dwt")
+seg <- dwt.read(segment, "file-test.dwt")
 }
 }

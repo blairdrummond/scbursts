@@ -10,8 +10,8 @@ dwt.read_bursts(folder)
 \item{folder}{list of dataframes corresponding to bursts}
 }
 \value{
-A pair (bursts,gaps), where the bursts are records
-starting and ending in 1 states, and gaps is a vector of 0s which sit
+A pair (bursts,gaps), where the bursts are segments
+starting and ending in an open dwell, and gaps is a vector of 0s which sit
 inbetween the bursts. There will be n bursts and n-1 gaps.
 }
 \description{

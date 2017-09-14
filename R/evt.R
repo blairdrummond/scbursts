@@ -54,16 +54,16 @@ evt.read <- function (filename) {
 
 #' Calculate pulse lengths
 #'
-#' Converts transition times to dwell lengths
+#' Converts transition times to dwell durations
 #'
 #' @param table with columns "states" and "times"
-#' @return A "record" with one less row, where each row
-#' represents pulse in state 0 of duration 0.51231, instead
+#' @return A "segment" with one less row, where each row
+#' represents pulse in state 0 (closed dwell) of duration 0.51231, instead
 #' of the time at which the state transitioned.
 #'
 #' Also, the output table preserves the attributes
 #'
-#' See "record" for more info
+#' See "segment" for more info
 #' 
 #' @examples
 #' 
@@ -72,7 +72,7 @@ evt.read <- function (filename) {
 #' # 0         0.016010
 #'
 #' \dontrun{
-#' record <- evt.to_dwells(table)
+#' segment <- evt.to_dwells(table)
 #' }
 #' @export
 evt.to_dwells <- function(table) {
@@ -83,15 +83,16 @@ evt.to_dwells <- function(table) {
     # Calculate the durations, the last one gets thrown away
     dwells <- diff(times)
     
-    # remove the first pulse, and ignore the trailing end-state
+    # remove the first pulse, and ignore the trailing end-dwell
     states <- states[1:length(states)-1]
     
     # NOTE: the use of "name" here, is kinda an abuse.
-    if (!is.null(record.name(table))) {
-        record <- record.create(states, dwells, name=record.name(table))
+    if (!is.null(segment.name(table))) {
+        segment <- segment.create(states, dwells, name=segment.name(table))
     } else {
-        record <- record.create(states, dwells)
+        segment <- segment.create(states, dwells)
     }
 
-    return(record)
+    return(segment)
+
 }

@@ -4,26 +4,26 @@
 \alias{risetime.correct_guassian}
 \title{Undo the effect of the guassian filter
 See section 4.1.1 of Colquhoun and Sigworth,
-"Fitting and Analysis of Single-Channel records"}
+"Fitting and Analysis of Single-Channel segments"}
 \usage{
-risetime.correct_guassian(Tr, record)
+risetime.correct_guassian(Tr, segment)
 }
 \arguments{
 \item{Tr}{Rise time of the filter in (us)}
 
-\item{record}{record with $states and $dwells to correct.}
+\item{segment}{segment with $states and $dwells to correct.}
 }
 \value{
-Record with corrected risetimes.
+Segment with corrected risetimes.
 }
 \description{
 NOTE: This is potentially problematic, in that this unfiltering
-lengthens every state. A less naive algorithm would take into
+lengthens every dwell. A less naive algorithm would take into
 account the infulence of the surroundings, as they impact the
 effects of the filter.
 }
 \examples{
 \dontrun{
-record <- risetime.correct_guassian(14.77155587, record)
+segment <- risetime.correct_guassian(14.77155587, segment)
 }
 }

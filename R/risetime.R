@@ -1,21 +1,21 @@
 #' Undo the effect of the guassian filter
 #' See section 4.1.1 of Colquhoun and Sigworth,
-#' "Fitting and Analysis of Single-Channel records"
+#' "Fitting and Analysis of Single-Channel segments"
 #'
 #' NOTE: This is potentially problematic, in that this unfiltering
-#' lengthens every state. A less naive algorithm would take into
+#' lengthens every dwell. A less naive algorithm would take into
 #' account the infulence of the surroundings, as they impact the
 #' effects of the filter.
 #'
 #' @param Tr Rise time of the filter in (us)
-#' @param record record with $states and $dwells to correct.
-#' @return Record with corrected risetimes.
+#' @param segment segment with $states and $dwells to correct.
+#' @return Segment with corrected risetimes.
 #' @examples
 #' \dontrun{
-#' record <- risetime.correct_guassian(14.77155587, record)
+#' segment <- risetime.correct_guassian(14.77155587, segment)
 #' }
 #' @export
-risetime.correct_guassian <- function(Tr, record) {
+risetime.correct_guassian <- function(Tr, segment) {
 
 
     ### Tr = rise time (in us!!)
@@ -45,9 +45,9 @@ risetime.correct_guassian <- function(Tr, record) {
     ### This is somewhat problematic, as the length of the whole file increases.
     ### In the future, it's worth exploring more elegant solutions to this
 
-    dwells <- record$dwells
-    record$dwells <- rescale(dwells)
+    dwells <- segment$dwells
+    segment$dwells <- rescale(dwells)
     
-    return(record)
+    return(segment)
 
 }

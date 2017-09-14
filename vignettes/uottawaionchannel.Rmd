@@ -70,6 +70,9 @@ From this, we extract the {\tt Events} section, taking the second column -the tr
 
 \end{minipage}
    
+# Definitions and Terminology
+
+In the program, a **segment** is used to denote any contiguous sequence of dwells (plus some metadata); so, a recording is a segment, but so are the bursts, which are contained in a recording. So, for example, a function like `bursts.defined_by_tcrit` splits a segment (the recording) into multiple smaller segments (the bursts). The segements *always* start and end on open dwells, and the closed dwells between them (interburst closings) are refered to as **gaps**.
 
 # Example scripts
 
@@ -99,7 +102,7 @@ head(table)
 record <- evt.to_dwells(table)
 
 
-# a record is just a sequence of dwells
+# "record" is a segment which is just a sequence of dwells
 head(record)
 
 
@@ -111,11 +114,11 @@ record_c <- risetime.correct_guassian(Tr=14.77155587,record)
 dwt.write(record_c, file="60uMc.dwt")
 ```
 
-## Seperating a record into bursts
+## Seperating the record (a segment) into bursts (segments)
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-# Splitting record into smaller records 
-bursts_and_gaps <- bursts.separate_tcrit(record_c , 0.1)
+# Splitting segment into smaller segments 
+bursts_and_gaps <- bursts.defined_by_tcrit(record_c , 0.1)
 
 # Extract the two parts
 bursts <- bursts_and_gaps$bursts
@@ -126,7 +129,7 @@ gaps <- bursts_and_gaps$gaps
 # The gaps seperating them are the elements of gaps.
 bursts[[1]]
 
-# Write all the bursts to separate `.dwt` files + a `bursts.csv` file
+# Write all the bursts to seperate `.dwt` files + a `bursts.csv` file
 dwt.write_bursts(bursts=bursts, gaps=gaps)
 ```
 
@@ -140,20 +143,18 @@ A few examples of plots you can make.
 
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-open_times <- subset(record_c, states == 1, select=dwells)$dwells
-
-hist(log10(open_times), axes=FALSE, breaks=30)
-
-cplot.log_root_axes(open_times)
+open_dwells <- segment.open_dwells(record_c) / 1000
+hist(log10(open_dwells), axes=FALSE, breaks=30)
+cplot.log_root_axes(open_dwells)
 ```
 
 \newpage
 
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-closed_times <- subset(record_c, states == 0, select=dwells)$dwells / 1000
-hist(log10(closed_times), axes=FALSE, breaks=30)
-cplot.log_root_axes(closed_times)
+closed_dwells <- segment.closed_dwells(record_c) / 1000
+hist(log10(closed_dwells), axes=FALSE, breaks=30)
+cplot.log_root_axes(closed_dwells)
 ```
 
 
@@ -190,21 +191,21 @@ cplot.popen_ts(bursts, xlim=c(0,250))
 ```
 
 
-## Filtering and Sorting Bursts
+## Selecting and Sorting Bursts
 
-### Filtering 
+### Selection
 
 ```{r, eval=FALSE, include = TRUE}
 # Create a function to select with. 
-# It's a map from a record to {TRUE,FALSE}
+# It's a map from a segment to {TRUE,FALSE}
 high_popen <- function (rec) { 
 
-	record.popen(rec) > 0.5
+	segment.popen(rec) > 0.5
 
 }
 
-# select filtered bursts as a list
-filtered <- bursts.filter(high_popen, bursts)
+# select bursts as a list
+selected <- bursts.select(high_popen, bursts)
 
 
 length(bursts)
@@ -213,7 +214,7 @@ length(bursts)
 ## [1] 733
 ```
 ```{r, eval=FALSE, include = TRUE}
-length(filtered)
+length(selected)
 ```
 ```
 ## [1] 728
@@ -222,11 +223,11 @@ length(filtered)
  If you want to write these bursts to file, with the space *inbetween these bursts* zeroed out,
  
 ```{r, eval=FALSE, include = TRUE}
-# This is just one big dwell list, not a list of lists of record.
-filtered_file <- bursts.filter(high_popen, bursts, one_file=TRUE)
+# This is just one big dwell list, not a list of lists of segment.
+selected_file <- bursts.select(high_popen, bursts, one_file=TRUE)
 
 # Can be written directly to one file
-dwt.write(filtered_file, "high-popen.dwt")
+dwt.write(selected_file, "high-popen.dwt")
 ```
 
 
@@ -234,7 +235,7 @@ dwt.write(filtered_file, "high-popen.dwt")
 
 ```{r, eval=TRUE, include = TRUE}
 # Create a list of bursts, sorted by your chosen function
-sorted <- bursts.sort(bursts, record.popen, reverse=TRUE)
+sorted <- bursts.sort(bursts, segment.popen, reverse=TRUE)
 
 # In some cases, it might be that multiple bursts share the same value
 # and so the "order" is a bit arbitrary in those cases.

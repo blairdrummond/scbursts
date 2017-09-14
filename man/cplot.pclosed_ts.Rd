@@ -7,7 +7,7 @@
 cplot.pclosed_ts(bursts, main = "P(Closed) Time Series", xlim = NULL)
 }
 \arguments{
-\item{bursts}{List of multiple records}
+\item{bursts}{List of multiple segments}
 
 \item{main}{The title of the plot.}
 }

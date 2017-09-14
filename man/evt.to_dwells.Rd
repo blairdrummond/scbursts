@@ -10,16 +10,16 @@ evt.to_dwells(table)
 \item{table}{with columns "states" and "times"}
 }
 \value{
-A "record" with one less row, where each row
-represents pulse in state 0 of duration 0.51231, instead
+A "segment" with one less row, where each row
+represents pulse in state 0 (closed dwell) of duration 0.51231, instead
 of the time at which the state transitioned.
 
 Also, the output table preserves the attributes
 
-See "record" for more info
+See "segment" for more info
 }
 \description{
-Converts transition times to dwell lengths
+Converts transition times to dwell durations
 }
 \examples{
 
@@ -28,6 +28,6 @@ Converts transition times to dwell lengths
 # 0         0.016010
 
 \dontrun{
-record <- evt.to_dwells(table)
+segment <- evt.to_dwells(table)
 }
 }

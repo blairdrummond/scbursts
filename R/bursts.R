@@ -1,19 +1,25 @@
-#' Split record at long pauses, dividing the record
-#' into multiple -shorter- bursts.
+#' Split segment at long pauses, dividing the segment
+#' into multiple -shorter- segments (which are the bursts),
+#' Along with the interburst closings, which are referred to as "gaps".
 #'
-#' @param record Record with $states and $dwells
+#' @param segment Segment with $states and $dwells
 #' @param t_crit Critical time (us) at which to divide bursts
-#' @return A pair (bursts,gaps), where the bursts are records
-#' starting and ending in 1 states, and gaps is a vector of 0s which sit
-#' inbetween the bursts. There will be n bursts and n-1 gaps.
+#' @return A pair (bursts,gaps), where the bursts are segments
+#' starting and ending in 1 states (open dwell), and gaps is a
+#' vector of 0s (closed dwells) which sit inbetween the bursts.
+#' There will be n bursts and n-1 gaps.
 #' @examples
 #' \dontrun{
-#' pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
-#' bursts <- pair$bursts
-#' gaps <- pair$gaps
+#' # Splitting segment into smaller segments 
+#' bursts_and_gaps <- bursts.defined_by_tcrit(record_c , 0.1)
 #' 
-#' # Note that lists are accessed with [[i]], not [i].
+#' # Extract the two parts
+#' bursts <- bursts_and_gaps$bursts
+#' gaps <- bursts_and_gaps$gaps
 #' 
+#' # Note that you need two brackets to access list elements.
+#' # Also note that each burst begins and ends with an open dwell
+#' # The gaps seperating them are the elements of gaps.
 #' head(bursts[[11]])
 #' >     states      dwells
 #' > 427      0 15.16625000
@@ -24,13 +30,13 @@
 #' > 432      1  0.14415000
 #' }
 #' @export
-bursts.separate_tcrit <- function(record, t_crit) {
+bursts.defined_by_tcrit <- function(segment, t_crit) {
 
     ### Find all gaps
     gap_func <- function(row) {
         row$dwells > t_crit & row$state == 0
     }
-    pauses <- gap_func(record)
+    pauses <- gap_func(segment)
     pauses <- c(c(TRUE),pauses,c(TRUE)) ### Causes first and last burst to be included
 
 
@@ -47,7 +53,7 @@ bursts.separate_tcrit <- function(record, t_crit) {
         }
         
         if (pauses[i]) {
-            return(record$dwells[i])
+            return(segment$dwells[i])
         } else {
             return (NULL)
         }
@@ -74,8 +80,8 @@ bursts.separate_tcrit <- function(record, t_crit) {
        
         for (i in (n+1):(length(pauses))) {
             if (pauses[i]) {
-                # n is the n+1^nth index of the record, and i the i+1^st
-                # So (n+1:i-1) in the record -> (n:i-2)
+                # n is the n+1^nth index of the segment, and i the i+1^st
+                # So (n+1:i-1) in the segment -> (n:i-2)
                 return (n:(i-2))   
             }
         }
@@ -90,14 +96,14 @@ bursts.separate_tcrit <- function(record, t_crit) {
     ### Select the bursts using the indices
     burst <- function(i) {
 
-        df <- record[unlist(burst_selectors[i]),]
+        df <- segment[unlist(burst_selectors[i]),]
 
-        s <- record.create(
+        s <- segment.create(
             df$states,
             df$dwells,
-            rec=i,
+            seg=i,
             start_time=0,
-            name=record.name(record)
+            name=segment.name(segment)
         )
 
         return(s)
@@ -114,7 +120,7 @@ bursts.separate_tcrit <- function(record, t_crit) {
 
 
 
-#' Attach the meta-data to each record saying when it began.
+#' Attach the meta-data to each segment saying when it began.
 #'
 #' It interleaves the durations of the bursts and gaps, and
 #' assigns the sum of those durations up to a point as the
@@ -122,9 +128,9 @@ bursts.separate_tcrit <- function(record, t_crit) {
 #'
 #' You probably won't ever have to call this directly.
 #'
-#' @param bursts List of records
+#' @param bursts List of segments
 #' @param gaps vector of gap times.
-#' @return A list of records, one per burst, with updated start_times
+#' @return A list of segments, one per burst, with updated start_times
 #' @export
 bursts.start_times_update <- function (bursts, gaps) {
 
@@ -132,7 +138,7 @@ bursts.start_times_update <- function (bursts, gaps) {
         if (i == 1) {
             return(0)
         } else {
-            t <- record.start_time(bursts[[i-1]]) + sum(bursts[[i-1]]$dwells) + gaps[i-1]
+            t <- segment.start_time(bursts[[i-1]]) + sum(bursts[[i-1]]$dwells) + gaps[i-1]
             return(t)
         }
     }
@@ -155,7 +161,7 @@ bursts.start_times_update <- function (bursts, gaps) {
 #' This is done using the start_time attribute, which
 #' is mostly hidden in the data.
 #'
-#' @param bursts The list of records
+#' @param bursts The list of segments
 #' @return A vector of gap times
 #' @examples
 #' \dontrun{
@@ -165,8 +171,8 @@ bursts.start_times_update <- function (bursts, gaps) {
 bursts.get_gaps <- function (bursts) {
 
 
-    start_times <- sapply(bursts, record.start_time)
-    durations   <- sapply(bursts, record.duration)
+    start_times <- sapply(bursts, segment.start_time)
+    durations   <- sapply(bursts, segment.duration)
     
     gaps <- diff(start_times) - durations[1:length(durations)-1]
     
@@ -221,29 +227,31 @@ bursts.remove_first_and_last <- function (bursts) {
 #' passing a selecting function. See the examples.
 #'
 #' @param bursts The list of all bursts
-#' @param func A function of a record that returns either TRUE or FALSE
+#' @param func A function of a segment that returns either TRUE or FALSE
 #' @param one_file TRUE or FALSE: Return a single file to disk, or a list of bursts.
-#' The one_file will return a file with all filtered bursts zeroed out.
-#' @return A shorter list of bursts OR if one_file is passed one record with zeros where the other bursts might have been originally. Defaults to FALSE.
+#' The one_file will return a file with all unselected bursts zeroed out.
+#' @return A shorter list of bursts OR if one_file is passed one segment with zeros where the other bursts might have been originally. Defaults to FALSE.
 #' @examples
 #' \dontrun{
-#' high_popen <- function (rec) {
+#' high_popen <- function (seg) {
 #'
-#'     record.popen(rec) > 0.7
+#'     segment.popen(seg) > 0.7
 #' 
 #' }
 #'
-#' subset <- bursts.filter(high_popen, bursts)
+#' subset <- bursts.select(high_popen, bursts)
 #'
 #' 
 #' # To export to one .dwt file
-#' subset_f <- bursts.filter(high_popen, bursts, one_file=TRUE)
+#' subset_f <- bursts.select(high_popen, bursts, one_file=TRUE)
 #' }
 #' @export
-bursts.filter <- function (bursts, func, one_file=FALSE) {
+bursts.select <- function (bursts, func, one_file=FALSE) {
 
+    ## "Filter" is ambiguous in the terriory of ion-channel analysis, and so
+    ## it's prefereable to use "select" instead.
 
-    filtered <- Filter(func, bursts)
+    filtered <- Filter(Negate(func), bursts)
     
     if (!one_file) {
         return(filtered)
@@ -251,8 +259,8 @@ bursts.filter <- function (bursts, func, one_file=FALSE) {
 
     ## else
 
-    gaps <- diff(sapply(filtered, record.start_time))
-    lengths <- sapply(filtered, record.duration)
+    gaps <- diff(sapply(filtered, segment.start_time))
+    lengths <- sapply(filtered, segment.duration)
 
     ## this is the time following one burst preceding another
     gap_lengths <- gaps - lengths[1:length(lengths)-1]
@@ -262,7 +270,7 @@ bursts.filter <- function (bursts, func, one_file=FALSE) {
     ##### We MIGHT be missing the first and last gap. #####
 
     ## Add the first gap (if necessary)
-    start <- record.start_time(filtered[[1]])
+    start <- segment.start_time(filtered[[1]])
     if (start != 0) {
 
         gap_lengths <- append(start, gap_lengths)
@@ -280,11 +288,11 @@ bursts.filter <- function (bursts, func, one_file=FALSE) {
     ## Add the last gap (if necessary)
     last_burst    <-   bursts[[length(bursts)]]
     last_filtered <- filtered[[length(filtered)]]
-    if (record.start_time(last_filtered) != record.start_time(last_burst)) {
+    if (segment.start_time(last_filtered) != segment.start_time(last_burst)) {
 
-        end <- record.start_time(last_burst) + record.duration(last_burst)
+        end <- segment.start_time(last_burst) + segment.duration(last_burst)
         
-        len <- end - record.duration(last_filtered)
+        len <- end - segment.duration(last_filtered)
         
         gap_lengths <- append(gap_lengths, end)
         
@@ -294,21 +302,21 @@ bursts.filter <- function (bursts, func, one_file=FALSE) {
     
 
     
-    faux_record <- function (dwell) {
-        record.create(c(0),c(dwell))
+    faux_segment <- function (dwell) {
+        segment.create(c(0),c(dwell))
     }
 
     ## list of size one dataframes
-    faux_recs <- lapply(gap_lengths, faux_record)
+    faux_segs <- lapply(gap_lengths, faux_segment)
 
 
     ## https://stackoverflow.com/questions/16443260/interleave-lists-in-r
     if (interleave_gaps_first) {
-        a <- faux_recs
+        a <- faux_segs
         b <- filtered
     } else {
         a <- filtered
-        b <- faux_recs
+        b <- faux_segs
     }
     
     ## interleave the lists
@@ -316,13 +324,13 @@ bursts.filter <- function (bursts, func, one_file=FALSE) {
     super_list <- (c(a,b))[idx]
 
     
-    ## super list is now a list of records - which are just dataframes.
+    ## super list is now a list of segments - which are just dataframes.
     ## We're going to fold all these dataframes up into one big one.
     flat <- Reduce(rbind, super_list, data.frame())
 
     ## NOTE: I should probably be doing this in a better way
     attr(flat, "name") <- attr(bursts[[1]], "name")
-    attr(flat, "rec")  <- 1
+    attr(flat, "seg")  <- 1
     attr(flat, "start_time")  <- 0
 
     return (flat)
@@ -339,12 +347,12 @@ bursts.filter <- function (bursts, func, one_file=FALSE) {
 #' Order a list of bursts by some function. For instance, popen.
 #'
 #' @param bursts The list of all bursts
-#' @param func A function of a record that returns a numeric value
+#' @param func A function of a segment that returns a numeric value
 #' @param reverse By default, return in ascending order. Use reverse=TRUE to change that.
 #' @return A list sorted by func. By default in ascending order (unless reversed)
 #' @examples
 #' \dontrun{
-#' sorted <- bursts.sort(record.popen, bursts)
+#' sorted <- bursts.sort(segment.popen, bursts)
 #' }
 #' @export
 bursts.sort <- function (bursts, func, reverse=FALSE) {
@@ -372,7 +380,7 @@ bursts.sort <- function (bursts, func, reverse=FALSE) {
 #' hist(popens)
 #' }
 #' @export
-bursts.popens <- function (bursts) {sapply(bursts, record.popen)}
+bursts.popens <- function (bursts) {sapply(bursts, segment.popen)}
 
 
 
@@ -389,4 +397,4 @@ bursts.popens <- function (bursts) {sapply(bursts, record.popen)}
 #' hist(pcloseds)
 #' }
 #' @export
-bursts.pcloseds <- function (bursts) {sapply(bursts, record.pclosed)}
+bursts.pcloseds <- function (bursts) {sapply(bursts, segment.pclosed)}

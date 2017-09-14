@@ -7,7 +7,7 @@
 bursts.get_gaps(bursts)
 }
 \arguments{
-\item{bursts}{The list of records}
+\item{bursts}{The list of segments}
 }
 \value{
 A vector of gap times

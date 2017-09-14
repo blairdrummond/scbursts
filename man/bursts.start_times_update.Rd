@@ -2,17 +2,17 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.start_times_update}
 \alias{bursts.start_times_update}
-\title{Attach the meta-data to each record saying when it began.}
+\title{Attach the meta-data to each segment saying when it began.}
 \usage{
 bursts.start_times_update(bursts, gaps)
 }
 \arguments{
-\item{bursts}{List of records}
+\item{bursts}{List of segments}
 
 \item{gaps}{vector of gap times.}
 }
 \value{
-A list of records, one per burst, with updated start_times
+A list of segments, one per burst, with updated start_times
 }
 \description{
 It interleaves the durations of the bursts and gaps, and

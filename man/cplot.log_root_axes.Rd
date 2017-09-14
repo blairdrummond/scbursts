@@ -15,6 +15,7 @@ Add log-root axes to histogram plot
 \examples{
 
 \dontrun{
+hist(open_times, axes=FALSE)
 cplot.log_root_axes(open_times)
 }
 

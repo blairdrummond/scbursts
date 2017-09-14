@@ -1,26 +1,24 @@
 #' Reformat the digits of data before writing to disk.
-#' Should ask about this. At the moment this has a hard-coded
-#' accuracy, because I don't understand significant figures.
 #'
 #' Writes DOS line endings. 
 #'
-#' @param record record with $dwells and $states
+#' @param segment segment with $dwells and $states
 #' @param file Filename to write to
-#' @param rec Record to write in .dwt header.
+#' @param seg Segment to write in .dwt header.
 #' @examples
 #' \dontrun{
-#' dwt.write(record, "file-test.dwt")
+#' dwt.write(segment, "file-test.dwt")
 #' }
 #' @export
 #' @importFrom utils write.table
-dwt.write <- function(record, file="", rec=1) {
+dwt.write <- function(segment, file="", seg=1) {
 
-    header <- sprintf("Segment: %d   Dwells: %d", rec, length(record$states))
+    header <- sprintf("Segment: %d   Dwells: %d", seg, length(segment$states))
 
     write(header, file) 
 
-    states <- record$states
-    dwells <- record$dwells
+    states <- segment$states
+    dwells <- segment$dwells
 
     dwells <- sprintf("%.6f", dwells)
 
@@ -36,13 +34,13 @@ dwt.write <- function(record, file="", rec=1) {
 
 
 
-#' Read a .dwt file. Result is a "record", which is a
-#' dataframe extra data. See "record" for more details.
+#' Read a .dwt file. Result is a "segment", which is a
+#' dataframe extra data. See "segment" for more details.
 #'
 #' @param filename Filename to read from
 #' @examples
 #' \dontrun{
-#' rec <- dwt.read(record, "file-test.dwt")
+#' seg <- dwt.read(segment, "file-test.dwt")
 #' }
 #' @export
 #' @importFrom utils read.csv
@@ -53,7 +51,7 @@ dwt.read <- function (filename) {
 
     header <- FileInput[[1]]
 
-    rec <- strtoi(sub("Segment: *([0-9]*).*",  "\\1", header, perl=TRUE))
+    seg <- strtoi(sub("Segment: *([0-9]*).*",  "\\1", header, perl=TRUE))
     # dwells <- sub(".*Dwells: *([0-9]*).*", "\\1", header, perl=TRUE)
 
     table <- read.csv(filename, skip=1, sep="\t",header=FALSE)
@@ -62,7 +60,7 @@ dwt.read <- function (filename) {
     dwells <- table[,3]
     states <- table[,2]
 
-    return(record.create(states, dwells, rec=rec, start_time=0, name=util.basename(filename)))
+    return(segment.create(states, dwells, seg=seg, start_time=0, name=util.basename(filename)))
     
 }
 
@@ -75,8 +73,8 @@ dwt.read <- function (filename) {
 #' Read bursts from a folder.
 #'
 #' @param folder list of dataframes corresponding to bursts
-#' @return A pair (bursts,gaps), where the bursts are records
-#' starting and ending in 1 states, and gaps is a vector of 0s which sit
+#' @return A pair (bursts,gaps), where the bursts are segments
+#' starting and ending in an open dwell, and gaps is a vector of 0s which sit
 #' inbetween the bursts. There will be n bursts and n-1 gaps.
 #' @examples
 #' \dontrun{
@@ -132,8 +130,8 @@ dwt.write_bursts <- function (bursts, gaps=c(), directory="bursts", filename="bu
 
 
     ### Write the bursts
-    if (!is.null(record.name(bursts[[1]]))) {
-        filename <- record.name(bursts[[1]])
+    if (!is.null(segment.name(bursts[[1]]))) {
+        filename <- segment.name(bursts[[1]])
     }
 
     len <- ceiling(log10(length(bursts)))
@@ -152,7 +150,7 @@ dwt.write_bursts <- function (bursts, gaps=c(), directory="bursts", filename="bu
 
     for (i in 1:length(bursts)) {
         filename <- file.path(subfolder, sprintf(str, i))
-        dwt.write(record=bursts[[i]], file=filename, rec=i)
+        dwt.write(segment=bursts[[i]], file=filename, seg=i)
     }
 
 
