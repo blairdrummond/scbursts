@@ -52,6 +52,61 @@ evt.read <- function (filename) {
 
 
 
+
+#' Write burst(s) to a .evt file
+#'
+#' @param segment A single segment to write to filename
+#' @param filename The filename
+#' @examples
+#' \dontrun{
+#'
+#' evt.write(segment, file="60mc-2.evt")
+#'
+#' }
+#' @export
+#' @importFrom utils read.csv
+evt.write <- function (segment, file="") {
+    
+
+    header_string <- "5
+File
+Acquire	Z:\\nonsense.dat	0	
+Sweeps
+1	0	0	0	0	0	
+2	0 0 0 0 0 
+Segments
+1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	
+Events
+"
+
+    write(header_string, file) 
+
+
+    data <- evt.from_dwells(segment)
+
+    times <- data$times
+    states <- data$states
+
+    # This forces a tab to be placed at the beginning
+    col1 <- rep(1,length(times))
+    col3 <- rep("0.000000E+000",length(times))
+    col4 <- rep("0.000000E+000",length(times))
+    col6 <- rep("0.000000E+000",length(times))
+    
+    data  <- data.frame(col1, times, col3, col4, states, col6)
+
+    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
+
+}
+
+
+
+
+
+
+
+
 #' Calculate pulse lengths
 #'
 #' Converts transition times to dwell durations
@@ -94,5 +149,33 @@ evt.to_dwells <- function(table) {
     }
 
     return(segment)
+
+}
+
+
+
+
+
+
+#' Converts dwell durations to absolute transition times
+#'
+#' @param segment A segment
+#' @return A dataframe of states and transition times
+#' @examples
+#' 
+#' \dontrun{
+#' table <- evt.from_dwells(segment)
+#' }
+#' @export
+evt.from_dwells <- function(segment) {
+
+    times <- diffinv(segment$dwells)
+
+    ## The last dwell is always a 1, meaning at the end you transition to 0.
+    states <- append(segment$states, 0)
+
+    data  <- data.frame(states, times)
+
+    return(data)
 
 }

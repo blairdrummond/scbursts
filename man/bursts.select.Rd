@@ -12,7 +12,7 @@ bursts.select(bursts, func, one_file = FALSE)
 
 \item{func}{A function of a segment that returns either TRUE or FALSE}
 
-\item{one_file}{TRUE or FALSE: Return a single file to disk, or a list of bursts.
+\item{one_file}{TRUE or FALSE: Return a single file to write to disk, or a list of bursts.
 The one_file will return a file with all unselected bursts zeroed out.}
 }
 \value{
@@ -30,10 +30,10 @@ high_popen <- function (seg) {
 
 }
 
-subset <- bursts.select(high_popen, bursts)
+subset <- bursts.select(bursts, high_popen)
 
 
 # To export to one .dwt file
-subset_f <- bursts.select(high_popen, bursts, one_file=TRUE)
+subset_f <- bursts.select(bursts, high_popen, one_file=TRUE)
 }
 }

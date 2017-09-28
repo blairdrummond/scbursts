@@ -70,6 +70,28 @@ From this, we extract the {\tt Events} section, taking the second column -the tr
 
 \end{minipage}
    
+   
+   \newpage
+   
+\begin{center}   
+\begin{tikzpicture}[node distance = 5cm, auto]
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle] (a) {List of bursts};
+    \path [draw,very thick,->] (a) edge [loop left] node {Select or Remove Bursts} (a);
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,right of=a,dashed] (z) {Make Plots and/or Gather Statistics} (a);
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,below of=a,dashed] (b) {Write all bursts to one .dwt};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,left of=b,dashed] (c) {Write each burst to .dwt};
+    \node [draw,text badly centered, text width=10em,minimum height=4em,rectangle,right of=b,dashed] (d) {Write all bursts to one .evt};
+    \path [draw,very thick,->] (a) -- node [right] {} (b);
+    \path [draw,very thick,->] (a) -- node [right] {} (c);
+    \path [draw,very thick,->] (a) -- node [right] {} (d);
+    \path [draw,very thick,->] (a) -- node [right] {} (z);
+\end{tikzpicture}
+\end{center}   
+   
+   
+   
+   
+   
 # Definitions and Terminology
 
 In the program, a **segment** is used to denote any contiguous sequence of dwells (plus some metadata); so, a recording is a segment, but so are the bursts, which are contained in a recording. So, for example, a function like `bursts.defined_by_tcrit` splits a segment (the recording) into multiple smaller segments (the bursts). The segements *always* start and end on open dwells, and the closed dwells between them (interburst closings) are refered to as **gaps**.
@@ -118,11 +140,7 @@ dwt.write(record_c, file="60uMc.dwt")
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Splitting segment into smaller segments 
-bursts_and_gaps <- bursts.defined_by_tcrit(record_c , 0.1)
-
-# Extract the two parts
-bursts <- bursts_and_gaps$bursts
-gaps <- bursts_and_gaps$gaps
+bursts <- bursts.defined_by_tcrit(record_c , 0.1)
 
 # Note that you need two brackets to access list elements.
 # Also note that each burst begins and ends with a 1 state
@@ -130,8 +148,76 @@ gaps <- bursts_and_gaps$gaps
 bursts[[1]]
 
 # Write all the bursts to seperate `.dwt` files + a `bursts.csv` file
-dwt.write_bursts(bursts=bursts, gaps=gaps)
+dwt.write_bursts(bursts=bursts)
 ```
+
+## Recombining bursts into one sequence
+
+You may wish to find all the bursts in a recording (for instance, by defining a critical time), and remove certain bursts that you aren't interested in, before analyzing your recording again with some other software. To do this, you would have to 
+
+* Import your recording
+* Define a critical time
+* Select your bursts of interest
+* Recombine them into **one** sequence of dwells
+* Write that sequence to `.evt` or `.dwt`
+
+To do this, one could imagine two options
+
+**Option 1**
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Load the library
+library(uottawaionchannel)
+
+# Import a pre-packaged file (stored inside the folder extdata)
+infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
+
+
+# Import the evt as a table
+table <- evt.read(infile)
+
+# Just transition times and states
+head(table)
+
+# Turn the transition times into dwells
+record <- evt.to_dwells(table)
+
+# Correct the risetime
+record_c <- risetime.correct_guassian(Tr=14.77155587,record)
+
+# Define critical time (tcrit=0.1)
+bursts <- bursts.defined_by_tcrit(record_c , 0.1)
+
+high_popen <- function (seg) {
+    segment.popen(seg) > 0.7
+}
+
+########## OPTION 1 ##############
+
+revised_record <- bursts.select(bursts, high_popen, one_file=TRUE)
+
+evt.write(revised_record, file="new_60mc.evt")
+dwt.write(revised_record, file="new_60mc.evt")
+
+########## END OPTION 1 ##############
+
+######### OPTION 2 #############
+
+high_bursts <- bursts.select(bursts, high_popen)
+
+#    revised_record <- bursts.recombine(high_bursts)
+#    
+#    evt.write(revised_record, file="new_60mc.evt")
+#    dwt.write(revised_record, file="new_60mc.evt")
+#    
+#    ######### END OPTION 2 #############
+```
+
+These two alternative *almost* do the same thing, but not quite. The issue is that when you remove bursts (by not selecting them), you forget what happens at the beginning and end of the recording if you happen to remove the first and/or last burst that was observed. From the bursts in the middle alone, you don't even know how long the recording was, let alone how long the gap after a burst might be (if you removed all subsequent bursts). However, 
+
+`bursts.select(bursts,func,one_file=TRUE)`
+
+accounts for this, by creating one big segment with the unselected bursts zeroed-out (thus, you don't lose this information). So, *Option 1* is preferable here, as *Option 2* could lose information, but in many cases they may have the same result.
 
 \newpage
 

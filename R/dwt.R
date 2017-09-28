@@ -115,7 +115,7 @@ dwt.read_bursts <- function (folder) {
 #' in temporal order.
 #'
 #' @param bursts list of dataframes corresponding to bursts
-#' @param gaps vector of gaps to write as csv
+#' @param gaps vector of gaps to write as csv (default is to try to reconstruct from bursts)
 #' @param directory folder to create for bursts
 #' @param filename label for the files
 #' @param timestamp Put the date and time in the folder-name
@@ -156,10 +156,11 @@ dwt.write_bursts <- function (bursts, gaps=c(), directory="bursts", filename="bu
 
     ### Add a .csv containing all of the gaps.
     if (length(gaps) != 0) {
-        write.table(gaps, file=file.path(subfolder,"gaps.csv"), col.names = FALSE, row.names = FALSE)
+        gaps <- bursts.get_gaps(bursts)
     }
+
+    write.table(gaps, file=file.path(subfolder,"gaps.csv"), col.names = FALSE, row.names = FALSE)
 
     return (subfolder)
     
 }
-

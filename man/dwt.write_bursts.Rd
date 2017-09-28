@@ -11,7 +11,7 @@ dwt.write_bursts(bursts, gaps = c(), directory = "bursts",
 \arguments{
 \item{bursts}{list of dataframes corresponding to bursts}
 
-\item{gaps}{vector of gaps to write as csv}
+\item{gaps}{vector of gaps to write as csv (default is to try to reconstruct from bursts)}
 
 \item{directory}{folder to create for bursts}
 

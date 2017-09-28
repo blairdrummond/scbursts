@@ -4,18 +4,12 @@
 #'
 #' @param segment Segment with $states and $dwells
 #' @param t_crit Critical time (us) at which to divide bursts
-#' @return A pair (bursts,gaps), where the bursts are segments
-#' starting and ending in 1 states (open dwell), and gaps is a
-#' vector of 0s (closed dwells) which sit inbetween the bursts.
-#' There will be n bursts and n-1 gaps.
+#' @return bursts. Which is a list of segments
+#' starting and ending in 1 states (open dwell)
 #' @examples
 #' \dontrun{
 #' # Splitting segment into smaller segments 
-#' bursts_and_gaps <- bursts.defined_by_tcrit(record_c , 0.1)
-#' 
-#' # Extract the two parts
-#' bursts <- bursts_and_gaps$bursts
-#' gaps <- bursts_and_gaps$gaps
+#' bursts <- bursts.defined_by_tcrit(record_c , 0.1)
 #' 
 #' # Note that you need two brackets to access list elements.
 #' # Also note that each burst begins and ends with an open dwell
@@ -42,7 +36,6 @@ bursts.defined_by_tcrit <- function(segment, t_crit) {
 
 
 
-
     # Extract the gaps
     filter_gaps <- function(i) {
 
@@ -63,7 +56,6 @@ bursts.defined_by_tcrit <- function(segment, t_crit) {
     gaps <- Filter(Negate(is.null), sapply(1:length(pauses),filter_gaps))
     gaps <- unlist(gaps, use.names=FALSE)
 
-    
     
     
     ### Turn gaps into selected regions (indices only)
@@ -112,21 +104,19 @@ bursts.defined_by_tcrit <- function(segment, t_crit) {
     bursts <- lapply(seq_along(burst_selectors), burst)
     bursts <- bursts.start_times_update(bursts, gaps)
     
-
-
-    return( list( bursts=bursts , gaps=gaps ))
+    return(bursts)
 
 }
 
 
 
+#' YOU PROBABLY WON'T EVER HAVE TO CALL THIS DIRECTLY.
+#' 
 #' Attach the meta-data to each segment saying when it began.
 #'
 #' It interleaves the durations of the bursts and gaps, and
 #' assigns the sum of those durations up to a point as the
 #' starting time
-#'
-#' You probably won't ever have to call this directly.
 #'
 #' @param bursts List of segments
 #' @param gaps vector of gap times.
@@ -161,28 +151,38 @@ bursts.start_times_update <- function (bursts, gaps) {
 #' This is done using the start_time attribute, which
 #' is mostly hidden in the data.
 #'
+#' (The gaps at the ends may have length 0)
+#'
+#'
+#' ================ Bursts =================
+#' 
+#'       1      2     3   4   5   6   7
+#'      |||   |||||   |   |   |   |   |
+#' _____|||___|||||___|___|___|___|___|_____
+#'   1      2       3   4   5   6   7    8
+#'
+#' ================= Gaps ==================
+#'
+#'
+#'
 #' @param bursts The list of segments
-#' @return A vector of gap times
+#' @return A vector of N+1 gaps for N bursts times
 #' @examples
 #' \dontrun{
 #' gaps <- bursts.get_gaps(bursts)
 #' }
 #' @export
-bursts.get_gaps <- function (bursts) {
-
+bursts.get_gaps <- function (bursts, end_time=-1) {
 
     start_times <- sapply(bursts, segment.start_time)
     durations   <- sapply(bursts, segment.duration)
+
+    diff_start <- diff(start_times)
+    head_durations <- durations[1:length(durations)-1]
     
-    gaps <- diff(start_times) - durations[1:length(durations)-1]
+    gaps <- diff_start - head_durations
     
 }
-
-
-
-
-
-
 
 
 
@@ -221,6 +221,32 @@ bursts.remove_first_and_last <- function (bursts) {
 
 
 
+#' From a list of segments, return the concatenated 
+#' segment containing all bursts.
+#'
+#' Inverse of functions like bursts.defined_by_tcrit
+#'
+#' @param bursts The list of all bursts
+#' @return The segment containing all bursts.
+#' @examples
+#' \dontrun{
+#'
+#' record <- bursts.recombine(bursts)
+#' 
+#' }
+#' @export
+bursts.recombine <- function (bursts) {
+
+    ## This is a silly way to do it, but it works!
+
+    all <- function (x) { TRUE }
+
+    return ( bursts.select(bursts, all, one_file=TRUE) )
+
+}
+
+
+
 
 
 #' From a list of bursts, extract those that interest you by
@@ -228,7 +254,7 @@ bursts.remove_first_and_last <- function (bursts) {
 #'
 #' @param bursts The list of all bursts
 #' @param func A function of a segment that returns either TRUE or FALSE
-#' @param one_file TRUE or FALSE: Return a single file to disk, or a list of bursts.
+#' @param one_file TRUE or FALSE: Return a single file to write to disk, or a list of bursts.
 #' The one_file will return a file with all unselected bursts zeroed out.
 #' @return A shorter list of bursts OR if one_file is passed one segment with zeros where the other bursts might have been originally. Defaults to FALSE.
 #' @examples
@@ -239,11 +265,11 @@ bursts.remove_first_and_last <- function (bursts) {
 #' 
 #' }
 #'
-#' subset <- bursts.select(high_popen, bursts)
+#' subset <- bursts.select(bursts, high_popen)
 #'
 #' 
 #' # To export to one .dwt file
-#' subset_f <- bursts.select(high_popen, bursts, one_file=TRUE)
+#' subset_f <- bursts.select(bursts, high_popen, one_file=TRUE)
 #' }
 #' @export
 bursts.select <- function (bursts, func, one_file=FALSE) {
@@ -257,14 +283,7 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
         return(filtered)
     }
 
-    ## else
-
-    gaps <- diff(sapply(filtered, segment.start_time))
-    lengths <- sapply(filtered, segment.duration)
-
-    ## this is the time following one burst preceding another
-    gap_lengths <- gaps - lengths[1:length(lengths)-1]
-
+    gaps <- bursts.get_gaps(filtered)
 
 
     ##### We MIGHT be missing the first and last gap. #####
@@ -273,7 +292,7 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
     start <- segment.start_time(filtered[[1]])
     if (start != 0) {
 
-        gap_lengths <- append(start, gap_lengths)
+        gaps <- append(start, gaps)
 
         interleave_gaps_first <- TRUE
         
@@ -282,6 +301,8 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
         interleave_gaps_first <- FALSE
 
     }
+
+
     
 
 
@@ -292,13 +313,13 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
 
         end <- segment.start_time(last_burst) + segment.duration(last_burst)
         
-        len <- end - segment.duration(last_filtered)
+        len <- end - (segment.duration(last_filtered) + segment.start_time(last_filtered))
         
-        gap_lengths <- append(gap_lengths, end)
+        gaps <- append(gaps, len)
         
     } 
     
- 
+    
     
 
     
@@ -307,7 +328,7 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
     }
 
     ## list of size one dataframes
-    faux_segs <- lapply(gap_lengths, faux_segment)
+    faux_segs <- lapply(gaps, faux_segment)
 
 
     ## https://stackoverflow.com/questions/16443260/interleave-lists-in-r
