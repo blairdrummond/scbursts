@@ -2,3 +2,4 @@ build.Rout
 *.pdf
 .RData
 *.tar.gz
+builds/*
