@@ -27,8 +27,7 @@ install-no-doc: build-no-doc
 	R CMD INSTALL $(PACKAGE)_$(VERSION).tar.gz
 
 check: build
-	# R CMD check $(PACKAGE)_$(VERSION).tar.gz --as-cran
-	R CMD check $(PACKAGE)_$(VERSION).tar.gz
+	R CMD check $(PACKAGE)_$(VERSION).tar.gz --as-cran
 
 check-no-doc: build-no-doc
 	R CMD check $(PACKAGE)_$(VERSION).tar.gz --as-cran
