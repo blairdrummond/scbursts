@@ -3,3 +3,4 @@ build.Rout
 .RData
 *.tar.gz
 builds/*
+uottawaionchannel.Rcheck/

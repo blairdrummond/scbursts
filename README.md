@@ -33,8 +33,6 @@ library(uottawaionchannel)
 
 ## From Source 
 
-### If you have LaTeX
-
 You can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
 
 1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
@@ -59,36 +57,7 @@ or possibly
 sudo make install
 ~~~
 
-And then the package should be installed.
-
-
-### If you don't have LaTeX
-
-You can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
-
-1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
-
-2. Open a terminal in the directory, and run
-
-~~~
-make all-no-doc
-~~~
-
-to prepare the package. This will build it and download all the dependencies that you need.
-
-3. To install, then just run
-
-~~~
-make install-no-doc
-~~~
-
-or possibly
-
-~~~
-sudo make install-no-doc
-~~~
-
-And then the package should be installed. (though it won't have a manual)
+And then the package should be installed. Though, you won't be able to create any manuals unless you have LaTeX installed.
 
 ## From CRAN
 
