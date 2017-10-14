@@ -1,7 +1,7 @@
 PACKAGE = uottawaionchannel
 VERSION = 0.1
 
-LATEX := $(shell superpdflatex -v 2> /dev/null)
+LATEX := $(shell pdflatex -v 2> /dev/null)
 
 export_build := builds/$(shell date +'%Y-%m-%d_%H-%M-%S')
 

@@ -32,8 +32,8 @@ evt.read <- function (filename) {
     FileInput <- readLines(filename) 
 
     # Jump to where the data starts
-    skip_line <- grep("^Events$",FileInput)
-  
+    skip_line <- tail(grep("^Events$",FileInput), n=1)
+
     # Read everything past 'Events'
     table <- read.csv(filename, skip=skip_line, sep="\t",header=FALSE)
     
