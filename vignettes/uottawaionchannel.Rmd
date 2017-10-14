@@ -205,12 +205,12 @@ dwt.write(revised_record, file="new_60mc.evt")
 
 high_bursts <- bursts.select(bursts, high_popen)
 
-#    revised_record <- bursts.recombine(high_bursts)
-#    
-#    evt.write(revised_record, file="new_60mc.evt")
-#    dwt.write(revised_record, file="new_60mc.evt")
-#    
-#    ######### END OPTION 2 #############
+revised_record <- bursts.recombine(high_bursts)
+
+evt.write(revised_record, file="new_60mc.evt")
+dwt.write(revised_record, file="new_60mc.evt")
+
+######### END OPTION 2 #############
 ```
 
 These two alternative *almost* do the same thing, but not quite. The issue is that when you remove bursts (by not selecting them), you forget what happens at the beginning and end of the recording if you happen to remove the first and/or last burst that was observed. From the bursts in the middle alone, you don't even know how long the recording was, let alone how long the gap after a burst might be (if you removed all subsequent bursts). However, 

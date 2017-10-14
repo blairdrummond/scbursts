@@ -77,16 +77,20 @@ Sweeps
 Segments
 1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	
-Events
-"
+Events\r"
 
+    # Use DOS line endings
+    header_string <- gsub("\n", "\r\n", header_string)
+    
     write(header_string, file) 
-
 
     data <- evt.from_dwells(segment)
 
     times <- data$times
+    times <- sprintf("%.8f", times)
+
     states <- data$states
+
 
     # This forces a tab to be placed at the beginning
     col1 <- rep(1,length(times))
@@ -96,7 +100,7 @@ Events
     
     data  <- data.frame(col1, times, col3, col4, states, col6)
 
-    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
+    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
 
 }
 

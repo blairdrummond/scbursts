@@ -174,6 +174,11 @@ bursts.start_times_update <- function (bursts, gaps) {
 #' @export
 bursts.get_gaps <- function (bursts, end_time=-1) {
 
+    if (length(bursts) == 0) {
+        warning("list not long enough to extract bursts from")
+        return(list())
+    }
+    
     start_times <- sapply(bursts, segment.start_time)
     durations   <- sapply(bursts, segment.duration)
 
@@ -239,12 +244,11 @@ bursts.recombine <- function (bursts) {
 
     ## This is a silly way to do it, but it works!
 
-    all <- function (x) { TRUE }
+    all <- function (x) { return(TRUE) }
 
     return ( bursts.select(bursts, all, one_file=TRUE) )
 
 }
-
 
 
 
@@ -277,12 +281,16 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
     ## "Filter" is ambiguous in the terriory of ion-channel analysis, and so
     ## it's prefereable to use "select" instead.
 
-    filtered <- Filter(Negate(func), bursts)
+    filtered <- Filter(func, bursts)
     
     if (!one_file) {
         return(filtered)
     }
 
+    if (length(filtered) == 0) {
+        return (filtered)
+    }
+    
     gaps <- bursts.get_gaps(filtered)
 
 
