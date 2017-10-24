@@ -3,7 +3,7 @@ VERSION = 0.1
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
 
-export_build := builds/$(shell date +'%Y-%m-%d_%H-%M-%S')
+BUILD := builds/$(shell date +'%Y-%m-%d_%H-%M-%S')
 
 all: deps docs build check
 

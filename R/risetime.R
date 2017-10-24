@@ -1,4 +1,4 @@
-#' Undo the effect of the guassian filter
+#' Undo the effect of the gaussian filter
 #' See section 4.1.1 of Colquhoun and Sigworth,
 #' "Fitting and Analysis of Single-Channel segments"
 #'
@@ -12,10 +12,10 @@
 #' @return Segment with corrected risetimes.
 #' @examples
 #' \dontrun{
-#' segment <- risetime.correct_guassian(14.77155587, segment)
+#' segment <- risetime.correct_gaussian(14.77155587, segment)
 #' }
 #' @export
-risetime.correct_guassian <- function(Tr, segment) {
+risetime.correct_gaussian <- function(Tr, segment) {
 
 
     ### Tr = rise time (in us!!)
@@ -36,7 +36,7 @@ risetime.correct_guassian <- function(Tr, segment) {
     a3  = 1.120  * Trm**(-3)
 
     rescale <- function(T) {
-        ### undo the effect of a guassian filter to one time interval
+        ### undo the effect of a gaussian filter to one time interval
         T <- 1000 * T
 	return( T + a1 * exp(- T / a1 - a2 * T**2 - a3 * T**3) )
     }
