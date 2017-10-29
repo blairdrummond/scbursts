@@ -126,7 +126,7 @@ dwt.read_bursts <- function (folder) {
 #' }
 #' @export
 #' @importFrom utils write.table
-dwt.write_bursts <- function (bursts, gaps=c(), directory="bursts", filename="burst", timestamp=TRUE) {
+dwt.write_bursts <- function (bursts, gaps=NULL, directory="bursts", filename="burst", timestamp=TRUE) {
 
 
     ### Write the bursts
@@ -155,11 +155,11 @@ dwt.write_bursts <- function (bursts, gaps=c(), directory="bursts", filename="bu
 
 
     ### Add a .csv containing all of the gaps.
-    if (length(gaps) != 0) {
+    if (is.null(gaps)) {
         gaps <- bursts.get_gaps(bursts)
+        write.table(gaps, file=file.path(subfolder,"gaps.csv"), col.names = FALSE, row.names = FALSE)
     }
 
-    write.table(gaps, file=file.path(subfolder,"gaps.csv"), col.names = FALSE, row.names = FALSE)
 
     return (subfolder)
     

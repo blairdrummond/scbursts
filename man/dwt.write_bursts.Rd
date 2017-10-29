@@ -5,7 +5,7 @@
 \title{Write all the bursts to dwt. They will be placed in
 a timestamped subfolder of bursts/}
 \usage{
-dwt.write_bursts(bursts, gaps = c(), directory = "bursts",
+dwt.write_bursts(bursts, gaps = NULL, directory = "bursts",
   filename = "burst", timestamp = TRUE)
 }
 \arguments{

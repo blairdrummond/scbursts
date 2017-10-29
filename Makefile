@@ -1,5 +1,5 @@
 PACKAGE = uottawaionchannel
-VERSION = 0.1
+VERSION = 0.2
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
 
@@ -26,7 +26,7 @@ else
 endif
 
 $(PACKAGE)_$(VERSION).tar.gz:
-	build
+	$(MAKE) build
 
 install: $(PACKAGE)_$(VERSION).tar.gz
 	R CMD INSTALL $(PACKAGE)_$(VERSION).tar.gz

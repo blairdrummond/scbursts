@@ -129,7 +129,7 @@ head(record)
 
 
 # Correct the risetime
-record_c <- risetime.correct_guassian(Tr=14.77155587,record)
+record_c <- risetime.correct_gaussian(Tr=14.77155587,record)
 
 
 # Write the corrected record to a .dwt file
@@ -183,7 +183,7 @@ head(table)
 record <- evt.to_dwells(table)
 
 # Correct the risetime
-record_c <- risetime.correct_guassian(Tr=14.77155587,record)
+record_c <- risetime.correct_gaussian(Tr=14.77155587,record)
 
 # Define critical time (tcrit=0.1)
 bursts <- bursts.defined_by_tcrit(record_c , 0.1)
