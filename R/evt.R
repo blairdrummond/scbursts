@@ -1,5 +1,7 @@
 #' Read a .evt file to a table
 #'
+#' Times are in seconds
+#'
 #' @param filename The filename
 #' @return A table with columns "states" and "times"
 #' @examples
@@ -87,6 +89,7 @@ Events\r"
     data <- evt.from_dwells(segment)
 
     times <- data$times
+
     times <- sprintf("%.8f", times)
 
     states <- data$states

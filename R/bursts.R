@@ -3,7 +3,8 @@
 #' Along with the interburst closings, which are referred to as "gaps".
 #'
 #' @param segment Segment with $states and $dwells
-#' @param t_crit Critical time (us) at which to divide bursts
+#' @param t_crit Critical time at which to divide bursts (in seconds by default)
+#' @param units what unit the critical time is in ('s','ms','us', or 'ns')
 #' @return bursts. Which is a list of segments
 #' starting and ending in 1 states (open dwell)
 #' @examples
@@ -24,8 +25,22 @@
 #' > 432      1  0.14415000
 #' }
 #' @export
-bursts.defined_by_tcrit <- function(segment, t_crit) {
+bursts.defined_by_tcrit <- function(segment, t_crit, units="s") {
 
+    
+    if (units == "s") {         
+        t_crit = t_crit
+    } else if (units == "ms") {
+        t_crit = t_crit / 1000
+    } else if (units == "us") {
+        t_crit = t_crit / 1000000
+    } else if (units == "ns") {
+        t_crit = t_crit / 1000000000
+    } else {
+        stop("units must be either 's', 'ms', 'us', or 'ns'")
+    }
+
+    
     ### Find all gaps
     gap_func <- function(row) {
         row$dwells > t_crit & row$state == 0
@@ -152,18 +167,6 @@ bursts.start_times_update <- function (bursts, gaps) {
 #' is mostly hidden in the data.
 #'
 #' (The gaps at the ends may have length 0)
-#'
-#'
-#' ================ Bursts =================
-#' 
-#'       1      2     3   4   5   6   7
-#'      |||   |||||   |   |   |   |   |
-#' _____|||___|||||___|___|___|___|___|_____
-#'   1      2       3   4   5   6   7    8
-#'
-#' ================= Gaps ==================
-#'
-#'
 #'
 #' @param bursts The list of segments
 #' @return A vector of N+1 gaps for N bursts times

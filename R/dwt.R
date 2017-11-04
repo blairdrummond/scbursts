@@ -2,6 +2,8 @@
 #'
 #' Writes DOS line endings. 
 #'
+#' Dwells are in milliseconds
+#'
 #' @param segment segment with $dwells and $states
 #' @param file Filename to write to
 #' @param seg Segment to write in .dwt header.
@@ -20,6 +22,8 @@ dwt.write <- function(segment, file="", seg=1) {
     states <- segment$states
     dwells <- segment$dwells
 
+    dwells <- dwells * 1000 # seconds to milliseconds 
+
     dwells <- sprintf("%.6f", dwells)
 
     # This forces a tab to be placed at the beginning
@@ -36,6 +40,8 @@ dwt.write <- function(segment, file="", seg=1) {
 
 #' Read a .dwt file. Result is a "segment", which is a
 #' dataframe extra data. See "segment" for more details.
+#'
+#' Converts millisecond dwells to seconds.
 #'
 #' @param filename Filename to read from
 #' @examples
@@ -58,6 +64,9 @@ dwt.read <- function (filename) {
 
     # NOTE: Column 1 is empty, and thats how we get the spacing right.
     dwells <- table[,3]
+
+    dwells <- dwells / 1000 # milliseconds to seconds
+    
     states <- table[,2]
 
     return(segment.create(states, dwells, seg=seg, start_time=0, name=util.basename(filename)))
@@ -97,6 +106,8 @@ dwt.read_bursts <- function (folder) {
         warning("No Gaps File Found! Starting times will not be accurate!")
         gaps <- rep(0, length(bursts)) # otherwise set them to zero
     }
+    
+    gaps <- gaps / 1000 # milliseconds to seconds
     
     bursts <- bursts.start_times_update(bursts, gaps)
 
@@ -157,6 +168,9 @@ dwt.write_bursts <- function (bursts, gaps=NULL, directory="bursts", filename="b
     ### Add a .csv containing all of the gaps.
     if (is.null(gaps)) {
         gaps <- bursts.get_gaps(bursts)
+
+        gaps <- gaps * 1000 # seconds to milliseconds
+        
         write.table(gaps, file=file.path(subfolder,"gaps.csv"), col.names = FALSE, row.names = FALSE)
     }
 
