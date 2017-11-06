@@ -77,7 +77,7 @@ dwt.read <- function (filename, separating_factor=1000) {
     segs <- c(which(grepl("Segment:", FileInput)), length(FileInput))
 
     ### Track the longest space
-    max_dwell <- seperating_factor
+    max_dwell <- separating_factor
     
     bursts <- list()
     for (i in 1:(length(segs)-1)) {
@@ -94,7 +94,7 @@ dwt.read <- function (filename, separating_factor=1000) {
         
         states <- table[,2]
 
-        bursts[[i]] <- segment.create(states, dwells, seg=seg, start_time=0, name=util.basename(filename))
+        bursts[[i]] <- segment.create(states, dwells, seg=i, start_time=0, name=util.basename(filename))
     }
 
     bursts <- bursts.start_times_update(bursts,gaps=rep(max_dwell,length(segs)-2))
