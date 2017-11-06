@@ -18,15 +18,6 @@ is mostly hidden in the data.
 }
 \details{
 (The gaps at the ends may have length 0)
-
-================ Bursts =================
-
-1      2     3   4   5   6   7
-     |||   |||||   |   |   |   |   |
-_____|||___|||||___|___|___|___|___|_____
-  1      2       3   4   5   6   7    8
-
-================= Gaps ==================
 }
 \examples{
 \dontrun{

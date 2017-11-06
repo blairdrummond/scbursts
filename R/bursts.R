@@ -2,7 +2,8 @@
 #' into multiple -shorter- segments (which are the bursts),
 #' Along with the interburst closings, which are referred to as "gaps".
 #'
-#' @param segment Segment with $states and $dwells
+#' @param segments A segment or multiple segments with $states and $dwells.
+#' NOTE: separate segments will remain split, regardless of why they were originally divided.
 #' @param t_crit Critical time at which to divide bursts (in seconds by default)
 #' @param units what unit the critical time is in ('s','ms','us', or 'ns')
 #' @return bursts. Which is a list of segments
@@ -25,8 +26,20 @@
 #' > 432      1  0.14415000
 #' }
 #' @export
-bursts.defined_by_tcrit <- function(segment, t_crit, units="s") {
+bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
 
+    if (!is.data.frame(segments)) {
+        
+        partial <- function (s) { bursts.defined_by_tcrit(s, t_crit, units) }
+        
+        ## Don't ask me why this works.
+        return(lapply(segments, partial)[[1]])
+        
+    } else {
+        segment <- segments
+    }
+    
+    
     
     if (units == "s") {         
         t_crit = t_crit
@@ -256,6 +269,49 @@ bursts.recombine <- function (bursts) {
 
 
 
+
+
+#' Given a list of segments separated by an unknown amount of time, one
+#' may want to space the segments by some amount of time, so that they
+#' can be plotted. This function takes a separating factor, and splits
+#' up the segments by either that factor (in seconds), or that many
+#' multiples of the largest observed dwell.
+#'
+#' @param segments The segments to space out
+#' @param sep_factor the factor by which to separate the segments.
+#' Either the factor in seconds, or a multiple of the longest observed dwell.
+#' @return The segments again, but with modified meta-data.
+#' @examples
+#' \dontrun{
+#'
+#' # Still a list, but the meta-data is fixed
+#' spaced_records <- bursts.space_out(evt.read(infile), sep_factor=1000)
+#'
+#' # Combine them, and they'll be nicely spaced out.
+#' single_record <- bursts.recombine(spaced_records)
+#' 
+#' }
+#' @export
+bursts.space_out <- function (segments, sep_factor=1000) {
+
+    max_dwell <- sep_factor
+
+    for (s in segments) {
+        max_dwell <- max( max(s$dwells) * sep_factor, max_dwell )
+    }
+    
+    segments <- bursts.start_times_update(segments, gaps=rep(max_dwell, length(segments)-1))
+
+    return(segments)
+    
+}
+
+
+
+
+
+
+
 #' From a list of bursts, extract those that interest you by
 #' passing a selecting function. See the examples.
 #'
@@ -430,3 +486,4 @@ bursts.popens <- function (bursts) {sapply(bursts, segment.popen)}
 #' }
 #' @export
 bursts.pcloseds <- function (bursts) {sapply(bursts, segment.pclosed)}
+

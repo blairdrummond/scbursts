@@ -6,12 +6,15 @@
 into multiple -shorter- segments (which are the bursts),
 Along with the interburst closings, which are referred to as "gaps".}
 \usage{
-bursts.defined_by_tcrit(segment, t_crit)
+bursts.defined_by_tcrit(segments, t_crit, units = "s")
 }
 \arguments{
-\item{segment}{Segment with $states and $dwells}
+\item{segments}{A segment or multiple segments with $states and $dwells.
+NOTE: separate segments will remain split, regardless of why they were originally divided.}
 
-\item{t_crit}{Critical time (us) at which to divide bursts}
+\item{t_crit}{Critical time at which to divide bursts (in seconds by default)}
+
+\item{units}{what unit the critical time is in ('s','ms','us', or 'ns')}
 }
 \value{
 bursts. Which is a list of segments

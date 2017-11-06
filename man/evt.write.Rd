@@ -2,22 +2,22 @@
 % Please edit documentation in R/evt.R
 \name{evt.write}
 \alias{evt.write}
-\title{Write burst(s) to a .evt file}
+\title{Write bursts to a .evt file}
 \usage{
-evt.write(segment, file = "")
+evt.write(segments, file = "", header = NULL)
 }
 \arguments{
-\item{segment}{A single segment to write to filename}
+\item{segments}{A segment or list of segments to write to filename}
 
 \item{filename}{The filename}
 }
 \description{
-Write burst(s) to a .evt file
+Write bursts to a .evt file
 }
 \examples{
 \dontrun{
 
-evt.write(segment, file="60mc-2.evt")
+evt.write(segments, file="60uMc-R.evt")
 
 }
 }

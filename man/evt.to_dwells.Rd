@@ -2,24 +2,20 @@
 % Please edit documentation in R/evt.R
 \name{evt.to_dwells}
 \alias{evt.to_dwells}
-\title{Calculate pulse lengths}
+\title{Calculate pulse lengths. Converts transition times to dwell durations.}
 \usage{
-evt.to_dwells(table)
+evt.to_dwells(tables)
 }
 \arguments{
-\item{table}{with columns "states" and "times"}
+\item{tables}{Either a single table or a list of tables with columns "states" and "times"}
 }
 \value{
-A "segment" with one less row, where each row
+A segment or a list of segments with one less row, where each row
 represents pulse in state 0 (closed dwell) of duration 0.51231, instead
 of the time at which the state transitioned.
-
-Also, the output table preserves the attributes
-
-See "segment" for more info
 }
 \description{
-Converts transition times to dwell durations
+Calculate pulse lengths. Converts transition times to dwell durations.
 }
 \examples{
 
@@ -28,6 +24,6 @@ Converts transition times to dwell durations
 # 0         0.016010
 
 \dontrun{
-segment <- evt.to_dwells(table)
+segments <- evt.to_dwells(tables)
 }
 }

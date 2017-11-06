@@ -4,177 +4,101 @@
 #'
 #' Dwells are in milliseconds
 #'
-#' @param segment segment with $dwells and $states
+#' @param segments A segment or multiple segments with $dwells and $states
 #' @param file Filename to write to
-#' @param seg Segment to write in .dwt header.
+#' @param seg Segment number to write in .dwt header.
+#' @param append Add ot the end of a file or overwrite? (defaults to false)
 #' @examples
 #' \dontrun{
 #' dwt.write(segment, "file-test.dwt")
 #' }
 #' @export
 #' @importFrom utils write.table
-dwt.write <- function(segment, file="", seg=1) {
+dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 
-    header <- sprintf("Segment: %d   Dwells: %d", seg, length(segment$states))
+    if (!is.data.frame(segments)) {
 
-    write(header, file) 
+        # Erase file
+        file.remove(file) 
+        for (i in 1:length(segments)) {
+            dwt.write(segments=segments[[i]], file=file, seg=i, append=TRUE)
+        }
 
-    states <- segment$states
-    dwells <- segment$dwells
+    } else {
 
-    dwells <- dwells * 1000 # seconds to milliseconds 
+        segment <- segments
+        
+        header <- sprintf("Segment: %d   Dwells: %d", seg, length(segment$states))
 
-    dwells <- sprintf("%.6f", dwells)
+        write(header, file, append=append) 
 
-    # This forces a tab to be placed at the beginning
-    junk <- rep("",length(dwells))
-    
-    data  <- data.frame(junk,states, dwells)
-    
-    write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
-    
+        states <- segment$states
+        dwells <- segment$dwells
+
+        dwells <- dwells * 1000 # seconds to milliseconds 
+
+        dwells <- sprintf("%.6f", dwells)
+
+                                        # This forces a tab to be placed at the beginning
+        junk <- rep("",length(dwells))
+        
+        data  <- data.frame(junk,states, dwells)
+        
+        write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\n", quote = FALSE) 
+        
+    }
 }
 
 
 
 
-#' Read a .dwt file. Result is a "segment", which is a
+
+#' Read a .dwt file. Result is a list of "segments", which is a
 #' dataframe extra data. See "segment" for more details.
 #'
 #' Converts millisecond dwells to seconds.
 #'
 #' @param filename Filename to read from
+#' @param separating_factor In lieu of a known time between segments, seperate with a multple of the longest dwell.
+#' @return A list of bursts (possibly a singleton)
 #' @examples
 #' \dontrun{
 #' seg <- dwt.read(segment, "file-test.dwt")
 #' }
 #' @export
 #' @importFrom utils read.csv
-dwt.read <- function (filename) {
+dwt.read <- function (filename, separating_factor=1000) {
 
     # load lines
     FileInput <- readLines(filename) 
 
     header <- FileInput[[1]]
 
-    seg <- strtoi(sub("Segment: *([0-9]*).*",  "\\1", header, perl=TRUE))
-    # dwells <- sub(".*Dwells: *([0-9]*).*", "\\1", header, perl=TRUE)
+    segs <- c(which(grepl("Segment:", FileInput)), length(FileInput))
 
-    table <- read.csv(filename, skip=1, sep="\t",header=FALSE)
-
-    # NOTE: Column 1 is empty, and thats how we get the spacing right.
-    dwells <- table[,3]
-
-    dwells <- dwells / 1000 # milliseconds to seconds
+    ### Track the longest space
+    max_dwell <- seperating_factor
     
-    states <- table[,2]
+    bursts <- list()
+    for (i in 1:(length(segs)-1)) {
+        table <- read.csv(filename, skip=segs[i], nrows=segs[i+1]-segs[i]-1, sep="\t",header=FALSE)
 
-    return(segment.create(states, dwells, seg=seg, start_time=0, name=util.basename(filename)))
-    
-}
+        ### NOTE: Column 1 is empty, and thats how we get the spacing right.
 
+        dwells <- table[,3]
 
+        dwells <- dwells / 1000 # milliseconds to seconds
 
-
-
-
-
-#' Read bursts from a folder.
-#'
-#' @param folder list of dataframes corresponding to bursts
-#' @return A pair (bursts,gaps), where the bursts are segments
-#' starting and ending in an open dwell, and gaps is a vector of 0s which sit
-#' inbetween the bursts. There will be n bursts and n-1 gaps.
-#' @examples
-#' \dontrun{
-#' pair <- dwt.read_bursts("bursts/60uM-2017-08-19-19-35")
-#' bursts <- pair$bursts
-#' gaps <- pair$gaps
-#' }
-#' @export
-#' @importFrom utils read.table
-dwt.read_bursts <- function (folder) {
-
-    filenames <- sort(list.files(folder, pattern="*.dwt", full.names = TRUE))
-    bursts <- lapply(filenames, dwt.read)
-
-
-    gaps <- file.path(folder,"gaps.csv")
-    if (file.exists(gaps)) {
-        gaps <- read.table(gaps)$V1  # read as vector
-    } else {
-        warning("No Gaps File Found! Starting times will not be accurate!")
-        gaps <- rep(0, length(bursts)) # otherwise set them to zero
-    }
-    
-    gaps <- gaps / 1000 # milliseconds to seconds
-    
-    bursts <- bursts.start_times_update(bursts, gaps)
-
-    return(list(bursts=bursts,gaps=gaps))
-
-}
-
-
-
-
-
-#' Write all the bursts to dwt. They will be placed in
-#' a timestamped subfolder of bursts/
-#'
-#' All bursts will be written out as .dwt files, labeled
-#' in temporal order.
-#'
-#' @param bursts list of dataframes corresponding to bursts
-#' @param gaps vector of gaps to write as csv (default is to try to reconstruct from bursts)
-#' @param directory folder to create for bursts
-#' @param filename label for the files
-#' @param timestamp Put the date and time in the folder-name
-#' @return Name of folder containing contents.
-#' @examples
-#' \dontrun{
-#' dwt.write_bursts(bursts)
-#' }
-#' @export
-#' @importFrom utils write.table
-dwt.write_bursts <- function (bursts, gaps=NULL, directory="bursts", filename="burst", timestamp=TRUE) {
-
-
-    ### Write the bursts
-    if (!is.null(segment.name(bursts[[1]]))) {
-        filename <- segment.name(bursts[[1]])
-    }
-
-    len <- ceiling(log10(length(bursts)))
-    str <- sprintf("%s-%%0%dd.dwt", filename, len)
-
-    if (timestamp) {
-        time <- format(Sys.time(), "%F-%H-%M")
-        subfolder <- file.path("bursts", paste(filename,time,sep='-'))
-    } else {
-        subfolder <- file.path("bursts", filename)
-    }
-
-    
-    dir.create("bursts")
-    dir.create(subfolder)
-
-    for (i in 1:length(bursts)) {
-        filename <- file.path(subfolder, sprintf(str, i))
-        dwt.write(segment=bursts[[i]], file=filename, seg=i)
-    }
-
-
-    ### Add a .csv containing all of the gaps.
-    if (is.null(gaps)) {
-        gaps <- bursts.get_gaps(bursts)
-
-        gaps <- gaps * 1000 # seconds to milliseconds
+        ### Take the longest of all gaps, bound from below by seperating_factor itself
+        max_dwell <- max(max(dwells)*separating_factor, max_dwell)
         
-        write.table(gaps, file=file.path(subfolder,"gaps.csv"), col.names = FALSE, row.names = FALSE)
+        states <- table[,2]
+
+        bursts[[i]] <- segment.create(states, dwells, seg=seg, start_time=0, name=util.basename(filename))
     }
 
-
-    return (subfolder)
+    bursts <- bursts.start_times_update(bursts,gaps=rep(max_dwell,length(segs)-2))
+    
+    return(bursts)
     
 }

@@ -4,13 +4,13 @@
 \alias{evt.from_dwells}
 \title{Converts dwell durations to absolute transition times}
 \usage{
-evt.from_dwells(segment)
+evt.from_dwells(segments)
 }
 \arguments{
-\item{segment}{A segment}
+\item{segments}{A segment or multiple segemtns}
 }
 \value{
-A dataframe of states and transition times
+A dataframe or multiple dataframes of states and transition times
 }
 \description{
 Converts dwell durations to absolute transition times
@@ -18,6 +18,9 @@ Converts dwell durations to absolute transition times
 \examples{
 
 \dontrun{
-table <- evt.from_dwells(segment)
+tables <- evt.from_dwells(segments)
+
+evt.write(tables, file="output.evt")
+
 }
 }

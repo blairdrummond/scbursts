@@ -10,18 +10,24 @@ evt.read(filename)
 \item{filename}{The filename}
 }
 \value{
-A table with columns "states" and "times"
+A list of tables with columns "states" and "times".
+Each table corresponds to a contiguous segment from a recording.
 }
 \description{
-Read a .evt file to a table
+Times are in seconds
 }
 \examples{
+
+library(uottawaionchannel)
+
 \dontrun{
-table <- evt.read("data/60uM.evt")
+tables <- evt.read("data/60uM.evt")
+}
 
 # import some of the data included with the package
 infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
-table <- evt.read(infile)
+tables <- evt.read(infile)
 
-}
+head(tables[[1]])
+
 }

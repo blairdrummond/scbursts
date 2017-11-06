@@ -90,6 +90,9 @@ From this, we extract the {\tt Events} section, taking the second column -the tr
    
    
    
+## At least, in principle this is what's happening
+
+There is an added complexity, that a single recording (`evt` or `dwt`) may include pauses, and the temporal information is lost between these pauses. As a result, instead of reading a single table from an `evt` or `dwt` file, the output from a file-read will be a list of tables. You can, however, recombine thse tables into one, by making up an amount of elapsed time that accounts for the pauses.
    
    
 # Definitions and Terminology
@@ -113,34 +116,66 @@ infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
 # infile <- "data/100uM.evt"
 
 # Import the evt as a table
-table <- evt.read(infile)
+tables <- evt.read(infile)
 
 
 # Just transition times and states
-head(table)
+head(tables)
 
 
 # Turn the transition times into dwells
-record <- evt.to_dwells(table)
+records <- evt.to_dwells(tables)
 
+# How many recordings?
+length(records)
 
 # "record" is a segment which is just a sequence of dwells
-head(record)
-
-
-# Correct the risetime
-record_c <- risetime.correct_gaussian(Tr=35.0052278,record, units="us")
-
-
-# Write the corrected record to a .dwt file
-dwt.write(record_c, file="60uMc.dwt")
+head(records[[1]])
 ```
 
-## Seperating the record (a segment) into bursts (segments)
+You probably want to leave the records split up if you want to write these back to `evt` or `dwt` files, but if you **really** want to turn the list of segments into one segment, you can do this
+
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
-# Splitting segment into smaller segments 
-bursts <- bursts.defined_by_tcrit(record_c , 0.1, units="ms")
+# If you have multiple records, you can recombine them with
+# This is now just one list of spaced out segments.
+records <- bursts.space_out(records, sep_factor=1000)
+record <- bursts.recombine(records)
+```
+
+This will separate the segments by the separating factor that is used when converting the times to dwells.
+
+But, what you probably want to do is just leave the bursts inside of the list. Most important functions can be applied either to a single segment, or to a list of segments. For instance, the following two are equivalent:
+
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Correct the risetime
+
+corrected_records <- list()
+for (i in 1:length(records)) {
+    corrected_records[[i]] <- risetime.correct_gaussian(Tr=35.0052278, records[[i]], units="us")
+}
+
+# Write the corrected record to a .dwt file
+dwt.write(corrected_records, file="60uMc.dwt")
+```
+
+and this simplified code
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Correct the risetime
+records_c <- risetime.correct_gaussian(Tr=35.0052278, records, units="us")
+
+# Write the corrected record to a .dwt file
+dwt.write(records_c, file="60uMc.dwt")
+```
+
+## Seperating the records (which are segments) into bursts (which are also segments)
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+# Splitting segments into smaller segments
+# Either takes a single segment and splits it up, or divides multiple in parallel to make one large list.
+bursts <- bursts.defined_by_tcrit(records_c , 0.1, units="ms")
 
 # Note that you need two brackets to access list elements.
 # Also note that each burst begins and ends with a 1 state
@@ -148,7 +183,7 @@ bursts <- bursts.defined_by_tcrit(record_c , 0.1, units="ms")
 bursts[[1]]
 
 # Write all the bursts to seperate `.dwt` files + a `bursts.csv` file
-dwt.write_bursts(bursts=bursts)
+dwt.write(bursts, file="bursts.dwt")
 ```
 
 ## Recombining bursts into one sequence
@@ -174,46 +209,44 @@ infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
 
 
 # Import the evt as a table
-table <- evt.read(infile)
+tables <- evt.read(infile)
 
 # Just transition times and states
-head(table)
+head(tables[[1]])
 
 # Turn the transition times into dwells
-record <- evt.to_dwells(table)
+records <- evt.to_dwells(tables)
 
 # Correct the risetime (default time in seconds)
-record_c <- risetime.correct_gaussian(Tr=35.0052278,record, unit="us")
+records_c <- risetime.correct_gaussian(Tr=35.0052278,records, unit="us")
 
 # Define critical time (tcrit=0.1s)
-bursts <- bursts.defined_by_tcrit(record_c , 0.1, units="ms")
+bursts <- bursts.defined_by_tcrit(records_c , 0.1, units="ms")
 
 high_popen <- function (seg) {
     segment.popen(seg) > 0.7
 }
-
-########## OPTION 1 ##############
-
-revised_record <- bursts.select(bursts, high_popen, one_file=TRUE)
-
-evt.write(revised_record, file="new_60mc.evt")
-dwt.write(revised_record, file="new_60mc.evt")
-
-########## END OPTION 1 ##############
-
-######### OPTION 2 #############
-
-high_bursts <- bursts.select(bursts, high_popen)
-
-revised_record <- bursts.recombine(high_bursts)
-
-evt.write(revised_record, file="new_60mc.evt")
-dwt.write(revised_record, file="new_60mc.evt")
-
-######### END OPTION 2 #############
 ```
 
-These two alternative *almost* do the same thing, but not quite. The issue is that when you remove bursts (by not selecting them), you forget what happens at the beginning and end of the recording if you happen to remove the first and/or last burst that was observed. From the bursts in the middle alone, you don't even know how long the recording was, let alone how long the gap after a burst might be (if you removed all subsequent bursts). However, 
+You then have a few options. There is an option in `bursts.select` to do this all at once
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+record_c <- bursts.select(bursts, high_popen, one_file=TRUE)
+
+evt.write(record_c, file="new_60mc.evt")
+dwt.write(record_c, file="new_60mc.evt")
+```
+
+Alternatively, you can use `bursts.recombine` to recombine split up segments. Or, you can just leave the bursts split up, and write them as individual segments.
+
+```{r, fig.show='hold', eval=TRUE, include = TRUE}
+high_bursts <- bursts.select(bursts, high_popen)
+
+evt.write(high_bursts, file="new_60mc.evt")
+dwt.write(high_bursts, file="new_60mc.evt")
+```
+
+These alternative *almost* do the same thing, but not quite. The issue is that when you remove bursts (by not selecting them), you forget what happens at the beginning and end of the recording if you happen to remove the first and/or last burst that was observed. From the bursts in the middle alone, you don't even know how long the recording was, let alone how long the gap after a burst might be (if you removed all subsequent bursts). However, 
 
 `bursts.select(bursts,func,one_file=TRUE)`
 

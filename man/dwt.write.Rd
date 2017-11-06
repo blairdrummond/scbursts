@@ -4,17 +4,22 @@
 \alias{dwt.write}
 \title{Reformat the digits of data before writing to disk.}
 \usage{
-dwt.write(segment, file = "", seg = 1)
+dwt.write(segments, file = "", seg = 1, append = FALSE)
 }
 \arguments{
-\item{segment}{segment with $dwells and $states}
+\item{segments}{A segment or multiple segments with $dwells and $states}
 
 \item{file}{Filename to write to}
 
-\item{seg}{Segment to write in .dwt header.}
+\item{seg}{Segment number to write in .dwt header.}
+
+\item{append}{Add ot the end of a file or overwrite? (defaults to false)}
 }
 \description{
 Writes DOS line endings.
+}
+\details{
+Dwells are in milliseconds
 }
 \examples{
 \dontrun{

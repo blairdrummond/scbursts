@@ -6,15 +6,17 @@
 See section 4.1.1 of Colquhoun and Sigworth,
 "Fitting and Analysis of Single-Channel segments"}
 \usage{
-risetime.correct_gaussian(Tr, segment)
+risetime.correct_gaussian(Tr, segments, units = "s")
 }
 \arguments{
 \item{Tr}{Rise time of the filter in (us)}
 
-\item{segment}{segment with $states and $dwells to correct.}
+\item{segments}{A segment or multiple segments with $states and $dwells to correct.}
+
+\item{units}{What unit the risetime is input in (defaults to seconds)}
 }
 \value{
-Segment with corrected risetimes.
+A Segment or multiple segments with corrected risetimes.
 }
 \description{
 NOTE: This is potentially problematic, in that this unfiltering
@@ -24,6 +26,6 @@ effects of the filter.
 }
 \examples{
 \dontrun{
-segment <- risetime.correct_gaussian(14.77155587, segment)
+segments <- risetime.correct_gaussian(Tr=14.77155587, segments, units="us")
 }
 }

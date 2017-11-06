@@ -2,17 +2,21 @@
 % Please edit documentation in R/dwt.R
 \name{dwt.read}
 \alias{dwt.read}
-\title{Read a .dwt file. Result is a "segment", which is a
+\title{Read a .dwt file. Result is a list of "segments", which is a
 dataframe extra data. See "segment" for more details.}
 \usage{
-dwt.read(filename)
+dwt.read(filename, separating_factor = 1000)
 }
 \arguments{
 \item{filename}{Filename to read from}
+
+\item{separating_factor}{In lieu of a known time between segments, seperate with a multple of the longest dwell.}
+}
+\value{
+A list of bursts (possibly a singleton)
 }
 \description{
-Read a .dwt file. Result is a "segment", which is a
-dataframe extra data. See "segment" for more details.
+Converts millisecond dwells to seconds.
 }
 \examples{
 \dontrun{
