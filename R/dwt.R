@@ -19,7 +19,10 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
     if (!is.data.frame(segments)) {
 
         # Erase file
-        file.remove(file) 
+        if(file.exists(file)) {
+            file.remove(file)
+        }
+            
         for (i in 1:length(segments)) {
             dwt.write(segments=segments[[i]], file=file, seg=i, append=TRUE)
         }

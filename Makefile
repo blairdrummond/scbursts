@@ -39,10 +39,7 @@ clean:
 	$(RM) $(PACKAGE)_$(VERSION).tar.gz
 	$(RM) -r builds/
 
-$(PACKAGE).Rcheck:
-	check
-
-export: $(PACKAGE)_$(VERSION).tar.gz $(PACKAGE).Rcheck
+export: $(PACKAGE)_$(VERSION).tar.gz check
 	@echo Copying tarball and manuals to ${BUILD}
 	@mkdir -p ${BUILD}
 	@cp uottawaionchannel.Rcheck/uottawaionchannel-manual.pdf ${BUILD}

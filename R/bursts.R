@@ -2,6 +2,8 @@
 #' into multiple -shorter- segments (which are the bursts),
 #' Along with the interburst closings, which are referred to as "gaps".
 #'
+#' (Default time units are seconds)
+#'
 #' @param segments A segment or multiple segments with $states and $dwells.
 #' NOTE: separate segments will remain split, regardless of why they were originally divided.
 #' @param t_crit Critical time at which to divide bursts (in seconds by default)
@@ -27,20 +29,7 @@
 #' }
 #' @export
 bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
-
-    if (!is.data.frame(segments)) {
-        
-        partial <- function (s) { bursts.defined_by_tcrit(s, t_crit, units) }
-        
-        ## Don't ask me why this works.
-        return(lapply(segments, partial)[[1]])
-        
-    } else {
-        segment <- segments
-    }
-    
-    
-    
+ 
     if (units == "s") {         
         t_crit = t_crit
     } else if (units == "ms") {
@@ -53,7 +42,28 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
         stop("units must be either 's', 'ms', 'us', or 'ns'")
     }
 
+    if (!is.data.frame(segments)) {
+        ## Merge all the bursts into one long list.
+        segment <- bursts.recombine(bursts.space_out(segments, sep_factor = 2*t_crit))
+    } else {
+        segment <- segments
+    }
     
+    
+    ## # This code could be resued later.
+    ## if (!is.data.frame(segments)) {
+    ##     
+    ##     partial <- function (s) { bursts.defined_by_tcrit(s, t_crit, units) }
+    ##     
+    ##     ## Don't ask me why this works.
+    ##     return(lapply(segments, partial))
+    ##     
+    ## } else {
+    ##     segment <- segments
+    ## }
+    
+    
+       
     ### Find all gaps
     gap_func <- function(row) {
         row$dwells > t_crit & row$state == 0
@@ -234,7 +244,11 @@ bursts.get_gaps <- function (bursts, end_time=-1) {
 #' 
 #' @export
 bursts.remove_first_and_last <- function (bursts) {
-    bursts[2:length(bursts)-1]
+    if ( length(bursts) <= 2 ) {
+        return(list())
+    } else {
+        bursts[2:length(bursts)-1]
+    }
 }
 
 

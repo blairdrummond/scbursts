@@ -120,7 +120,7 @@ tables <- evt.read(infile)
 
 
 # Just transition times and states
-head(tables)
+head(tables[[1]])
 
 
 # Turn the transition times into dwells
