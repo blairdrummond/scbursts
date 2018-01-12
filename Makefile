@@ -1,5 +1,5 @@
 PACKAGE = uottawaionchannel
-VERSION = 0.3
+VERSION = 0.31
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
 
