@@ -103,7 +103,7 @@ evt.extract_header <- function (filename) {
     # Jump to where the data starts
     header_end <- tail(grep("^Events$", FileInput), n=1)
 
-    header_string <- paste(lines[1:header_end], collapse='\r\n')
+    header_string <- paste(paste(FileInput[1:header_end], collapse='\r\n'), "\r", sep="")
     
     return(header_string)
 
@@ -137,12 +137,20 @@ evt.write <- function (segments, file="", header=NULL) {
 File
 Acquire	Z:\\nonsense.dat	0	
 Sweeps
-1	0	0	0	0	0	
-2	0 0 0 0 0 
-Segments
-1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	
-Events\r"
+"
+        
+        for (i in 1:length(segments))
+            header_string <- paste(header_string, sprintf("%d	0	0	0	0	0
+", i),sep="")
+        
+        header_string <- paste(header_string, "Segments
+",sep="")
+        for (i in 1:length(segments))
+            header_string <- paste(header_string, sprintf("%d	0	0	0	0	0
+", i),sep="")
+
+        header_string <- paste(header_string, "Events\r",sep="")
+
         ## Use DOS line endings
         header_string <- gsub("\n", "\r\n", header_string)
 
@@ -207,33 +215,54 @@ evt.to_dwells <- function(tables) {
 
     if (!is.data.frame(tables)) {
 
-        return(lapply(tables, evt.to_dwells))
+        dwells <- lapply(tables, evt.to_dwell)
+
+        ## Warning Message
+        if (any(lapply(dwells, segment.verify) == FALSE)) {
+
+            if (length(which(unlist(lapply(dwells, segment.verify)) == FALSE)) == 1)
+                warning(paste('Dwell', (which(unlist(lapply(dwells, segment.verify)) == FALSE)), 'seems to have been misrecorded!'))
+            else
+                warning(paste('Dwells', (which(unlist(lapply(dwells, segment.verify)) == FALSE)), 'seem to have been misrecorded!'))
+        }
+
+        return(dwells)
         
     } else {
 
-        table <- tables
+        segment <- evt.to_dwell(tables)
 
-        states <- table$states
-        times  <- table$times
-        
-        ## Calculate the durations, the last one gets thrown away
-        dwells <- diff(times)
-
-        ## remove the first pulse, and ignore the trailing end-dwell
-        states <- states[1:length(states)-1]
-
-        ## NOTE: the use of "name" here, is kinda an abuse.
-        if (!is.null(segment.name(table))) {
-            segment <- segment.create(states, dwells, name=segment.name(table))
-        } else {
-            segment <- segment.create(states, dwells)
-        }
+        if (segment.verify(segment) == FALSE)
+            warning('This segment has been misrecorded!')
         
         return(segment)
-        
     }
-
 }
+
+
+## Not Exported. Call evt.to_dwells instead
+evt.to_dwell <- function(table) {
+
+    states <- table$states
+    times  <- table$times
+    
+    ## Calculate the durations, the last one gets thrown away
+    dwells <- diff(times)
+
+    ## remove the first pulse, and ignore the trailing end-dwell
+    states <- states[1:length(states)-1]
+
+    ## NOTE: the use of "name" here, is kinda an abuse.
+    if (!is.null(segment.name(table))) {
+        segment <- segment.create(states, dwells, name=segment.name(table))
+    } else {
+        segment <- segment.create(states, dwells)
+    }
+    
+    return(segment)
+}
+
+
 
 
 

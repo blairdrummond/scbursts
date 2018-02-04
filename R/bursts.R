@@ -44,6 +44,7 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
 
     if (!is.data.frame(segments)) {
         ## Merge all the bursts into one long list.
+        warning('Merging all recordings into one recording.')
         segment <- bursts.recombine(bursts.space_out(segments, sep_factor = 2*t_crit))
     } else {
         segment <- segments
@@ -141,6 +142,15 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
     
     bursts <- lapply(seq_along(burst_selectors), burst)
     bursts <- bursts.start_times_update(bursts, gaps)
+    
+    ## Warning Message
+    if (any(lapply(bursts, segment.verify) == FALSE)) {
+
+        if (length(which(unlist(lapply(bursts, segment.verify)) == FALSE)) == 1)
+            warning(paste('Burst', (which(unlist(lapply(bursts, segment.verify)) == FALSE)), 'seems to have been misrecorded!'))
+        else
+            warning(paste('Bursts', (which(unlist(lapply(bursts, segment.verify)) == FALSE)), 'seem to have been misrecorded!'))
+    }
     
     return(bursts)
 

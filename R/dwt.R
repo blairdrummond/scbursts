@@ -75,9 +75,9 @@ dwt.read <- function (filename, separating_factor=1000) {
     # load lines
     FileInput <- readLines(filename) 
 
-    header <- FileInput[[1]]
+    # header <- FileInput[[1]]
 
-    segs <- c(which(grepl("Segment:", FileInput)), length(FileInput))
+    segs <- c(which(grepl("Segment:", FileInput)), length(FileInput) + 1)
 
     ### Track the longest space
     max_dwell <- separating_factor
@@ -101,7 +101,16 @@ dwt.read <- function (filename, separating_factor=1000) {
     }
 
     bursts <- bursts.start_times_update(bursts,gaps=rep(max_dwell,length(segs)-2))
-    
+ 
+    ## Warning Message
+    if (any(lapply(bursts, segment.verify) == FALSE)) {
+
+        if (length(which(unlist(lapply(bursts, segment.verify)) == FALSE)) == 1)
+            warning(paste('Burst', (which(unlist(lapply(bursts, segment.verify)) == FALSE)), 'seems to have been misrecorded!'))
+        else
+            warning(paste('Bursts', (which(unlist(lapply(bursts, segment.verify)) == FALSE)), 'seem to have been misrecorded!'))
+    }
+
     return(bursts)
     
 }

@@ -9,5 +9,3 @@ util.basename <- function(filename) {
     ### Remove the (.dwt|.evt) from filename
     substr(basename(filename), 1, nchar(basename(filename)) - 4) 
 }
-
-

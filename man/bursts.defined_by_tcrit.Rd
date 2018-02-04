@@ -21,9 +21,7 @@ bursts. Which is a list of segments
 starting and ending in 1 states (open dwell)
 }
 \description{
-Split segment at long pauses, dividing the segment
-into multiple -shorter- segments (which are the bursts),
-Along with the interburst closings, which are referred to as "gaps".
+(Default time units are seconds)
 }
 \examples{
 \dontrun{

@@ -189,3 +189,40 @@ segment.pclosed <- function (segment) {
     
     return ( 1 - popen )
 }
+
+
+#' Segments should have a very specific shape, but recordings can
+#' produce errors that make non-sensical segments. In particular, ones
+#' contain multiple consecutive openings or closings, or end in closings.
+#'
+#' This function detects whether a segment satisfies the constraint that
+#' the segment states alternate between open and closed, and begin and end with a closing.
+#'
+#' @param segment The dwells and states table
+#' @return True if a valid segment, False otherwise
+#' @examples
+#' \dontrun{
+#' segment.verify(segment)
+#' > False
+#' }
+#' @export
+segment.verify <- function (segment) {
+
+    if (length(segment$states) == 0)
+        return(TRUE)
+    
+    ## Begins with 0
+    if (head(segment$states,n=1) == 0)
+        return(FALSE)
+
+    ## Ends with 0
+    if (tail(segment$states,n=1) == 0)
+        return(FALSE)
+
+    ## Contains consecutive 0s or 1s.
+    if (any(diff(segment$states) == 0))
+        return(FALSE)
+
+    ## Otherwise is OK
+    return(TRUE)
+}
