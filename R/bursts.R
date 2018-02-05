@@ -257,7 +257,7 @@ bursts.remove_first_and_last <- function (bursts) {
     if ( length(bursts) <= 2 ) {
         return(list())
     } else {
-        bursts[2:length(bursts)-1]
+        return(bursts[2:length(bursts)-1])
     }
 }
 

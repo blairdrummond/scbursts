@@ -14,7 +14,7 @@
 #' }
 #'
 #' # import some of the data included with the package
-#' infile <- system.file("extdata", "60uM.evt", package = "uottawaionchannel")
+#' infile <- system.file("extdata", "example.evt", package = "uottawaionchannel")
 #' tables <- evt.read(infile)
 #'
 #' head(tables[[1]])

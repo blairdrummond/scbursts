@@ -1,5 +1,5 @@
 PACKAGE = uottawaionchannel
-VERSION = 0.31
+VERSION = 0.32
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
 
@@ -44,6 +44,9 @@ install: $(PACKAGE)_$(VERSION).tar.gz
 
 check: build
 	R CMD check $(PACKAGE)_$(VERSION).tar.gz --as-cran
+
+fastcheck: build
+	R CMD check $(PACKAGE)_$(VERSION).tar.gz
 
 clean:
 	$(RM) NAMESPACE
