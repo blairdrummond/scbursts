@@ -88,6 +88,19 @@ segment.duration <- function(segment) {
 
 
 
+#' Extract number of dwells in segment
+#'
+#' @param segment the segment object
+#' @return number of dwells
+#' @examples
+#' \dontrun{
+#' segment.count_dwells(data)
+#' > 5
+#' }
+#' @export
+segment.count_dwells <- function(segment) {length(segment$states)}
+
+
 
 #' Extract number of open dwells
 #'

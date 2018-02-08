@@ -18,7 +18,7 @@ header-includes:
 This is a package designed to extract information on the stochastic properties of single molecules. It was originally designed for dwell time analysis of single channel data derived from patch clamp experiments. It contains functions for importing and exporting idealized stochastic events, as well as for displaying, analyzing and sorting dwells.
 
 
-**This manual is meant to give a high-level overview of the package. For the details of specific function, use `help()` or consult the technical manual.**
+**This manual is meant to give a high-level overview of the package. For the details of specific functions, use `help()` or consult the technical manual (or the source code)**
 
 \tableofcontents
 
