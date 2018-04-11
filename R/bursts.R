@@ -216,12 +216,29 @@ bursts.get_gaps <- function (bursts, end_time=-1) {
     }
     
     start_times <- sapply(bursts, segment.start_time)
+    if (length(start_times) > 1 && sum(start_times) == 0) {
+        warning("These have non-sensical starting times!!!
+        It is not clear how much time transpired inbetween them
+
+        Consider looking at any of the following for solutions:
+
+        > help(bursts.defined_by_tcrit)
+        > help(bursts.space_out)
+
+        Or (for more technical uses)
+
+        > help(bursts.start_times_update)")
+        stop("Exiting. Need to fix the metadata of the bursts.")
+    }
+
     durations   <- sapply(bursts, segment.duration)
 
     diff_start <- diff(start_times)
     head_durations <- durations[1:length(durations)-1]
     
     gaps <- diff_start - head_durations
+
+    return(gaps)
     
 }
 
@@ -375,7 +392,6 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
     }
     
     gaps <- bursts.get_gaps(filtered)
-
 
     ##### We MIGHT be missing the first and last gap. #####
 

@@ -31,9 +31,15 @@ cplot.log_root_axes <- function (points) {
 
     }
 
-    x_ticks <- unlist(sapply(l:u, f))
+    label <- function (x) {
+        c(c(x),rep(NaN,9))
+    }
+    
+    x_ticks  <- unlist(sapply(l:u, f))
+    x_labels <- unlist(sapply(l:u, label))
 
-    axis(side = 1, at = x_ticks)
+    axis(side = 1, at = x_ticks, labels=FALSE)
+    axis(side = 1, at = l:u, las = TRUE)
     axis(side = 2, at = y_ticks)
     box()
 

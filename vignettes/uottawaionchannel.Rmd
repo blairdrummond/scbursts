@@ -24,7 +24,7 @@ This is a package designed to extract information on the stochastic properties o
 
 # `.evt`s and `.dwt`s
 
-EVTs (Event files) and DWTs (Dwell times) are formats produced and required by several pieces of software that are used by the lab. In particular, TAC produces and uses `.evt` files and Mill uses `.dwt`s. So we need to read and write these files often, but they aren't ideal ways to represent our data, and so the only manipulations we want to do on `evt`s and `dwt`s is read and write them to data-types which are more natural in R. Those data-types which we prefer are **segments**, and **bursts**, which are detailed in the next sections. Segments are essentially tables of dwell times, and bursts are essentiall lists of segments, but with meta-data attached to them. In any case **the first thing you want to do is convert your file into a list of segments**.
+EVTs (Event files) and DWTs (Dwell times) are formats produced and required by several pieces of software that are used by the lab. In particular, TAC produces and uses `.evt` files and Mill uses `.dwt`s. So we need to read and write these files often, but they aren't ideal ways to represent our data, and so the only manipulations we want to do on `evt`s and `dwt`s is read and write them to data-types which are more natural in R. Those data-types which we prefer are **segments**, and **bursts**, which are detailed in the next sections. Segments are essentially tables of dwell times, and bursts are essentially lists of segments, but with meta-data attached to them. In any case **the first thing you want to do is convert your file into a list of segments**.
 
 ## Handling `.evt`s
 
