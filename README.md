@@ -33,7 +33,14 @@ library(uottawaionchannel)
 
 ## From Source 
 
-You can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
+Start by installing the dependencies
+
+	- texlive
+	- pandoc
+	- R
+	- make
+
+With those installed, you can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
 
 1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
 
@@ -43,7 +50,7 @@ You can install this from source with `Make`. You will need to make sure that yo
 make
 ~~~
 
-to prepare the package. This will build it and download all the dependencies that you need.
+to prepare the package. This will build it and download all the `R` dependencies that you need.
 
 3. To install, then just run
 
