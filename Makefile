@@ -3,7 +3,7 @@ VERSION = 0.33
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
 
-BUILD := build/$(shell date +'%Y-%m-%d_%H-%M-%S')
+BUILD := ../builds/$(shell date +'%Y-%m-%d_%H-%M-%S')
 
 all: deps docs build check
 
@@ -25,7 +25,7 @@ ifdef LATEX
 	R -e 'devtools::document()'
 endif
 
-build: NAMESPACE
+build: deps NAMESPACE
 ifdef LATEX
 	R CMD build .
 else
@@ -36,13 +36,12 @@ NAMESPACE:
 	$(MAKE) docs
 
 $(PACKAGE)_$(VERSION).tar.gz:
-	$(MAKE) clean
 	$(MAKE) build
 
 install: $(PACKAGE)_$(VERSION).tar.gz
 	R CMD INSTALL $(PACKAGE)_$(VERSION).tar.gz
 
-check: build
+check: $(PACKAGE)_$(VERSION).tar.gz
 	R CMD check $(PACKAGE)_$(VERSION).tar.gz --as-cran
 
 fastcheck: build
@@ -52,7 +51,6 @@ clean:
 	$(RM) NAMESPACE
 	$(RM) -r $(PACKAGE).Rcheck/
 	$(RM) $(PACKAGE)_$(VERSION).tar.gz
-	$(RM) -r build/
 
 $(PACKAGE).Rcheck:
 	$(MAKE) check
@@ -63,3 +61,4 @@ export: $(PACKAGE)_$(VERSION).tar.gz $(PACKAGE).Rcheck
 	@cp uottawaionchannel.Rcheck/uottawaionchannel-manual.pdf ${BUILD}
 	@cp uottawaionchannel.Rcheck/uottawaionchannel/doc/uottawaionchannel.pdf ${BUILD}
 	@mv $(PACKAGE)_$(VERSION).tar.gz ${BUILD}
+	$(MAKE) clean

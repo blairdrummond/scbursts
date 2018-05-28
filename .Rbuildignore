@@ -2,3 +2,5 @@
 ^README\.md$
 ^TODO\.md$
 \.gitignore
+.*tar.gz$
+builds/

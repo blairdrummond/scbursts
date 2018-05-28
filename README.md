@@ -33,12 +33,16 @@ library(uottawaionchannel)
 
 ## From Source 
 
-Start by installing the dependencies
+Start by installing the dependencies. On Ubuntu
 
-	- texlive
+	- texlive-full
 	- pandoc
-	- R
+	- pandoc-citeproc
 	- make
+	- r-base
+	- pkg-config 
+	- libcurl4-openssl-dev
+	- libxml2-dev
 
 With those installed, you can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
 
