@@ -7,3 +7,5 @@ build.Rout
 builds/*
 uottawaionchannel.Rcheck/
 NAMESPACE
+email-build.sh
+git-stuff.sh
