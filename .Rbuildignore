@@ -4,3 +4,4 @@
 \.gitignore
 .*tar.gz$
 builds/
+email-build.sh

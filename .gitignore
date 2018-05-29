@@ -1,6 +1,9 @@
 build.Rout
+.Rhistory
+*.swp
 *.pdf
 .RData
 *.tar.gz
 builds/*
 uottawaionchannel.Rcheck/
+NAMESPACE
