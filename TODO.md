@@ -1,7 +1,6 @@
 # Build
 R CMD BUILD batch.R
 
-
 # TODO: 
 
 - Mixture of exponentials + Laplace transform

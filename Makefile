@@ -1,11 +1,7 @@
 PACKAGE = uottawaionchannel
 VERSION = 0.33
 
-SHELL := /bin/bash
-PATH := $(shell pwd):$(PATH)
-
 LATEX := $(shell pdflatex -v 2> /dev/null)
-
 BUILD := ../builds/$(shell date +'%Y-%m-%d_%H-%M-%S')
 
 all: deps docs build check
@@ -58,25 +54,10 @@ clean:
 $(PACKAGE).Rcheck:
 	$(MAKE) check
 
-just-export: $(PACKAGE)_$(VERSION).tar.gz $(PACKAGE).Rcheck
+export: $(PACKAGE)_$(VERSION).tar.gz $(PACKAGE).Rcheck
 	@echo Copying tarball and manuals to ${BUILD}
 	@mkdir -p ${BUILD}
 	@cp uottawaionchannel.Rcheck/uottawaionchannel-manual.pdf ${BUILD}
 	@cp uottawaionchannel.Rcheck/uottawaionchannel/doc/uottawaionchannel.pdf ${BUILD}
 	@cp $(PACKAGE)_$(VERSION).tar.gz ${BUILD}
 	$(MAKE) clean
-
-export: $(PACKAGE)_$(VERSION).tar.gz $(PACKAGE).Rcheck
-	$(MAKE) just-export
-# Only run if the shell scripts exist
-ifneq ($(wildcard git-stuff.sh),) 
-	@echo =======================================
-	@git-stuff.sh
-endif 
-ifneq ($(wildcard email-build.sh),) 
-	@echo =======================================
-	@email-build.sh
-endif 
-	@echo =======================================
-	@echo 
-	@echo Done!
