@@ -1,5 +1,5 @@
 PACKAGE = uottawaionchannel
-VERSION = 0.33
+VERSION = 0.34
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
 BUILD := ../builds/$(shell date +'%Y-%m-%d_%H-%M-%S')
