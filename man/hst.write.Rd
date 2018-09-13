@@ -2,17 +2,24 @@
 % Please edit documentation in R/hst.R
 \name{hst.write}
 \alias{hst.write}
-\title{Write bursts to a .hst file}
+\title{Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables}
 \usage{
-hst.write(open_hist, closed_hist, file = "", header = NULL)
+hst.write(open_hist, closed_hist, file = "", header = NULL,
+  fromraw = FALSE)
 }
 \arguments{
-\item{segments}{A segment or list of segments to write to filename}
+\item{open_hist}{The table (bin,freq,fit) for open times}
 
-\item{filename}{The filename}
+\item{closed_hist}{The table (bin,freq,fit) for closed times}
+
+\item{file}{The filename}
+
+\item{header}{The header info}
+
+\item{fromraw}{Unless FALSE, assume we need to write a log10(milliseconds)-sqrt(Frequency) plot}
 }
 \description{
-Write bursts to a .hst file
+Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables
 }
 \examples{
 \dontrun{

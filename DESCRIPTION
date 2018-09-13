@@ -1,8 +1,8 @@
-Package: uottawaionchannel
+Package: scbursts
 Version: 0.34
-Date: 2018-01-12
-Title: UOttawa Ion Channel Analysis
-Description: Ion Channel Analysis for daCosta Lab.
+Date: 2018-09-12
+Title: Single Channel Bursts Analysis
+Description: Single Channel Bursts Analysis for the daCosta Lab.
 Author: Blair Drummond <bdrum047@uottawa.ca>
 Maintainer: Blair Drummond <bdrum047@uottawa.ca>
 License: MIT + file LICENSE

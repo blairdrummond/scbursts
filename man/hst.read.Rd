@@ -2,33 +2,37 @@
 % Please edit documentation in R/hst.R
 \name{hst.read}
 \alias{hst.read}
-\title{Read a .hst file to a table (x, y, fit)}
+\title{Read a MIL ".hst" file to a table. By default these files are in
+log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE,
+this function returns a table containing Seconds-Freq}
 \usage{
-hst.read(filename, extract = "open", square = FALSE)
+hst.read(filename, extract = "open", raw = FALSE)
 }
 \arguments{
 \item{filename}{The filename}
 
 \item{extract}{Extract either "open" or "closed" histogram}
 
-\item{square}{Reverse a square-root operation on histogram}
+\item{raw}{Data is given as log10(milliseconds)-Sqrt(Freq). Setting raw=FALSE yields output as Seconds-Frequency}
 }
 \value{
-A tables with columns "x", "y" and "fit".
+A tables with columns "bin", "freq" and "fit".
 }
 \description{
-Times are in seconds
+Read a MIL ".hst" file to a table. By default these files are in
+log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE,
+this function returns a table containing Seconds-Freq
 }
 \examples{
 
-library(uottawaionchannel)
+library(scbursts)
 
 \dontrun{
-mil_hst <- hst.read("data/A1W18_dur.hst", extract="open", square=TRUE)
+mil_hst <- hst.read("data/A1W18_dur.hst", extract="open", raw=FALSE)
 }
 
 # import some of the data included with the package
-infile <- system.file("extdata", "example.hst", package = "uottawaionchannel")
+infile <- system.file("extdata", "example.hst", package = "scbursts")
 table <- hst.read(infile)
 
 table

@@ -28,7 +28,7 @@ install_github("blairdrummond/bio")
 You should then be able to call
 
 ```{.R}
-library(uottawaionchannel)
+library(scbursts)
 ```
 
 ## From Source 
@@ -83,7 +83,7 @@ TODO: Look into this.
 You can view the soft-documentation for this package by calling
 
 ```{.R}
-vignette("uottawaionchannel")
+vignette("scbursts")
 ```
 
 from an R console.

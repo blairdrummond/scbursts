@@ -1,4 +1,4 @@
-PACKAGE = uottawaionchannel
+PACKAGE = scbursts
 VERSION = 0.34
 
 LATEX := $(shell pdflatex -v 2> /dev/null)
@@ -57,7 +57,7 @@ $(PACKAGE).Rcheck:
 export: $(PACKAGE)_$(VERSION).tar.gz $(PACKAGE).Rcheck
 	@echo Copying tarball and manuals to ${BUILD}
 	@mkdir -p ${BUILD}
-	@cp uottawaionchannel.Rcheck/uottawaionchannel-manual.pdf ${BUILD}
-	@cp uottawaionchannel.Rcheck/uottawaionchannel/doc/uottawaionchannel.pdf ${BUILD}
+	@cp scbursts.Rcheck/scbursts-manual.pdf ${BUILD}
+	@cp scbursts.Rcheck/scbursts/doc/scbursts.pdf ${BUILD}
 	@cp $(PACKAGE)_$(VERSION).tar.gz ${BUILD}
 	$(MAKE) clean

@@ -7,7 +7,7 @@ output:
         toc: true
 bibliography: bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{uottawaionchannel}
+  %\VignetteIndexEntry{scbursts}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 header-includes:
@@ -38,7 +38,7 @@ So that in order to read an `evt` file, we must do something like
 
 ```{r, fig.show='hold', eval=FALSE, include = TRUE}
 # Load the library
-library(uottawaionchannel)
+library(scbursts)
 
 infile <- "data/100uM.evt"
 
@@ -112,10 +112,10 @@ Segment: 2   Dwells: 7653
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Load the library
-library(uottawaionchannel)
+library(scbursts)
 
 # Import a pre-packaged file (stored inside the folder extdata)
-dwt_example <- system.file("extdata", "example.dwt", package = "uottawaionchannel")
+dwt_example <- system.file("extdata", "example.dwt", package = "scbursts")
 
 # Import the evt as a table
 dwells <- dwt.read(dwt_example)
@@ -149,10 +149,10 @@ Since, `evt` recordings do not detect bursts, but also have multiple segments, o
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Load the library
-library(uottawaionchannel)
+library(scbursts)
 
 # Import a pre-packaged file (stored inside the folder extdata)
-infile <- system.file("extdata", "example.evt", package = "uottawaionchannel")
+infile <- system.file("extdata", "example.evt", package = "scbursts")
 
 
 # Import the evt as a table
@@ -185,10 +185,10 @@ We might not always be interested in all the bursts, but perhaps bursts that hav
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Load the library
-library(uottawaionchannel)
+library(scbursts)
 
 # Import a pre-packaged file (stored inside the folder extdata)
-infile <- system.file("extdata", "example.evt", package = "uottawaionchannel")
+infile <- system.file("extdata", "example.evt", package = "scbursts")
 
 
 # Import the evt as a table
@@ -239,7 +239,7 @@ this is obviously physically impossible, but sometimes appears in the data. To c
 
 
 ```{r, fig.show='hold', eval=FALSE, include = TRUE}
-library(uottawaionchannel)
+library(scbursts)
 infile <- "faulty_dwells.dwt"
 
 # This will raise a warning message to alert you that the data has problems
@@ -341,10 +341,10 @@ It was skimmed over, but risetime correction on the recordings can be accomplish
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Load the library
-library(uottawaionchannel)
+library(scbursts)
 
 # Import a pre-packaged file (stored inside the folder extdata)
-infile <- system.file("extdata", "example.evt", package = "uottawaionchannel")
+infile <- system.file("extdata", "example.evt", package = "scbursts")
 
 
 # Import the evt as a table

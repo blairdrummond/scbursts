@@ -7,14 +7,14 @@
 #' Each table corresponds to a contiguous segment from a recording.
 #' @examples
 #'
-#' library(uottawaionchannel)
+#' library(scbursts)
 #' 
 #' \dontrun{
 #' tables <- evt.read("data/60uM.evt")
 #' }
 #'
 #' # import some of the data included with the package
-#' infile <- system.file("extdata", "example.evt", package = "uottawaionchannel")
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
 #' tables <- evt.read(infile)
 #'
 #' head(tables[[1]])

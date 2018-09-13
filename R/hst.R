@@ -1,35 +1,35 @@
-#' Read a .hst file to a table (x, y, fit)
-#'
-#' Times are in seconds
+#' Read a MIL ".hst" file to a table. By default these files are in
+#' log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE,
+#' this function returns a table containing Seconds-Freq
 #'
 #' @param filename The filename
 #' @param extract Extract either "open" or "closed" histogram
-#' @param square Reverse a square-root operation on histogram
-#' @return A tables with columns "x", "y" and "fit".
+#' @param raw Data is given as log10(milliseconds)-Sqrt(Freq). Setting raw=FALSE yields output as Seconds-Frequency
+#' @return A tables with columns "bin", "freq" and "fit".
 #' @examples
 #'
-#' library(uottawaionchannel)
+#' library(scbursts)
 #' 
 #' \dontrun{
-#' mil_hst <- hst.read("data/A1W18_dur.hst", extract="open", square=TRUE)
+#' mil_hst <- hst.read("data/A1W18_dur.hst", extract="open", raw=FALSE)
 #' }
 #'
 #' # import some of the data included with the package
-#' infile <- system.file("extdata", "example.hst", package = "uottawaionchannel")
+#' infile <- system.file("extdata", "example.hst", package = "scbursts")
 #' table <- hst.read(infile)
 #'
 #' table
 #'
 #' @export
 #' @importFrom utils read.csv
-hst.read <- function (filename, extract="open", square=FALSE) {
+hst.read <- function (filename, extract="open", raw=FALSE) {
 
     extract <- tolower(extract)
     
     if (extract == "open") {         
-        offset <- 0
+        offset <- 1
     } else if (extract == "closed") {
-        offset <- 3
+        offset <- 5
     } else {
         stop("extract either \"open\" or \"closed\"")
     }
@@ -37,6 +37,8 @@ hst.read <- function (filename, extract="open", square=FALSE) {
     ### Assumes file has the format (DOS)
     ### Notice the two blank lines and the leading tabs. Also the note DOS line endings
 
+    #### 1     2           3           4        5      6            7          8
+    
     ####	histograms bin-sqrt(hst/sum(hst))-sqrt(pdf/sum(hst)):
     ####	0.018840	0.013985	0.016598		0.018878	0.013922	0.007139	
     ####	0.023106	0.362802	0.373325		0.022677	0.096458	0.065489	
@@ -65,16 +67,17 @@ hst.read <- function (filename, extract="open", square=FALSE) {
      
     # extract the open v.s. closed columns
     bin  <- table[,1+offset]
-    y    <- table[,2+offset]
-    yfit <- table[,3+offset]
+    freq <- table[,2+offset]
+    fit  <- table[,3+offset]
 
     # Correct for the square root
-    if (square) {
-        y <- y*y
-        yfit <- yfit*yfit
+    if (!raw) {
+        bin  <- (10**bin) / 1000 # undo log10 and ms -> s
+        freq <- freq**2
+        fit  <- fit**2
     }
     
-    data <- data.frame(bin,y,yfit)
+    data <- data.frame(bin,freq,fit)
     attr(data, "name") <- util.basename(filename)
     
     return(data)
@@ -108,33 +111,55 @@ hst.extract_header <- function (filename) {
 
 
 
-#' Write bursts to a .hst file
+#' Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables
 #'
-#' @param segments A segment or list of segments to write to filename
-#' @param filename The filename
+#' @param open_hist The table (bin,freq,fit) for open times
+#' @param closed_hist The table (bin,freq,fit) for closed times
+#' @param file The filename
+#' @param header The header info
+#' @param fromraw Unless FALSE, assume we need to write a log10(milliseconds)-sqrt(Frequency) plot
 #' @examples
 #' \dontrun{
 #'
-#' hst.write(, file="60uMc-R.hst")
+#' library(scbursts)
+#' open = hst.read("A1W18_dur.hst", extract="open")
+#' closed = hst.read("A1W18_dur.hst", extract="closed")
+#' header = hst.extract_header("A1W18_dur.hst")
+#'
+#' ### Do stuff
+#' 
+#' hst.write(open, closed, file="swag.hst", header=header)
 #'
 #' }
 #' @export
 #' @importFrom utils read.csv
-hst.write <- function (open_hist, closed_hist, file="", header=NULL) {
+hst.write <- function (open_hist, closed_hist, file="", header=NULL, fromraw=FALSE) {
     
     tabs <- rep("", length(open_hist$bin))
     
-    # Later code assumes that there are multiple segments
-    t <- cbind(tabs, open_hist, tabs, closed_hist, tabs)
+    if (!fromraw) {
+        obin <- sprintf("%.6f", log10(open_hist$bin * 1000))
+        ofreq <- sprintf("%.6f", sqrt(open_hist$freq))
+        ofit  <- sprintf("%.6f", sqrt(open_hist$fit))
+
+        cbin <- sprintf("%.6f", log10(closed_hist$bin * 1000))
+        cfreq <- sprintf("%.6f", sqrt(closed_hist$freq))
+        cfit  <- sprintf("%.6f", sqrt(closed_hist$fit))
+
+        t <- cbind(tabs, obin, ofreq, ofit, tabs, cbin, cfreq, cfit, tabs)
+    } else {
+        t <- cbind(tabs, open_hist, tabs, closed_hist, tabs)
+    }
 
     if (is.null(header)) {
-        header_string <- "	histograms bin-sqrt(hst/sum(hst))-sqrt(pdf/sum(hst)):\r\n"
+        header_string <- "	histograms bin-sqrt(hst/sum(hst))-sqrt(pdf/sum(hst)):\r"
+        # header_string <- gsub("\n", "\r\n", header_string)
     } else {
-        header_string <- header
+        header_string <- paste(header, "\r")
     }
-    
+
     write(header_string, file) 
     write.table(t, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
-    write("\r\n\r\n", file)
+    write("\r\n\r\n", file, append=TRUE)
 
 }
