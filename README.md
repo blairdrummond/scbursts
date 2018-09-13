@@ -1,4 +1,4 @@
-# UOttawa Ion Channel Analysis
+# SCBursts - Single Channel Bursts Analysis
 
 This `R` Package was designed for use by the [dacosta lab](http://www.dacosta.net/). The package contains the following features:
 
@@ -6,13 +6,13 @@ This `R` Package was designed for use by the [dacosta lab](http://www.dacosta.ne
 - Correct for effects of the Gaussian filter on the time-series data.
 - Identify bursts in time series, and isolate those bursts.
 - Provide toolkit for sorting, filtering, and studying individual bursts.
-- **Tentatively** Burst detection.
+- **In the future** Burst detection.
 
-If any features seem wrongfully absent, or if any methods can be improved upon, feel free to either create an [issue](https://github.com/blairdrummond/bio/issues) or (even better) submit a pull request.
+If any features seem wrongfully absent, or if any methods can be improved upon, feel free to either create an [issue](https://github.com/dacostalab/scbursts/issues) or (even better) submit a pull request.
 
 # Installation
 
-## With `devtools` (**WILL NOT WORK UNTIL REPO IS PUBLIC!!!**)
+## With `devtools`
 
 Open an R console, and run the following lines
 
@@ -22,7 +22,7 @@ install.package("knitr")
 install.package("rmarkdown")
 install.package("roxygen2")
 library(devtools)
-install_github("blairdrummond/bio")
+install_github("dacostalab/scbursts")
 ```
 
 You should then be able to call
@@ -73,10 +73,6 @@ And then the package should be installed. Though, you won't be able to create an
 ## From CRAN
 
 We don't have the package up yet, but should be easy to do when the time comes.
-
-## RStudio might have a fancy way too. Not sure.
-
-TODO: Look into this.
 
 # Manual
 
