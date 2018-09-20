@@ -6,6 +6,5 @@ build.Rout
 *.tar.gz
 builds/*
 uottawaionchannel.Rcheck/
-NAMESPACE
 email-build.sh
 git-stuff.sh
