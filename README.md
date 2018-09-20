@@ -17,10 +17,10 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 Open an R console, and run the following lines
 
 ```{.R}
-install.package("devtools")
-install.package("knitr")
-install.package("rmarkdown")
-install.package("roxygen2")
+install.packages("devtools")
+install.packages("knitr")
+install.packages("rmarkdown")
+install.packages("roxygen2")
 library(devtools)
 install_github("dacostalab/scbursts")
 ```
