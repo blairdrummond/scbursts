@@ -24,7 +24,14 @@ Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed table
 \examples{
 \dontrun{
 
-hst.write(, file="60uMc-R.hst")
+library(scbursts)
+open = hst.read("A1W18_dur.hst", extract="open")
+closed = hst.read("A1W18_dur.hst", extract="closed")
+header = hst.extract_header("A1W18_dur.hst")
+
+### Do stuff
+
+hst.write(open, closed, file="swag.hst", header=header)
 
 }
 }

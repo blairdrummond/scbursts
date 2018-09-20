@@ -4,7 +4,8 @@
 \alias{segment.create}
 \title{Create object containing table data and metadata}
 \usage{
-segment.create(states, dwells, seg = 1, start_time = 0, name = "burst")
+segment.create(states, dwells, seg = 1, start_time = 0,
+  name = "burst")
 }
 \arguments{
 \item{states}{a vector of states in {0,1}}

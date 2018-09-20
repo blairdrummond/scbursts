@@ -12,7 +12,7 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 
 # Installation
 
-## With `devtools`
+## From `R`
 
 Open an R console, and run the following lines
 
@@ -35,16 +35,11 @@ library(scbursts)
 
 Start by installing the dependencies. On Ubuntu
 
-	- texlive-full
-	- pandoc
-	- pandoc-citeproc
-	- make
-	- r-base
-	- pkg-config 
-	- libcurl4-openssl-dev
-	- libxml2-dev
+```
+# apt-get install texlive-full pandoc pandoc-citeproc make r-base pkg-config libcurl4-openssl-dev libxml2-dev
+```
 
-With those installed, you can install this from source with `Make`. You will need to make sure that you have this installed. Once you have it, the steps are:
+With those installed, you can install this from source with `make`. You will need to make sure that you have this installed. Once you have it, the steps are:
 
 1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
 

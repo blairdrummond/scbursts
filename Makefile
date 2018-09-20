@@ -47,7 +47,6 @@ fastcheck: build
 	R CMD check $(PACKAGE)_$(VERSION).tar.gz
 
 clean:
-	$(RM) NAMESPACE
 	$(RM) -r $(PACKAGE).Rcheck/
 	$(RM) $(PACKAGE)_$(VERSION).tar.gz
 

@@ -1,5 +1,5 @@
 ---
-title: "Ion Channel Analysis"
+title: "Single Channel Burst Analysis"
 author: "Blair Drummond"
 date: "`r Sys.Date()`"
 output: 
