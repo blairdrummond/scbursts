@@ -1,6 +1,6 @@
 # SCBursts - Single Channel Bursts Analysis
 
-This `R` Package was designed for use by the [dacosta lab](http://www.dacosta.net/). The package contains the following features:
+This `R` Package was designed for use by the [daCosta lab](http://www.dacosta.net/). The package contains the following features:
 
 - Transform data between formats (`.evt`, `.dwt`, etc)
 - Correct for effects of the Gaussian filter on the time-series data.
@@ -12,7 +12,21 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 
 # Installation
 
-## From `R`
+## From a tarball (easy)
+
+Get the `tar.gz` file from [the daCosta lab](http://www.dacosta.net/publications.html). You should then be able to install from this file within R-Commander, R-Studio, or from the command-line with
+
+~~~
+R CMD INSTALL scbursts_*.*.tar.gz
+~~~
+
+## From CRAN (easier)
+
+We don't have the package up yet, but should be easy to do when the time comes.
+
+## From `R` (with pdf documentation)
+
+If you have `LaTeX` and `pandoc` installed, you can install the package **and** generate some documentation for it (this is optional. If you don't have those see the next section). 
 
 Open an R console, and run the following lines
 
@@ -22,7 +36,37 @@ install.packages("knitr")
 install.packages("rmarkdown")
 install.packages("roxygen2")
 library(devtools)
-install_github("dacostalab/scbursts")
+install_github("dacostalab/scbursts", build_vignettes = TRUE)
+
+# to update install run
+# install_github("dacostalab/scbursts", build_vignettes = TRUE, force=TRUE)
+```
+
+You should then be able to call
+
+```{.R}
+library(scbursts)
+```
+
+and to see documentation run
+
+```{.R}
+vignette("scbursts")
+```
+
+## From `R`
+
+If you have `LaTeX` and `pandoc` installed, you can install the package **and** generate some documentation for it (this is optional. If you don't have those see the next section). 
+
+Open an R console, and run the following lines
+
+```{.R}
+install.packages("devtools")
+library(devtools)
+install_github("dacostalab/scbursts", build_vignettes = TRUE)
+
+# to update install run
+# install_github("dacostalab/scbursts", force=TRUE)
 ```
 
 You should then be able to call
@@ -33,7 +77,9 @@ library(scbursts)
 
 ## From Source 
 
-Start by installing the dependencies. On Ubuntu
+**You only want to do this if you plan to modify the package. Otherwise use another option**
+
+1. Start by installing the dependencies. On Ubuntu
 
 ```
 # apt-get install texlive-full pandoc pandoc-citeproc make r-base pkg-config libcurl4-openssl-dev libxml2-dev
@@ -41,33 +87,22 @@ Start by installing the dependencies. On Ubuntu
 
 With those installed, you can install this from source with `make`. You will need to make sure that you have this installed. Once you have it, the steps are:
 
-1. Get a copy of this repository, either by downloading a zip or by `git clone`-ing. 
+2. Get a copy of this repository, either by downloading a zip or by `git clone`-ing.
 
-2. Open a terminal in the directory, and run
+3. Open a terminal in the directory
 
-~~~
-make
-~~~
+4. You will also need some `R` packages. If you have write access to your R library path, then you can run `make deps`. Otherwise in an `R` terminal run
 
-to prepare the package. This will build it and download all the `R` dependencies that you need.
+```{.R}
+install.packages("devtools")
+install.packages("knitr")
+install.packages("rmarkdown")
+install.packages("roxygen2")
+```
 
-3. To install, then just run
+3. Now, back in the shell, you can run `make` and `make install`.
 
-~~~
-make install
-~~~
-
-or possibly
-
-~~~
-sudo make install
-~~~
-
-And then the package should be installed. Though, you won't be able to create any manuals unless you have LaTeX installed.
-
-## From CRAN
-
-We don't have the package up yet, but should be easy to do when the time comes.
+And then the package should be installed. Note that you won't be able to create any manuals unless you have LaTeX and pandoc installed.
 
 # Manual
 
