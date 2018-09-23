@@ -2,7 +2,7 @@
 % Please edit documentation in R/evt.R
 \name{evt.from_dwells}
 \alias{evt.from_dwells}
-\title{Converts dwell durations to absolute transition times}
+\title{Converts dwell durations to absolute transition times.}
 \usage{
 evt.from_dwells(segments)
 }
@@ -13,7 +13,7 @@ evt.from_dwells(segments)
 A dataframe or multiple dataframes of states and transition times
 }
 \description{
-Converts dwell durations to absolute transition times
+Converts dwell durations to absolute transition times.
 }
 \examples{
 

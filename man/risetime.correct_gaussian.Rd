@@ -2,9 +2,7 @@
 % Please edit documentation in R/risetime.R
 \name{risetime.correct_gaussian}
 \alias{risetime.correct_gaussian}
-\title{Undo the effect of the gaussian filter
-See section 4.1.1 of Colquhoun and Sigworth,
-"Fitting and Analysis of Single-Channel segments"}
+\title{Undo the effect of the gaussian filter.}
 \usage{
 risetime.correct_gaussian(Tr, segments, units = "s")
 }
@@ -19,10 +17,7 @@ risetime.correct_gaussian(Tr, segments, units = "s")
 A Segment or multiple segments with corrected risetimes.
 }
 \description{
-NOTE: This is potentially problematic, in that this unfiltering
-lengthens every dwell. A less naive algorithm would take into
-account the infulence of the surroundings, as they impact the
-effects of the filter.
+Undo the effect of the gaussian filter. See section 4.1.1 of Colquhoun and Sigworth, "Fitting and Analysis of Single-Channel segments". NOTE: This is potentially problematic, in that this unfiltering lengthens every dwell. A less naive algorithm would take into account the infulence of the surroundings, as they impact the effects of the filter.
 }
 \examples{
 

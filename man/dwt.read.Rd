@@ -2,8 +2,7 @@
 % Please edit documentation in R/dwt.R
 \name{dwt.read}
 \alias{dwt.read}
-\title{Read a .dwt file. Result is a list of "segments", which is a
-dataframe extra data. See "segment" for more details.}
+\title{Read a .dwt file.}
 \usage{
 dwt.read(filename, separating_factor = 1000)
 }
@@ -16,7 +15,7 @@ dwt.read(filename, separating_factor = 1000)
 A list of bursts (possibly a singleton)
 }
 \description{
-Converts millisecond dwells to seconds.
+Read a .dwt file. Result is a list of "segments", which is a dataframe extra data. See "segment" for more details. Converts millisecond dwells to seconds.
 }
 \examples{
 

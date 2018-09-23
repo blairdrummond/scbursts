@@ -2,7 +2,7 @@
 % Please edit documentation in R/hst.R
 \name{hst.write}
 \alias{hst.write}
-\title{Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables}
+\title{Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables.}
 \usage{
 hst.write(open_hist, closed_hist, file = "", header = NULL,
   fromraw = FALSE)
@@ -19,7 +19,7 @@ hst.write(open_hist, closed_hist, file = "", header = NULL,
 \item{fromraw}{Unless FALSE, assume we need to write a log10(milliseconds)-sqrt(Frequency) plot}
 }
 \description{
-Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables
+Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables.
 }
 \examples{
 

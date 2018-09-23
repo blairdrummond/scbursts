@@ -1,8 +1,7 @@
-#' Split segment at long pauses, dividing the segment
-#' into multiple -shorter- segments (which are the bursts),
-#' Along with the interburst closings, which are referred to as "gaps".
 #'
-#' (Default time units are seconds)
+#' Divide a recording into bursts defined by a critical time.
+#' 
+#' Split segment at long pauses, dividing the segment into multiple -shorter- segments (which are the bursts), Along with the interburst closings, which are referred to as "gaps". (Default time units are seconds)
 #'
 #' @param segments A segment or multiple segments with $states and $dwells.
 #' NOTE: separate segments will remain split, regardless of why they were originally divided.
@@ -136,15 +135,10 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
 
 }
 
-
-
-#' YOU PROBABLY WON'T EVER HAVE TO CALL THIS DIRECTLY.
-#' 
-#' Attach the meta-data to each segment saying when it began.
 #'
-#' It interleaves the durations of the bursts and gaps, and
-#' assigns the sum of those durations up to a point as the
-#' starting time
+#' (DON'T USE THIS) Fix meta-data of bursts.
+#'
+#' YOU PROBABLY WON'T EVER HAVE TO CALL THIS DIRECTLY. Attach the meta-data to each segment saying when it began. It interleaves the durations of the bursts and gaps, and assigns the sum of those durations up to a point as the starting time.
 #'
 #' @param bursts List of segments
 #' @param gaps vector of gap times.
@@ -174,12 +168,9 @@ bursts.start_times_update <- function (bursts, gaps) {
 
 
 
-#' Extract vector of gaps from the bursts
-#'
-#' This is done using the start_time attribute, which
-#' is mostly hidden in the data.
-#'
-#' (The gaps at the ends may have length 0)
+#' Get the gaps between bursts.
+#' 
+#' Extract vector of gaps from the bursts. This is done using the start_time attribute, which is mostly hidden in the data. (The gaps at the ends may have length 0)
 #'
 #' @param bursts The list of segments
 #' @return A vector of N+1 gaps for N bursts times
@@ -236,7 +227,7 @@ bursts.get_gaps <- function (bursts) {
 
 
 
-#' Remove the first and last burst from the list
+#' Remove the first and last burst from the list.
 #'
 #' @param bursts The list of all bursts
 #' @return A shorter list of bursts
@@ -265,11 +256,9 @@ bursts.remove_first_and_last <- function (bursts) {
 
 
 
-
-#' From a list of segments, return the concatenated 
-#' segment containing all bursts.
-#'
-#' Inverse of functions like bursts.defined_by_tcrit
+#' Combine bursts into one recording (with obvious spaces between them).
+#' 
+#' From a list of segments, return the concatenated  segment containing all bursts. Inverse of functions like bursts.defined_by_tcrit
 #'
 #' @param bursts The list of all bursts
 #' @return The segment containing all bursts.
@@ -302,11 +291,9 @@ bursts.recombine <- function (bursts) {
 
 
 
-#' Given a list of segments separated by an unknown amount of time, one
-#' may want to space the segments by some amount of time, so that they
-#' can be plotted. This function takes a separating factor, and splits
-#' up the segments by either that factor (in seconds), or that many
-#' multiples of the largest observed dwell.
+#' Artificially add amount of time between bursts (in absence of recording information).
+#' 
+#' Given a list of segments separated by an unknown amount of time, one may want to space the segments by some amount of time, so that they can be plotted. This function takes a separating factor, and splits up the segments by either that factor (in seconds), or that many multiples of the largest observed dwell.
 #'
 #' @param segments The segments to space out
 #' @param sep_factor the factor by which to separate the segments.
@@ -345,8 +332,7 @@ bursts.space_out <- function (segments, sep_factor=1000) {
 
 
 
-#' From a list of bursts, extract those that interest you by
-#' passing a selecting function. See the examples.
+#' From a list of bursts, extract those that interest you by passing a selecting function.
 #'
 #' @param bursts The list of all bursts
 #' @param func A function of a segment that returns either TRUE or FALSE
@@ -512,7 +498,6 @@ bursts.sort <- function (bursts, func, reverse=FALSE) {
 
 #' Return popens of every burst.
 #'
-#'
 #' @param bursts The list of all bursts
 #' @return The popen values
 #' @examples
@@ -532,7 +517,6 @@ bursts.popens <- function (bursts) {sapply(bursts, segment.popen)}
 
 
 #' Return pcloseds of every burst.
-#'
 #'
 #' @param bursts The list of all bursts
 #' @return The pclosed values

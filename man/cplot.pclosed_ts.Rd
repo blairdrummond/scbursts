@@ -2,7 +2,7 @@
 % Please edit documentation in R/cplot.R
 \name{cplot.pclosed_ts}
 \alias{cplot.pclosed_ts}
-\title{Plot Time Series (ts) of P(Closed)}
+\title{Plot Time Series (ts) of P(Closed).}
 \usage{
 cplot.pclosed_ts(bursts, main = "P(Closed) Time Series", xlim = NULL)
 }
@@ -14,7 +14,7 @@ cplot.pclosed_ts(bursts, main = "P(Closed) Time Series", xlim = NULL)
 \item{xlim}{Pass xlim argument to plot() to focus on window of time series}
 }
 \description{
-Plot Time Series (ts) of P(Closed)
+Plot Time Series (ts) of P(Closed).
 }
 \examples{
 

@@ -2,8 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.create}
 \alias{segment.create}
-\title{This is a low-level function, mostly for use internally by other functions.
-There aren't many reasons to use this.}
+\title{Create a "segment" object}
 \usage{
 segment.create(states, dwells, seg = 1, start_time = 0,
   name = "burst", ignore_errors = FALSE)
@@ -25,15 +24,7 @@ segment.create(states, dwells, seg = 1, start_time = 0,
 The segment object: A dataframe with extra metadata.
 }
 \description{
-Create object containing table data and metadata
-}
-\details{
-The object can be used as a dataframe, and the
-metadata can be accessed with the functions
-
-- segment.seg
-- segment.start_time
-- segment.filename
+This is a low-level function, mostly for use internally by other functions. There aren't many reasons to use this. Create object containing table data and metadata. The object can be used as a dataframe, and the metadata can be accessed with the functions: segment.seg, segment.start_time, segment.filename
 }
 \examples{
 

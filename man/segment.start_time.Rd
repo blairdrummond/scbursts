@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.start_time}
 \alias{segment.start_time}
-\title{Extract start_time from segment}
+\title{Extract start_time from segment.}
 \usage{
 segment.start_time(segment)
 }
@@ -13,7 +13,7 @@ segment.start_time(segment)
 Segment start_time (float)
 }
 \description{
-Extract start_time from segment
+Extract start_time from segment.
 }
 \examples{
 

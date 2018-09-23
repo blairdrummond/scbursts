@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.count_closed}
 \alias{segment.count_closed}
-\title{Extract number of closed dwells}
+\title{Extract number of closed dwells.}
 \usage{
 segment.count_closed(segment)
 }
@@ -13,7 +13,7 @@ segment.count_closed(segment)
 number of closed dwells
 }
 \description{
-Extract number of closed dwells
+Extract number of closed dwells.
 }
 \examples{
 

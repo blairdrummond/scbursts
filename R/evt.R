@@ -1,6 +1,4 @@
-#' Read a .evt file to a table
-#'
-#' Times are in seconds
+#' Read a .evt file to a table. Times are in seconds
 #'
 #' @param filename The filename
 #' @return A list of tables with columns "states" and "times".
@@ -64,7 +62,7 @@ evt.read <- function (filename) {
 
 
 
-#' Extract header from evt file
+#' Extract header from evt file.
 #'
 #' @param filename The filename
 #' @return A string containing the header
@@ -115,7 +113,7 @@ evt.extract_header <- function (filename) {
 
 
 
-#' Write bursts to a .evt file
+#' Write bursts to a .evt file.
 #'
 #' @param segments A segment or list of segments to write to filename
 #' @param filename The filename
@@ -283,7 +281,7 @@ evt.to_dwell <- function(table) {
 
 
 
-#' Converts dwell durations to absolute transition times
+#' Converts dwell durations to absolute transition times.
 #'
 #' @param segments A segment or multiple segemtns
 #' @return A dataframe or multiple dataframes of states and transition times

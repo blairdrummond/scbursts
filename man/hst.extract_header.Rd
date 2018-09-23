@@ -2,7 +2,7 @@
 % Please edit documentation in R/hst.R
 \name{hst.extract_header}
 \alias{hst.extract_header}
-\title{Extract header from hst file}
+\title{Extract header from hst file.}
 \usage{
 hst.extract_header(filename)
 }
@@ -13,7 +13,7 @@ hst.extract_header(filename)
 A string containing the header
 }
 \description{
-Extract header from hst file
+Extract header from hst file.
 }
 \examples{
 

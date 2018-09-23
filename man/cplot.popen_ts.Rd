@@ -2,7 +2,7 @@
 % Please edit documentation in R/cplot.R
 \name{cplot.popen_ts}
 \alias{cplot.popen_ts}
-\title{Plot Time Series (ts) of P(Open)}
+\title{Plot Time Series (ts) of P(Open).}
 \usage{
 cplot.popen_ts(bursts, main = "P(Open) Time Series", xlim = NULL)
 }
@@ -14,7 +14,7 @@ cplot.popen_ts(bursts, main = "P(Open) Time Series", xlim = NULL)
 \item{xlim}{Pass xlim argument to plot() to focus on window of time series}
 }
 \description{
-Plot Time Series (ts) of P(Open)
+Plot Time Series (ts) of P(Open).
 }
 \examples{
 

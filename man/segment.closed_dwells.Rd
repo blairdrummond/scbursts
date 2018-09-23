@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.closed_dwells}
 \alias{segment.closed_dwells}
-\title{Extract closed dwells}
+\title{Extract closed dwells.}
 \usage{
 segment.closed_dwells(segment)
 }
@@ -13,7 +13,7 @@ segment.closed_dwells(segment)
 the closed dwells
 }
 \description{
-Extract closed dwells
+Extract closed dwells.
 }
 \examples{
 

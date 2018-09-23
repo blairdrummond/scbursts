@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.name}
 \alias{segment.name}
-\title{Extract name from segment}
+\title{Extract name from segment.}
 \usage{
 segment.name(segment)
 }
@@ -13,7 +13,7 @@ segment.name(segment)
 Segment name (string)
 }
 \description{
-Extract name from segment
+Extract name from segment.
 }
 \examples{
 

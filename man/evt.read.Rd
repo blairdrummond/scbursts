@@ -2,7 +2,7 @@
 % Please edit documentation in R/evt.R
 \name{evt.read}
 \alias{evt.read}
-\title{Read a .evt file to a table}
+\title{Read a .evt file to a table. Times are in seconds}
 \usage{
 evt.read(filename)
 }
@@ -14,7 +14,7 @@ A list of tables with columns "states" and "times".
 Each table corresponds to a contiguous segment from a recording.
 }
 \description{
-Times are in seconds
+Read a .evt file to a table. Times are in seconds
 }
 \examples{
 

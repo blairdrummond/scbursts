@@ -2,9 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.verify}
 \alias{segment.verify}
-\title{Segments should have a very specific shape, but recordings can
-produce errors that make non-sensical segments. In particular, ones
-contain multiple consecutive openings or closings, or end in closings.}
+\title{Detect misrecorded data.}
 \usage{
 segment.verify(segment)
 }
@@ -15,8 +13,7 @@ segment.verify(segment)
 True if a valid segment, False otherwise
 }
 \description{
-This function detects whether a segment satisfies the constraint that
-the segment states alternate between open and closed, and begin and end with a closing.
+Segments should have a very specific shape, but recordings can produce errors that make non-sensical segments. In particular, ones contain multiple consecutive openings or closings, or end in closings. This function detects whether a segment satisfies the constraint that the segment states alternate between open and closed, and begin and end with a closing.
 }
 \examples{
 

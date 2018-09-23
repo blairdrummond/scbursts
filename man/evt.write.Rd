@@ -2,7 +2,7 @@
 % Please edit documentation in R/evt.R
 \name{evt.write}
 \alias{evt.write}
-\title{Write bursts to a .evt file}
+\title{Write bursts to a .evt file.}
 \usage{
 evt.write(segments, filename = "", header = NULL)
 }
@@ -14,7 +14,7 @@ evt.write(segments, filename = "", header = NULL)
 \item{header}{The header information for the evt file, if available}
 }
 \description{
-Write bursts to a .evt file
+Write bursts to a .evt file.
 }
 \examples{
 

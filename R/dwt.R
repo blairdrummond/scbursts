@@ -1,8 +1,4 @@
-#' Reformat the digits of data before writing to disk.
-#'
-#' Writes DOS line endings. 
-#'
-#' Dwells are in milliseconds
+#' Write a dwt file to disk. Writes DOS line endings. Dwells are in milliseconds
 #'
 #' @param segments A segment or multiple segments with $dwells and $states
 #' @param file Filename to write to
@@ -46,7 +42,7 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 
         dwells <- sprintf("%.6f", dwells)
 
-                                        # This forces a tab to be placed at the beginning
+        # This forces a tab to be placed at the beginning
         junk <- rep("",length(dwells))
         
         data  <- data.frame(junk,states, dwells)
@@ -60,10 +56,9 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 
 
 
-#' Read a .dwt file. Result is a list of "segments", which is a
-#' dataframe extra data. See "segment" for more details.
-#'
-#' Converts millisecond dwells to seconds.
+#' Read a .dwt file.
+#' 
+#' Read a .dwt file. Result is a list of "segments", which is a dataframe extra data. See "segment" for more details. Converts millisecond dwells to seconds.
 #'
 #' @param filename Filename to read from
 #' @param separating_factor In lieu of a known time between segments, seperate with a multple of the longest dwell.

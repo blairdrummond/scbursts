@@ -2,7 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.get_gaps}
 \alias{bursts.get_gaps}
-\title{Extract vector of gaps from the bursts}
+\title{Get the gaps between bursts.}
 \usage{
 bursts.get_gaps(bursts)
 }
@@ -13,11 +13,7 @@ bursts.get_gaps(bursts)
 A vector of N+1 gaps for N bursts times
 }
 \description{
-This is done using the start_time attribute, which
-is mostly hidden in the data.
-}
-\details{
-(The gaps at the ends may have length 0)
+Extract vector of gaps from the bursts. This is done using the start_time attribute, which is mostly hidden in the data. (The gaps at the ends may have length 0)
 }
 \examples{
 infile <- system.file("extdata", "example.evt", package = "scbursts")

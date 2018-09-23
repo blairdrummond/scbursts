@@ -2,8 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.select}
 \alias{bursts.select}
-\title{From a list of bursts, extract those that interest you by
-passing a selecting function. See the examples.}
+\title{From a list of bursts, extract those that interest you by passing a selecting function.}
 \usage{
 bursts.select(bursts, func, one_file = FALSE)
 }
@@ -19,8 +18,7 @@ The one_file will return a file with all unselected bursts zeroed out.}
 A shorter list of bursts OR if one_file is passed one segment with zeros where the other bursts might have been originally. Defaults to FALSE.
 }
 \description{
-From a list of bursts, extract those that interest you by
-passing a selecting function. See the examples.
+From a list of bursts, extract those that interest you by passing a selecting function.
 }
 \examples{
 

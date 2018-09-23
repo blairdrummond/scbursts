@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.count_dwells}
 \alias{segment.count_dwells}
-\title{Extract number of dwells in segment}
+\title{Extract number of dwells in segment.}
 \usage{
 segment.count_dwells(segment)
 }
@@ -13,7 +13,7 @@ segment.count_dwells(segment)
 number of dwells
 }
 \description{
-Extract number of dwells in segment
+Extract number of dwells in segment.
 }
 \examples{
 

@@ -2,9 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.defined_by_tcrit}
 \alias{bursts.defined_by_tcrit}
-\title{Split segment at long pauses, dividing the segment
-into multiple -shorter- segments (which are the bursts),
-Along with the interburst closings, which are referred to as "gaps".}
+\title{Divide a recording into bursts defined by a critical time.}
 \usage{
 bursts.defined_by_tcrit(segments, t_crit, units = "s")
 }
@@ -21,7 +19,7 @@ bursts. Which is a list of segments
 starting and ending in 1 states (open dwell)
 }
 \description{
-(Default time units are seconds)
+Split segment at long pauses, dividing the segment into multiple -shorter- segments (which are the bursts), Along with the interburst closings, which are referred to as "gaps". (Default time units are seconds)
 }
 \examples{
 

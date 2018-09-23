@@ -2,7 +2,7 @@
 % Please edit documentation in R/evt.R
 \name{evt.extract_header}
 \alias{evt.extract_header}
-\title{Extract header from evt file}
+\title{Extract header from evt file.}
 \usage{
 evt.extract_header(filename)
 }
@@ -13,7 +13,7 @@ evt.extract_header(filename)
 A string containing the header
 }
 \description{
-Extract header from evt file
+Extract header from evt file.
 }
 \examples{
 

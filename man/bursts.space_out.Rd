@@ -2,11 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.space_out}
 \alias{bursts.space_out}
-\title{Given a list of segments separated by an unknown amount of time, one
-may want to space the segments by some amount of time, so that they
-can be plotted. This function takes a separating factor, and splits
-up the segments by either that factor (in seconds), or that many
-multiples of the largest observed dwell.}
+\title{Artificially add amount of time between bursts (in absence of recording information).}
 \usage{
 bursts.space_out(segments, sep_factor = 1000)
 }
@@ -20,11 +16,7 @@ Either the factor in seconds, or a multiple of the longest observed dwell.}
 The segments again, but with modified meta-data.
 }
 \description{
-Given a list of segments separated by an unknown amount of time, one
-may want to space the segments by some amount of time, so that they
-can be plotted. This function takes a separating factor, and splits
-up the segments by either that factor (in seconds), or that many
-multiples of the largest observed dwell.
+Given a list of segments separated by an unknown amount of time, one may want to space the segments by some amount of time, so that they can be plotted. This function takes a separating factor, and splits up the segments by either that factor (in seconds), or that many multiples of the largest observed dwell.
 }
 \examples{
 infile <- system.file("extdata", "example.dwt", package = "scbursts")

@@ -1,14 +1,6 @@
-#' This is a low-level function, mostly for use internally by other functions.
-#' There aren't many reasons to use this.
+#' Create a "segment" object
 #' 
-#' Create object containing table data and metadata
-#'
-#' The object can be used as a dataframe, and the
-#' metadata can be accessed with the functions
-#'
-#' - segment.seg
-#' - segment.start_time
-#' - segment.filename
+#' This is a low-level function, mostly for use internally by other functions. There aren't many reasons to use this. Create object containing table data and metadata. The object can be used as a dataframe, and the metadata can be accessed with the functions: segment.seg, segment.start_time, segment.filename
 #' 
 #' @param states a vector of states in {0,1}
 #' @param dwells a vector of dwell durations (same length as states)
@@ -46,7 +38,7 @@ segment.create <- function (states, dwells, seg=1, start_time=0, name="burst", i
 
 
 
-#' Extract segment number from segment
+#' Extract segment number from segment.
 #'
 #' @param segment the segment object
 #' @return Segment number (integer)
@@ -65,7 +57,7 @@ segment.seg <- function(segment) {attr(segment, "seg")}
 
 
 
-#' Extract start_time from segment
+#' Extract start_time from segment.
 #'
 #' @param segment the segment object
 #' @return Segment start_time (float)
@@ -83,7 +75,7 @@ segment.start_time <- function(segment) {attr(segment, "start_time")}
 
 
 
-#' Extract name from segment
+#' Extract name from segment.
 #'
 #' @param segment the segment object
 #' @return Segment name (string)
@@ -101,7 +93,7 @@ segment.name <- function(segment) {attr(segment, "name")}
 
 
 
-#' Get duration of a segment
+#' Get duration of a segment.
 #'
 #' @param segment the segment object
 #' @return the duration
@@ -121,7 +113,7 @@ segment.duration <- function(segment) {
 
 
 
-#' Extract number of dwells in segment
+#' Extract number of dwells in segment.
 #'
 #' @param segment the segment object
 #' @return number of dwells
@@ -139,7 +131,7 @@ segment.count_dwells <- function(segment) {length(segment$states)}
 
 
 
-#' Extract number of open dwells
+#' Extract number of open dwells.
 #'
 #' @param segment the segment object
 #' @return number of open dwells
@@ -158,7 +150,7 @@ segment.count_open<- function(segment) {sum(segment$states == 1)}
 
 
 
-#' Extract number of closed dwells
+#' Extract number of closed dwells.
 #'
 #' @param segment the segment object
 #' @return number of closed dwells
@@ -178,7 +170,7 @@ segment.count_closed<- function(segment) {sum(segment$states == 0)}
 
 
 
-#' Extract open dwells
+#' Extract open dwells.
 #'
 #' @param segment the segment object
 #' @return the open dwells
@@ -197,7 +189,7 @@ segment.open_dwells <- function(segment) { subset(segment, states == 1)$dwells }
 
 
 
-#' Extract closed dwells
+#' Extract closed dwells.
 #'
 #' @param segment the segment object
 #' @return the closed dwells
@@ -217,9 +209,9 @@ segment.closed_dwells <- function(segment) { subset(segment, states == 0)$dwells
 
 
 
-#' Calculate empirical P(Open) of a segment
-#'
-#' NOTE: Assuming that burst starts and ends with 1
+#' Calculate empirical P(Open) of a segment.
+#' 
+#' Calculate empirical P(Open) of a segment. NOTE: Assuming that burst starts and ends with 1
 #'
 #' @param segment The dwells and states table
 #' @return The ratio of open time to total time
@@ -246,9 +238,9 @@ segment.popen <- function (segment) {
 
 
 
-#' Calculate empirical P(Closed) of a segment
-#'
-#' NOTE: Assuming that burst starts and ends with 1
+#' Calculate empirical P(Closed) of a segment.
+#' 
+#' Calculate empirical P(Closed) of a segment. NOTE: Assuming that burst starts and ends with 1
 #'
 #' @param segment The dwells and states table
 #' @return The ratio of closed time to total time
@@ -271,12 +263,9 @@ segment.pclosed <- function (segment) {
 }
 
 
-#' Segments should have a very specific shape, but recordings can
-#' produce errors that make non-sensical segments. In particular, ones
-#' contain multiple consecutive openings or closings, or end in closings.
-#'
-#' This function detects whether a segment satisfies the constraint that
-#' the segment states alternate between open and closed, and begin and end with a closing.
+#' Detect misrecorded data.
+#' 
+#' Segments should have a very specific shape, but recordings can produce errors that make non-sensical segments. In particular, ones contain multiple consecutive openings or closings, or end in closings. This function detects whether a segment satisfies the constraint that the segment states alternate between open and closed, and begin and end with a closing.
 #'
 #' @param segment The dwells and states table
 #' @return True if a valid segment, False otherwise

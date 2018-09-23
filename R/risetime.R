@@ -1,11 +1,6 @@
-#' Undo the effect of the gaussian filter
-#' See section 4.1.1 of Colquhoun and Sigworth,
-#' "Fitting and Analysis of Single-Channel segments"
-#'
-#' NOTE: This is potentially problematic, in that this unfiltering
-#' lengthens every dwell. A less naive algorithm would take into
-#' account the infulence of the surroundings, as they impact the
-#' effects of the filter.
+#' Undo the effect of the gaussian filter.
+#' 
+#' Undo the effect of the gaussian filter. See section 4.1.1 of Colquhoun and Sigworth, "Fitting and Analysis of Single-Channel segments". NOTE: This is potentially problematic, in that this unfiltering lengthens every dwell. A less naive algorithm would take into account the infulence of the surroundings, as they impact the effects of the filter.
 #'
 #' @param Tr Rise time of the filter in (us)
 #' @param segments A segment or multiple segments with $states and $dwells to correct.

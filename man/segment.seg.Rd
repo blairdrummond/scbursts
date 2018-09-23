@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.seg}
 \alias{segment.seg}
-\title{Extract segment number from segment}
+\title{Extract segment number from segment.}
 \usage{
 segment.seg(segment)
 }
@@ -13,7 +13,7 @@ segment.seg(segment)
 Segment number (integer)
 }
 \description{
-Extract segment number from segment
+Extract segment number from segment.
 }
 \examples{
 

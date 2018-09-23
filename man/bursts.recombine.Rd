@@ -2,8 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.recombine}
 \alias{bursts.recombine}
-\title{From a list of segments, return the concatenated 
-segment containing all bursts.}
+\title{Combine bursts into one recording (with obvious spaces between them).}
 \usage{
 bursts.recombine(bursts)
 }
@@ -14,7 +13,7 @@ bursts.recombine(bursts)
 The segment containing all bursts.
 }
 \description{
-Inverse of functions like bursts.defined_by_tcrit
+From a list of segments, return the concatenated  segment containing all bursts. Inverse of functions like bursts.defined_by_tcrit
 }
 \examples{
 

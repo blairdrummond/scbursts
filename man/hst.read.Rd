@@ -2,9 +2,7 @@
 % Please edit documentation in R/hst.R
 \name{hst.read}
 \alias{hst.read}
-\title{Read a MIL ".hst" file to a table. By default these files are in
-log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE,
-this function returns a table containing Seconds-Freq}
+\title{Read a MIL ".hst" file to a table.}
 \usage{
 hst.read(filename, extract = "open", raw = FALSE)
 }
@@ -19,9 +17,7 @@ hst.read(filename, extract = "open", raw = FALSE)
 A tables with columns "bin", "freq" and "fit".
 }
 \description{
-Read a MIL ".hst" file to a table. By default these files are in
-log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE,
-this function returns a table containing Seconds-Freq
+Read a MIL ".hst" file to a table. By default these files are in log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE, this function returns a table containing Seconds-Freq
 }
 \examples{
 

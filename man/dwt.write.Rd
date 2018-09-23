@@ -2,7 +2,7 @@
 % Please edit documentation in R/dwt.R
 \name{dwt.write}
 \alias{dwt.write}
-\title{Reformat the digits of data before writing to disk.}
+\title{Write a dwt file to disk. Writes DOS line endings. Dwells are in milliseconds}
 \usage{
 dwt.write(segments, file = "", seg = 1, append = FALSE)
 }
@@ -16,10 +16,7 @@ dwt.write(segments, file = "", seg = 1, append = FALSE)
 \item{append}{Add ot the end of a file or overwrite? (defaults to false)}
 }
 \description{
-Writes DOS line endings.
-}
-\details{
-Dwells are in milliseconds
+Write a dwt file to disk. Writes DOS line endings. Dwells are in milliseconds
 }
 \examples{
 

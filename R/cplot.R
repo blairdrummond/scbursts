@@ -54,7 +54,7 @@ cplot.log_root_axes <- function (points) {
 
 
 
-#' Plot Time Series (ts) of P(Open)
+#' Plot Time Series (ts) of P(Open).
 #'
 #' @param bursts List of multiple segments
 #' @param main The title of the plot.
@@ -84,7 +84,7 @@ cplot.popen_ts <- function(bursts, main="P(Open) Time Series", xlim=NULL) {
 
 
 
-#' Plot Time Series (ts) of P(Closed)
+#' Plot Time Series (ts) of P(Closed).
 #'
 #' @param bursts List of multiple segments
 #' @param main The title of the plot.

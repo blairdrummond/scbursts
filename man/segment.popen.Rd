@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.popen}
 \alias{segment.popen}
-\title{Calculate empirical P(Open) of a segment}
+\title{Calculate empirical P(Open) of a segment.}
 \usage{
 segment.popen(segment)
 }
@@ -13,7 +13,7 @@ segment.popen(segment)
 The ratio of open time to total time
 }
 \description{
-NOTE: Assuming that burst starts and ends with 1
+Calculate empirical P(Open) of a segment. NOTE: Assuming that burst starts and ends with 1
 }
 \examples{
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.pclosed}
 \alias{segment.pclosed}
-\title{Calculate empirical P(Closed) of a segment}
+\title{Calculate empirical P(Closed) of a segment.}
 \usage{
 segment.pclosed(segment)
 }
@@ -13,7 +13,7 @@ segment.pclosed(segment)
 The ratio of closed time to total time
 }
 \description{
-NOTE: Assuming that burst starts and ends with 1
+Calculate empirical P(Closed) of a segment. NOTE: Assuming that burst starts and ends with 1
 }
 \examples{
 

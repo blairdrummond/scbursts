@@ -2,7 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.remove_first_and_last}
 \alias{bursts.remove_first_and_last}
-\title{Remove the first and last burst from the list}
+\title{Remove the first and last burst from the list.}
 \usage{
 bursts.remove_first_and_last(bursts)
 }
@@ -13,7 +13,7 @@ bursts.remove_first_and_last(bursts)
 A shorter list of bursts
 }
 \description{
-Remove the first and last burst from the list
+Remove the first and last burst from the list.
 }
 \examples{
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/segment.R
 \name{segment.duration}
 \alias{segment.duration}
-\title{Get duration of a segment}
+\title{Get duration of a segment.}
 \usage{
 segment.duration(segment)
 }
@@ -13,7 +13,7 @@ segment.duration(segment)
 the duration
 }
 \description{
-Get duration of a segment
+Get duration of a segment.
 }
 \examples{
 

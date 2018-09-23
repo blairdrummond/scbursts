@@ -2,7 +2,7 @@
 % Please edit documentation in R/bursts.R
 \name{bursts.start_times_update}
 \alias{bursts.start_times_update}
-\title{YOU PROBABLY WON'T EVER HAVE TO CALL THIS DIRECTLY.}
+\title{(DON'T USE THIS) Fix meta-data of bursts.}
 \usage{
 bursts.start_times_update(bursts, gaps)
 }
@@ -15,10 +15,5 @@ bursts.start_times_update(bursts, gaps)
 A list of segments, one per burst, with updated start_times
 }
 \description{
-Attach the meta-data to each segment saying when it began.
-}
-\details{
-It interleaves the durations of the bursts and gaps, and
-assigns the sum of those durations up to a point as the
-starting time
+YOU PROBABLY WON'T EVER HAVE TO CALL THIS DIRECTLY. Attach the meta-data to each segment saying when it began. It interleaves the durations of the bursts and gaps, and assigns the sum of those durations up to a point as the starting time.
 }

@@ -1,6 +1,6 @@
-#' Read a MIL ".hst" file to a table. By default these files are in
-#' log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE,
-#' this function returns a table containing Seconds-Freq
+#' Read a MIL ".hst" file to a table.
+#' 
+#' Read a MIL ".hst" file to a table. By default these files are in log10(Milliseconds)-sqrt(Freq), but unless "raw" is set to TRUE, this function returns a table containing Seconds-Freq
 #'
 #' @param filename The filename
 #' @param extract Extract either "open" or "closed" histogram
@@ -86,7 +86,7 @@ hst.read <- function (filename, extract="open", raw=FALSE) {
 
 
 
-#' Extract header from hst file
+#' Extract header from hst file.
 #'
 #' @param filename The filename
 #' @return A string containing the header
@@ -112,7 +112,7 @@ hst.extract_header <- function (filename) {
 
 
 
-#' Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables
+#' Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables.
 #'
 #' @param open_hist The table (bin,freq,fit) for open times
 #' @param closed_hist The table (bin,freq,fit) for closed times
