@@ -22,7 +22,19 @@ R CMD INSTALL scbursts_*.*.tar.gz
 
 ## From CRAN (easier)
 
-We don't have the package up yet, but should be easy to do when the time comes.
+Once the package gets uploaded to CRAN, in `R` you can run
+
+```
+install.packages("scbursts")
+```
+
+and then, as usual, just run
+
+```
+library(scbursts)
+```
+
+to get started.
 
 ## From `R` (with pdf documentation)
 
