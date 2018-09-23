@@ -1,3 +1,6 @@
+#' This is a low-level function, mostly for use internally by other functions.
+#' There aren't many reasons to use this.
+#' 
 #' Create object containing table data and metadata
 #'
 #' The object can be used as a dataframe, and the
@@ -12,15 +15,19 @@
 #' @param seg The segment number. Defaults to 1
 #' @param start_time When the dwells began. Defaults to 0
 #' @param name Suffix-less version of the original filename. 60uM.dwt -> '60uM'
+#' @param ignore_errors Do not report faulty segments (not many reasons to do this)
 #' @return The segment object: A dataframe with extra metadata.
 #' @examples
-#' \dontrun{
-#' segment <- segment.create(states, dwells, seg=12, start_time=0, name="60uMc")
-#' segment.name(segment)
-#' > "60uMc"
-#' }
+#'
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=0, name="example_segment")
+#' 
+#' segment.name(my_burst)
+#' 
 #' @export
-segment.create <- function (states, dwells, seg=1, start_time=0, name="burst") {
+segment.create <- function (states, dwells, seg=1, start_time=0, name="burst", ignore_errors=FALSE) {
 
     data  <- data.frame(states, dwells)
 
@@ -28,9 +35,15 @@ segment.create <- function (states, dwells, seg=1, start_time=0, name="burst") {
     attr(data, "seg")  <- seg
     attr(data, "start_time")  <- start_time
 
+    # This is reasonable to include, but will interfere with the check done in bursts.
+    if (!ignore_errors && !segment.verify(data))
+        warning('Burst seems to have been misrecorded!')
+    
     return(data)
     
 }
+
+
 
 
 #' Extract segment number from segment
@@ -38,12 +51,18 @@ segment.create <- function (states, dwells, seg=1, start_time=0, name="burst") {
 #' @param segment the segment object
 #' @return Segment number (integer)
 #' @examples
-#' \dontrun{
-#' segment.seg(data)
-#' > 12
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=0, name="example_segment")
+#' 
+#' segment.seg(my_burst)
+#' 
 #' @export
 segment.seg <- function(segment) {attr(segment, "seg")}
+
+
 
 
 #' Extract start_time from segment
@@ -51,12 +70,17 @@ segment.seg <- function(segment) {attr(segment, "seg")}
 #' @param segment the segment object
 #' @return Segment start_time (float)
 #' @examples
-#' \dontrun{
-#' segment.start_time(data)
-#' > 17.123295
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.start_time(my_burst)
+#' 
 #' @export
 segment.start_time <- function(segment) {attr(segment, "start_time")}
+
 
 
 #' Extract name from segment
@@ -64,12 +88,17 @@ segment.start_time <- function(segment) {attr(segment, "start_time")}
 #' @param segment the segment object
 #' @return Segment name (string)
 #' @examples
-#' \dontrun{
-#' segment.name(data)
-#' > "60uMc"
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.name(my_burst)
+#' 
 #' @export
 segment.name <- function(segment) {attr(segment, "name")}
+
 
 
 #' Get duration of a segment
@@ -77,10 +106,14 @@ segment.name <- function(segment) {attr(segment, "name")}
 #' @param segment the segment object
 #' @return the duration
 #' @examples
-#' \dontrun{
-#' segment.duration(data)
-#' > 2.11
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.duration(my_burst)
+#' 
 #' @export
 segment.duration <- function(segment) {
     sum(segment$dwells)
@@ -93,10 +126,14 @@ segment.duration <- function(segment) {
 #' @param segment the segment object
 #' @return number of dwells
 #' @examples
-#' \dontrun{
-#' segment.count_dwells(data)
-#' > 5
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.count_dwells(my_burst)
+#' 
 #' @export
 segment.count_dwells <- function(segment) {length(segment$states)}
 
@@ -107,10 +144,14 @@ segment.count_dwells <- function(segment) {length(segment$states)}
 #' @param segment the segment object
 #' @return number of open dwells
 #' @examples
-#' \dontrun{
-#' segment.count_open(data)
-#' > 5
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.count_open(my_burst)
+#' 
 #' @export
 segment.count_open<- function(segment) {sum(segment$states == 1)}
 
@@ -122,10 +163,14 @@ segment.count_open<- function(segment) {sum(segment$states == 1)}
 #' @param segment the segment object
 #' @return number of closed dwells
 #' @examples
-#' \dontrun{
-#' segment.count_closed(data)
-#' > 5
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.count_closed(my_burst)
+#' 
 #' @export
 segment.count_closed<- function(segment) {sum(segment$states == 0)}
 
@@ -138,9 +183,15 @@ segment.count_closed<- function(segment) {sum(segment$states == 0)}
 #' @param segment the segment object
 #' @return the open dwells
 #' @examples
-#' \dontrun{
-#' open_dwells <- segment.open_dwells(data)
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' open_dwells <- segment.open_dwells(my_burst)
+#' head(open_dwells)
+#' 
 #' @export
 segment.open_dwells <- function(segment) { subset(segment, states == 1)$dwells }
 
@@ -151,9 +202,15 @@ segment.open_dwells <- function(segment) { subset(segment, states == 1)$dwells }
 #' @param segment the segment object
 #' @return the closed dwells
 #' @examples
-#' \dontrun{
-#' closed_dwells <- segment.closed_dwells(data)
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' closed_dwells <- segment.closed_dwells(my_burst)
+#' head(closed_dwells)
+#' 
 #' @export
 segment.closed_dwells <- function(segment) { subset(segment, states == 0)$dwells }
 
@@ -167,10 +224,15 @@ segment.closed_dwells <- function(segment) { subset(segment, states == 0)$dwells
 #' @param segment The dwells and states table
 #' @return The ratio of open time to total time
 #' @examples
-#' \dontrun{
-#' segment.popen(segment)
-#' > 0.22
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#'
+#' # P(Open) of this burst
+#' segment.popen(my_burst)
+#' 
 #' @export
 segment.popen <- function (segment) {
 
@@ -191,10 +253,15 @@ segment.popen <- function (segment) {
 #' @param segment The dwells and states table
 #' @return The ratio of closed time to total time
 #' @examples
-#' \dontrun{
-#' segment.pclosed(segment)
-#' > 0.78
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' # P(Closed) of this burst
+#' segment.pclosed(my_burst)
+#' 
 #' @export
 segment.pclosed <- function (segment) {
 
@@ -214,11 +281,29 @@ segment.pclosed <- function (segment) {
 #' @param segment The dwells and states table
 #' @return True if a valid segment, False otherwise
 #' @examples
-#' \dontrun{
-#' segment.verify(segment)
-#' > False
-#' }
+#' 
+#' # It's more likely that you created states or dwells with some function
+#' states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+#' my_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="example_segment")
+#' 
+#' segment.verify(my_burst)
+#'
+#' # Now, a bad burst with two adjacent open dwells
+#' states  <-  c(0,      1,    0,    1,    1,    0,    1,    0,    1)
+#' dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.1,  0.6,  1.1,  0.8,  1.1)
+#'
+#' # This will issue a warning
+#' faulty_burst <- segment.create(states, dwells, seg=1, start_time=3.14159, name="faulty_segment")
+#'
+#' # This will differentiate good and faulty bursts
+#' segment.verify(faulty_burst)
+#'
+#' # If you have a list of bursts, you can select the good ones with
+#' # vbursts <- bursts.select(bursts, segment.verify)
+#' 
 #' @export
+#' @importFrom utils head tail
 segment.verify <- function (segment) {
 
     if (length(segment$states) == 0)

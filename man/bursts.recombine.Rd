@@ -17,9 +17,16 @@ The segment containing all bursts.
 Inverse of functions like bursts.defined_by_tcrit
 }
 \examples{
-\dontrun{
 
+infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+dwells_c <- dwt.read(infile)
+
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+
+# This is a single segment!
 record <- bursts.recombine(bursts)
 
-}
+# Which means you can do stuff like this
+open_dwells <- segment.open_dwells(bursts.recombine(bursts))
+
 }

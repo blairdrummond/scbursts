@@ -18,16 +18,10 @@ Times are in seconds
 }
 \examples{
 
-library(scbursts)
-
-\dontrun{
-tables <- evt.read("data/60uM.evt")
-}
-
 # import some of the data included with the package
 infile <- system.file("extdata", "example.evt", package = "scbursts")
-tables <- evt.read(infile)
+transitions <- evt.read(infile)
 
-head(tables[[1]])
+head(transitions[[1]])
 
 }

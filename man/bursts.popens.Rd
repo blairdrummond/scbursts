@@ -16,8 +16,12 @@ The popen values
 Return popens of every burst.
 }
 \examples{
-\dontrun{
+
+infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+dwells_c <- dwt.read(infile)
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+
 popens <- bursts.popens(bursts)
 hist(popens)
-}
+
 }

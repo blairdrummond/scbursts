@@ -20,7 +20,20 @@ A list sorted by func. By default in ascending order (unless reversed)
 Order a list of bursts by some function. For instance, popen.
 }
 \examples{
-\dontrun{
-sorted <- bursts.sort(segment.popen, bursts)
+
+infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+dwells_c <- dwt.read(infile)
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+
+# A sorted list of bursts. 
+sorted <- bursts.sort(bursts, segment.popen)
+
+# You can also write your own functions. If you want P(Open) =~ P(Closed)
+variance_fun <- function (seg) {
+    # Any function that maps a segment to a number works.
+    return(  segment.popen(seg) * segment.pclosed(seg)  )
 }
+
+weird_sort <- bursts.sort(bursts, variance_fun)
+
 }

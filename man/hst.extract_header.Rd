@@ -16,10 +16,15 @@ A string containing the header
 Extract header from hst file
 }
 \examples{
-\dontrun{
-header <- hst.extract_header("data/60uM.hst")
 
-hst.write(open_table, closed_table, file="60uMc.hst", header=header)
+# import some of the data included with the package
+infile <- system.file("extdata", "example.hst", package = "scbursts")
 
-}
+open_table <- hst.read(infile, extract="open")
+closed_table <- hst.read(infile, extract="closed")
+header <- hst.extract_header(infile)
+
+# Make adjustments to the histogram, if you wish
+hst.write(open_table, closed_table, file="output_hist.hst", header=header)
+
 }

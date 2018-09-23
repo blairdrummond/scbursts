@@ -19,7 +19,15 @@ A list of bursts (possibly a singleton)
 Converts millisecond dwells to seconds.
 }
 \examples{
-\dontrun{
-seg <- dwt.read(segment, "file-test.dwt")
-}
+
+infile <- system.file("extdata", "example.evt", package = "scbursts")
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+
+dwt.write(dwells, file="dwells.dwt")
+
+# Quit R, come back the next day
+
+dwells <- dwt.read("dwells.dwt")
+
 }

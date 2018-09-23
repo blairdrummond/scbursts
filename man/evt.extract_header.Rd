@@ -16,10 +16,17 @@ A string containing the header
 Extract header from evt file
 }
 \examples{
-\dontrun{
-header <- evt.extract_header("data/60uM.evt")
 
-evt.write(segments, header=header, file="60uMc.evt")
+infile <- system.file("extdata", "example.evt", package = "scbursts")
 
-}
+# Get Dwells
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+
+# Get Header
+header <- evt.extract_header(infile)
+
+evt.write(dwells_c, header=header, file="fixed_example.evt")
+
 }

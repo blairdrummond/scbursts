@@ -9,9 +9,13 @@
 #' @param seg Segment number to write in .dwt header.
 #' @param append Add ot the end of a file or overwrite? (defaults to false)
 #' @examples
-#' \dontrun{
-#' dwt.write(segment, "file-test.dwt")
-#' }
+#' 
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' 
+#' dwt.write(dwells, file="dwells.dwt")
+#' 
 #' @export
 #' @importFrom utils write.table
 dwt.write <- function(segments, file="", seg=1, append=FALSE) {
@@ -65,9 +69,17 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 #' @param separating_factor In lieu of a known time between segments, seperate with a multple of the longest dwell.
 #' @return A list of bursts (possibly a singleton)
 #' @examples
-#' \dontrun{
-#' seg <- dwt.read(segment, "file-test.dwt")
-#' }
+#' 
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' 
+#' dwt.write(dwells, file="dwells.dwt")
+#'
+#' # Quit R, come back the next day
+#' 
+#' dwells <- dwt.read("dwells.dwt")
+#' 
 #' @export
 #' @importFrom utils read.csv
 dwt.read <- function (filename, separating_factor=1000) {

@@ -22,16 +22,15 @@ hst.write(open_hist, closed_hist, file = "", header = NULL,
 Write bursts to a log10(ms)-sqrt(Frequency) .hst file from open and closed tables
 }
 \examples{
-\dontrun{
 
-library(scbursts)
-open = hst.read("A1W18_dur.hst", extract="open")
-closed = hst.read("A1W18_dur.hst", extract="closed")
-header = hst.extract_header("A1W18_dur.hst")
+infile <- system.file("extdata", "example.hst", package = "scbursts")
+
+open = hst.read(infile, extract="open")
+closed = hst.read(infile, extract="closed")
+header = hst.extract_header(infile)
 
 ### Do stuff
 
-hst.write(open, closed, file="swag.hst", header=header)
+hst.write(open, closed, file="new_histogram.hst", header=header)
 
-}
 }

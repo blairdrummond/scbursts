@@ -2,10 +2,11 @@
 % Please edit documentation in R/segment.R
 \name{segment.create}
 \alias{segment.create}
-\title{Create object containing table data and metadata}
+\title{This is a low-level function, mostly for use internally by other functions.
+There aren't many reasons to use this.}
 \usage{
 segment.create(states, dwells, seg = 1, start_time = 0,
-  name = "burst")
+  name = "burst", ignore_errors = FALSE)
 }
 \arguments{
 \item{states}{a vector of states in {0,1}}
@@ -17,23 +18,30 @@ segment.create(states, dwells, seg = 1, start_time = 0,
 \item{start_time}{When the dwells began. Defaults to 0}
 
 \item{name}{Suffix-less version of the original filename. 60uM.dwt -> '60uM'}
+
+\item{ignore_errors}{Do not report faulty segments (not many reasons to do this)}
 }
 \value{
 The segment object: A dataframe with extra metadata.
 }
 \description{
-The object can be used as a dataframe, and the
-metadata can be accessed with the functions
+Create object containing table data and metadata
 }
 \details{
+The object can be used as a dataframe, and the
+metadata can be accessed with the functions
+
 - segment.seg
 - segment.start_time
 - segment.filename
 }
 \examples{
-\dontrun{
-segment <- segment.create(states, dwells, seg=12, start_time=0, name="60uMc")
-segment.name(segment)
-> "60uMc"
-}
+
+# It's more likely that you created states or dwells with some function
+states  <-  c(0,      1,    0,    1,    0,    1,    0,    1,    0,    1)
+dwells  <-  c(0.1,  1.1,  0.5,  0.2,  1.0,  1.1,  0.6,  1.1,  0.8,  1.1)
+my_burst <- segment.create(states, dwells, seg=1, start_time=0, name="example_segment")
+
+segment.name(my_burst)
+
 }

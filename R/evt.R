@@ -7,20 +7,14 @@
 #' Each table corresponds to a contiguous segment from a recording.
 #' @examples
 #'
-#' library(scbursts)
-#' 
-#' \dontrun{
-#' tables <- evt.read("data/60uM.evt")
-#' }
-#'
 #' # import some of the data included with the package
 #' infile <- system.file("extdata", "example.evt", package = "scbursts")
-#' tables <- evt.read(infile)
+#' transitions <- evt.read(infile)
 #'
-#' head(tables[[1]])
+#' head(transitions[[1]])
 #'
 #' @export
-#' @importFrom utils read.csv
+#' @importFrom utils read.csv tail
 evt.read <- function (filename) {
     
     ### Assumes file has the format
@@ -75,13 +69,21 @@ evt.read <- function (filename) {
 #' @param filename The filename
 #' @return A string containing the header
 #' @examples
-#' \dontrun{
-#' header <- evt.extract_header("data/60uM.evt")
 #' 
-#' evt.write(segments, header=header, file="60uMc.evt")
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#'
+#' # Get Dwells
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+#'
+#' # Get Header
+#' header <- evt.extract_header(infile)
+#'
+#' evt.write(dwells_c, header=header, file="fixed_example.evt")
 #' 
-#' }
 #' @export
+#' @importFrom utils tail
 evt.extract_header <- function (filename) {
     
     ### Assumes file has the format
@@ -117,15 +119,24 @@ evt.extract_header <- function (filename) {
 #'
 #' @param segments A segment or list of segments to write to filename
 #' @param filename The filename
+#' @param header The header information for the evt file, if available
 #' @examples
-#' \dontrun{
+#' 
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
 #'
-#' evt.write(segments, file="60uMc-R.evt")
+#' # Get Dwells
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
 #'
-#' }
+#' # Get Header
+#' header <- evt.extract_header(infile)
+#'
+#' evt.write(dwells_c, header=header, file="fixed_example.evt")
+#' 
 #' @export
 #' @importFrom utils read.csv
-evt.write <- function (segments, file="", header=NULL) {
+evt.write <- function (segments, filename="", header=NULL) {
     
     # Later code assumes that there are multiple segments
     if (is.data.frame(segments))
@@ -159,7 +170,7 @@ Sweeps
     }
 
     
-    write(header_string, file) 
+    write(header_string, filename) 
 
     for (i in 1:length(segments)) {
 
@@ -182,7 +193,7 @@ Sweeps
         
         data  <- data.frame(col1, times, col3, col4, states, col6)
 
-        write.table(data, file, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
+        write.table(data, filename, append=TRUE, sep="\t", col.names=FALSE, row.names=FALSE, eol="\r\n", quote = FALSE) 
 
     }
 }
@@ -203,13 +214,11 @@ Sweeps
 #'
 #' @examples
 #' 
-#' # Example rows
-#' # states    dwells
-#' # 0         0.016010
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' head(dwells[[1]])
 #'
-#' \dontrun{
-#' segments <- evt.to_dwells(tables)
-#' }
 #' @export
 evt.to_dwells <- function(tables) {
 
@@ -238,6 +247,11 @@ evt.to_dwells <- function(tables) {
         return(segment)
     }
 }
+
+
+
+
+
 
 
 ## Not Exported. Call evt.to_dwells instead
@@ -275,13 +289,13 @@ evt.to_dwell <- function(table) {
 #' @return A dataframe or multiple dataframes of states and transition times
 #' @examples
 #' 
-#' \dontrun{
-#' tables <- evt.from_dwells(segments)
-#'
-#' evt.write(tables, file="output.evt")
+#' dwells_file <- system.file("extdata", "example.dwt", package = "scbursts")
+#' dwells <- dwt.read(dwells_file)
 #' 
-#' }
+#' transitions <- evt.from_dwells(dwells)
+#'
 #' @export
+#' @importFrom stats diffinv
 evt.from_dwells <- function(segments) {
 
     if (!is.data.frame(segments)) {

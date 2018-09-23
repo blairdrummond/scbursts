@@ -17,8 +17,14 @@ Remove the first and last burst from the list
 }
 \examples{
 
-\dontrun{
+infile <- system.file("extdata", "example.evt", package = "scbursts")
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+
+# If there seem to be bad bursts at the ends
 bursts <- bursts.remove_first_and_last(bursts)
-}
 
 }

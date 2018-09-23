@@ -11,22 +11,15 @@
 #' @return bursts. Which is a list of segments
 #' starting and ending in 1 states (open dwell)
 #' @examples
-#' \dontrun{
-#' # Splitting segment into smaller segments 
-#' bursts <- bursts.defined_by_tcrit(record_c , 0.1)
-#' 
-#' # Note that you need two brackets to access list elements.
-#' # Also note that each burst begins and ends with an open dwell
-#' # The gaps seperating them are the elements of gaps.
-#' head(bursts[[11]])
-#' >     states      dwells
-#' > 427      0 15.16625000
-#' > 428      1  0.31105000
-#' > 429      0  0.01289401
-#' > 430      1  0.04823000
-#' > 431      0  0.04160000
-#' > 432      1  0.14415000
-#' }
+#'
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+#'
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' head(bursts[[1]])
+#'
 #' @export
 bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
  
@@ -51,20 +44,7 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
     }
     
     
-    ## # This code could be resued later.
-    ## if (!is.data.frame(segments)) {
-    ##     
-    ##     partial <- function (s) { bursts.defined_by_tcrit(s, t_crit, units) }
-    ##     
-    ##     ## Don't ask me why this works.
-    ##     return(lapply(segments, partial))
-    ##     
-    ## } else {
-    ##     segment <- segments
-    ## }
-    
-    
-       
+
     ### Find all gaps
     gap_func <- function(row) {
         row$dwells > t_crit & row$state == 0
@@ -89,7 +69,6 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
         } else {
             return (NULL)
         }
-        
     }
 
     gaps <- Filter(Negate(is.null), sapply(1:length(pauses),filter_gaps))
@@ -134,7 +113,8 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
             df$dwells,
             seg=i,
             start_time=0,
-            name=segment.name(segment)
+            name=segment.name(segment),
+            ignore_errors=TRUE
         )
 
         return(s)
@@ -204,11 +184,17 @@ bursts.start_times_update <- function (bursts, gaps) {
 #' @param bursts The list of segments
 #' @return A vector of N+1 gaps for N bursts times
 #' @examples
-#' \dontrun{
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+#'
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
 #' gaps <- bursts.get_gaps(bursts)
-#' }
+#'
+#' head(gaps)
 #' @export
-bursts.get_gaps <- function (bursts, end_time=-1) {
+bursts.get_gaps <- function (bursts) {
 
     if (length(bursts) == 0) {
         warning("list not long enough to extract bursts from")
@@ -216,8 +202,8 @@ bursts.get_gaps <- function (bursts, end_time=-1) {
     }
     
     start_times <- sapply(bursts, segment.start_time)
-    if (length(start_times) > 1 && sum(start_times) == 0) {
-        warning("These have non-sensical starting times!!!
+    if (length(start_times) > 1 && sum(start_times) <= 0) {
+        warning("These have nonsensical starting times!!!
         It is not clear how much time transpired inbetween them
 
         Consider looking at any of the following for solutions:
@@ -250,24 +236,21 @@ bursts.get_gaps <- function (bursts, end_time=-1) {
 
 
 
-
-
-
-
-
-
-
-
-
 #' Remove the first and last burst from the list
 #'
 #' @param bursts The list of all bursts
 #' @return A shorter list of bursts
 #' @examples
 #'
-#' \dontrun{
+#' infile <- system.file("extdata", "example.evt", package = "scbursts")
+#' transitions <- evt.read(infile)
+#' dwells <- evt.to_dwells(transitions)
+#' dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+#'
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#'
+#' # If there seem to be bad bursts at the ends
 #' bursts <- bursts.remove_first_and_last(bursts)
-#' }
 #' 
 #' @export
 bursts.remove_first_and_last <- function (bursts) {
@@ -291,11 +274,18 @@ bursts.remove_first_and_last <- function (bursts) {
 #' @param bursts The list of all bursts
 #' @return The segment containing all bursts.
 #' @examples
-#' \dontrun{
-#'
-#' record <- bursts.recombine(bursts)
 #' 
-#' }
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#'
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#'
+#' # This is a single segment!
+#' record <- bursts.recombine(bursts)
+#'
+#' # Which means you can do stuff like this
+#' open_dwells <- segment.open_dwells(bursts.recombine(bursts))
+#' 
 #' @export
 bursts.recombine <- function (bursts) {
 
@@ -323,15 +313,17 @@ bursts.recombine <- function (bursts) {
 #' Either the factor in seconds, or a multiple of the longest observed dwell.
 #' @return The segments again, but with modified meta-data.
 #' @examples
-#' \dontrun{
+#' infile <- system.file("extdata", "example.dwt", package = "scbursts")
+#' dwells <- dwt.read(infile)
 #'
 #' # Still a list, but the meta-data is fixed
-#' spaced_records <- bursts.space_out(evt.read(infile), sep_factor=1000)
+#' spaced_records <- bursts.space_out(dwells, sep_factor=1000)
 #'
 #' # Combine them, and they'll be nicely spaced out.
 #' single_record <- bursts.recombine(spaced_records)
+#'
+#' # You can now plot that single_record using one of the plot functions.
 #' 
-#' }
 #' @export
 bursts.space_out <- function (segments, sep_factor=1000) {
 
@@ -362,19 +354,23 @@ bursts.space_out <- function (segments, sep_factor=1000) {
 #' The one_file will return a file with all unselected bursts zeroed out.
 #' @return A shorter list of bursts OR if one_file is passed one segment with zeros where the other bursts might have been originally. Defaults to FALSE.
 #' @examples
-#' \dontrun{
+#' 
 #' high_popen <- function (seg) {
 #'
 #'     segment.popen(seg) > 0.7
 #' 
 #' }
 #'
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#'
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
 #' subset <- bursts.select(bursts, high_popen)
 #'
-#' 
 #' # To export to one .dwt file
 #' subset_f <- bursts.select(bursts, high_popen, one_file=TRUE)
-#' }
+#' 
 #' @export
 bursts.select <- function (bursts, func, one_file=FALSE) {
 
@@ -479,9 +475,22 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
 #' @param reverse By default, return in ascending order. Use reverse=TRUE to change that.
 #' @return A list sorted by func. By default in ascending order (unless reversed)
 #' @examples
-#' \dontrun{
-#' sorted <- bursts.sort(segment.popen, bursts)
+#'
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
+#' # A sorted list of bursts. 
+#' sorted <- bursts.sort(bursts, segment.popen)
+#'
+#' # You can also write your own functions. If you want P(Open) =~ P(Closed)
+#' variance_fun <- function (seg) {
+#'     # Any function that maps a segment to a number works.
+#'     return(  segment.popen(seg) * segment.pclosed(seg)  )
 #' }
+#' 
+#' weird_sort <- bursts.sort(bursts, variance_fun)
+#' 
 #' @export
 bursts.sort <- function (bursts, func, reverse=FALSE) {
 
@@ -497,16 +506,24 @@ bursts.sort <- function (bursts, func, reverse=FALSE) {
     
 }
 
+
+
+
+
 #' Return popens of every burst.
 #'
 #'
 #' @param bursts The list of all bursts
 #' @return The popen values
 #' @examples
-#' \dontrun{
+#'
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
 #' popens <- bursts.popens(bursts)
 #' hist(popens)
-#' }
+#' 
 #' @export
 bursts.popens <- function (bursts) {sapply(bursts, segment.popen)}
 
@@ -520,10 +537,14 @@ bursts.popens <- function (bursts) {sapply(bursts, segment.popen)}
 #' @param bursts The list of all bursts
 #' @return The pclosed values
 #' @examples
-#' \dontrun{
+#'
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
 #' pcloseds <- bursts.popens(bursts)
 #' hist(pcloseds)
-#' }
+#' 
 #' @export
 bursts.pcloseds <- function (bursts) {sapply(bursts, segment.pclosed)}
 

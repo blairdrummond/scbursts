@@ -23,17 +23,21 @@ From a list of bursts, extract those that interest you by
 passing a selecting function. See the examples.
 }
 \examples{
-\dontrun{
+
 high_popen <- function (seg) {
 
     segment.popen(seg) > 0.7
 
 }
 
-subset <- bursts.select(bursts, high_popen)
+infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+dwells_c <- dwt.read(infile)
 
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+
+subset <- bursts.select(bursts, high_popen)
 
 # To export to one .dwt file
 subset_f <- bursts.select(bursts, high_popen, one_file=TRUE)
-}
+
 }

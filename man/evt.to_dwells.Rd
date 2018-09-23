@@ -19,11 +19,9 @@ Calculate pulse lengths. Converts transition times to dwell durations.
 }
 \examples{
 
-# Example rows
-# states    dwells
-# 0         0.016010
+infile <- system.file("extdata", "example.evt", package = "scbursts")
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+head(dwells[[1]])
 
-\dontrun{
-segments <- evt.to_dwells(tables)
-}
 }

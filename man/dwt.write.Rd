@@ -22,7 +22,11 @@ Writes DOS line endings.
 Dwells are in milliseconds
 }
 \examples{
-\dontrun{
-dwt.write(segment, "file-test.dwt")
-}
+
+infile <- system.file("extdata", "example.evt", package = "scbursts")
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+
+dwt.write(dwells, file="dwells.dwt")
+
 }

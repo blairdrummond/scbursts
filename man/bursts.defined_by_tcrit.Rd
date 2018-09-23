@@ -24,20 +24,13 @@ starting and ending in 1 states (open dwell)
 (Default time units are seconds)
 }
 \examples{
-\dontrun{
-# Splitting segment into smaller segments 
-bursts <- bursts.defined_by_tcrit(record_c , 0.1)
 
-# Note that you need two brackets to access list elements.
-# Also note that each burst begins and ends with an open dwell
-# The gaps seperating them are the elements of gaps.
-head(bursts[[11]])
->     states      dwells
-> 427      0 15.16625000
-> 428      1  0.31105000
-> 429      0  0.01289401
-> 430      1  0.04823000
-> 431      0  0.04160000
-> 432      1  0.14415000
-}
+infile <- system.file("extdata", "example.evt", package = "scbursts")
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+head(bursts[[1]])
+
 }

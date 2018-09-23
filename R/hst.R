@@ -8,20 +8,16 @@
 #' @return A tables with columns "bin", "freq" and "fit".
 #' @examples
 #'
-#' library(scbursts)
-#' 
-#' \dontrun{
-#' mil_hst <- hst.read("data/A1W18_dur.hst", extract="open", raw=FALSE)
-#' }
-#'
 #' # import some of the data included with the package
 #' infile <- system.file("extdata", "example.hst", package = "scbursts")
-#' table <- hst.read(infile)
+#' open_hst   <- hst.read(infile, extract="open")
+#' closed_hst <- hst.read(infile, extract="closed")
 #'
-#' table
+#' head(open_hst)
+#' head(closed_hst)
 #'
 #' @export
-#' @importFrom utils read.csv
+#' @importFrom utils read.table
 hst.read <- function (filename, extract="open", raw=FALSE) {
 
     extract <- tolower(extract)
@@ -95,12 +91,17 @@ hst.read <- function (filename, extract="open", raw=FALSE) {
 #' @param filename The filename
 #' @return A string containing the header
 #' @examples
-#' \dontrun{
-#' header <- hst.extract_header("data/60uM.hst")
 #' 
-#' hst.write(open_table, closed_table, file="60uMc.hst", header=header)
+#' # import some of the data included with the package
+#' infile <- system.file("extdata", "example.hst", package = "scbursts")
+#'
+#' open_table <- hst.read(infile, extract="open")
+#' closed_table <- hst.read(infile, extract="closed")
+#' header <- hst.extract_header(infile)
+#'
+#' # Make adjustments to the histogram, if you wish
+#' hst.write(open_table, closed_table, file="output_hist.hst", header=header)
 #' 
-#' }
 #' @export
 hst.extract_header <- function (filename) {
     # Just return the first line
@@ -119,18 +120,17 @@ hst.extract_header <- function (filename) {
 #' @param header The header info
 #' @param fromraw Unless FALSE, assume we need to write a log10(milliseconds)-sqrt(Frequency) plot
 #' @examples
-#' \dontrun{
 #'
-#' library(scbursts)
-#' open = hst.read("A1W18_dur.hst", extract="open")
-#' closed = hst.read("A1W18_dur.hst", extract="closed")
-#' header = hst.extract_header("A1W18_dur.hst")
+#' infile <- system.file("extdata", "example.hst", package = "scbursts")
+#' 
+#' open = hst.read(infile, extract="open")
+#' closed = hst.read(infile, extract="closed")
+#' header = hst.extract_header(infile)
 #'
 #' ### Do stuff
 #' 
-#' hst.write(open, closed, file="swag.hst", header=header)
+#' hst.write(open, closed, file="new_histogram.hst", header=header)
 #'
-#' }
 #' @export
 #' @importFrom utils read.csv
 hst.write <- function (open_hist, closed_hist, file="", header=NULL, fromraw=FALSE) {

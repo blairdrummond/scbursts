@@ -4,7 +4,7 @@
 \alias{bursts.get_gaps}
 \title{Extract vector of gaps from the bursts}
 \usage{
-bursts.get_gaps(bursts, end_time = -1)
+bursts.get_gaps(bursts)
 }
 \arguments{
 \item{bursts}{The list of segments}
@@ -20,7 +20,13 @@ is mostly hidden in the data.
 (The gaps at the ends may have length 0)
 }
 \examples{
-\dontrun{
+infile <- system.file("extdata", "example.evt", package = "scbursts")
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+
+bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
 gaps <- bursts.get_gaps(bursts)
-}
+
+head(gaps)
 }

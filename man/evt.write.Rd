@@ -4,20 +4,30 @@
 \alias{evt.write}
 \title{Write bursts to a .evt file}
 \usage{
-evt.write(segments, file = "", header = NULL)
+evt.write(segments, filename = "", header = NULL)
 }
 \arguments{
 \item{segments}{A segment or list of segments to write to filename}
 
 \item{filename}{The filename}
+
+\item{header}{The header information for the evt file, if available}
 }
 \description{
 Write bursts to a .evt file
 }
 \examples{
-\dontrun{
 
-evt.write(segments, file="60uMc-R.evt")
+infile <- system.file("extdata", "example.evt", package = "scbursts")
 
-}
+# Get Dwells
+transitions <- evt.read(infile)
+dwells <- evt.to_dwells(transitions)
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+
+# Get Header
+header <- evt.extract_header(infile)
+
+evt.write(dwells_c, header=header, file="fixed_example.evt")
+
 }

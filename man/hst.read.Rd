@@ -25,16 +25,12 @@ this function returns a table containing Seconds-Freq
 }
 \examples{
 
-library(scbursts)
-
-\dontrun{
-mil_hst <- hst.read("data/A1W18_dur.hst", extract="open", raw=FALSE)
-}
-
 # import some of the data included with the package
 infile <- system.file("extdata", "example.hst", package = "scbursts")
-table <- hst.read(infile)
+open_hst   <- hst.read(infile, extract="open")
+closed_hst <- hst.read(infile, extract="closed")
 
-table
+head(open_hst)
+head(closed_hst)
 
 }

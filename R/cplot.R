@@ -3,12 +3,16 @@
 #' @param points The data to plot
 #' @examples
 #'
-#' \dontrun{
-#' hist(open_times, axes=FALSE)
-#' cplot.log_root_axes(open_times)
-#' }
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
+#' open_dwells <- segment.open_dwells(bursts.recombine(bursts))
+#' hist(log10(open_dwells), axes=FALSE, breaks=30)
+#' cplot.log_root_axes(open_dwells)
 #'
 #' @export
+#' @importFrom graphics hist axis box
 cplot.log_root_axes <- function (points) {
 
     tabulate <- hist(log10(points), plot = FALSE)
@@ -54,11 +58,14 @@ cplot.log_root_axes <- function (points) {
 #'
 #' @param bursts List of multiple segments
 #' @param main The title of the plot.
+#' @param xlim Pass xlim argument to plot() to focus on window of time series
 #' @examples
 #'
-#' \dontrun{
-#' cplot.popen_ts(bursts, "P(Open) Time Series, 2017-09-14")
-#' }
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
+#' cplot.popen_ts(bursts, "P(Open) Time Series, 2018-09-20")
 #'
 #' @export
 #' @importFrom graphics plot lines
@@ -81,11 +88,14 @@ cplot.popen_ts <- function(bursts, main="P(Open) Time Series", xlim=NULL) {
 #'
 #' @param bursts List of multiple segments
 #' @param main The title of the plot.
+#' @param xlim Pass xlim argument to plot() to focus on window of time series
 #' @examples
 #'
-#' \dontrun{
-#' cplot.pclosed_ts(bursts, "P(Closed) Time Series, 2017-09-14")
-#' }
+#' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
+#' dwells_c <- dwt.read(infile)
+#' bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+#' 
+#' cplot.pclosed_ts(bursts, "P(Closed) Time Series, 2018-09-20")
 #'
 #' @export
 #' @importFrom graphics plot lines
