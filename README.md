@@ -100,7 +100,7 @@ install.packages("rmarkdown")
 install.packages("roxygen2")
 ```
 
-3. Now, back in the shell, you can run `make` and `make install`.
+5. Now, back in the shell, you can run `make` and `make install`.
 
 And then the package should be installed. Note that you won't be able to create any manuals unless you have LaTeX and pandoc installed.
 
