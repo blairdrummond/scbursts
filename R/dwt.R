@@ -79,8 +79,16 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 #' @importFrom utils read.csv
 dwt.read <- function (filename, separating_factor=1000) {
 
+
     # load lines
     FileInput <- readLines(filename) 
+   
+    # auto-check if file is from qub
+
+    f = substr(FileInput[2],1,1)
+    c1 <- c(2,1) 
+    if (f=='\t') {c1 <- c(3,2)}
+    
 
     # header <- FileInput[[1]]
 
@@ -95,14 +103,14 @@ dwt.read <- function (filename, separating_factor=1000) {
 
         ### NOTE: Column 1 is empty, and thats how we get the spacing right.
 
-        dwells <- table[,3]
+        dwells <- table[,c1[[1]]]
 
         dwells <- dwells / 1000 # milliseconds to seconds
 
         ### Take the longest of all gaps, bound from below by seperating_factor itself
         max_dwell <- max(max(dwells)*separating_factor, max_dwell)
         
-        states <- table[,2]
+        states <- table[,c1[[2]]]
 
         bursts[[i]] <- segment.create(states, dwells, seg=i, start_time=0, name=util.basename(filename))
     }
