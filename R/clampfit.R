@@ -6,9 +6,11 @@
 #' @param separating_factor In lieu of a known time between segments, seperate with a multple of the longest dwell.
 #' @return A list of bursts (possibly a singleton)
 #' @examples
-#' \dontrun{
-#' dwells <- clampfit.read('example.xlsx')
-#' }
+#' 
+#' infile <- system.file("extdata", "example.xlsx", package = "scbursts")
+#' dwells <- clampfit.read(infile)
+#' head(dwells)
+#' 
 #' @export
 #' @importFrom gdata read.xls
 clampfit.read <- function(filename, separating_factor=1000) {
@@ -24,7 +26,7 @@ clampfit.read <- function(filename, separating_factor=1000) {
     states           <- i_read[3] # column 3 are the conductance levels
     brst             <- list()
     brst[[1]]      <- sc(states,dwells,seg=1,start_time=0,name=util.basename(filename))
-    brst             <- bursts.start_times_update(brst,gaps=rep(max_dwell,0))
+    brst             <- bursts.start_times_update(brst,gaps=rep(max_dwells,0))
     return(brst)
 
 }
