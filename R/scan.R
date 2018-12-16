@@ -55,7 +55,6 @@ scan.read <- function(filename,separating_factor=1000){
         stop('Input file must be a text file.')
     }
 
-    sc             <- segment.create
     init_read      <- read.csv(filename,sep='\t',header=FALSE)
     dwells         <- init_read[[1]]
     max_dwells     <- separating_factor
@@ -64,7 +63,9 @@ scan.read <- function(filename,separating_factor=1000){
     for(i in 1:length(states)){if(states[[i]] != 0){states[[i]] <- 1}}
     sd             <- consecutives_to_dwells(states,dwells)
     brst           <- list()
-    brst[[1]]      <- sc(sd[[1]],sd[[2]],seg=1,start_time=0,name=util.basename(filename))
+    states         <- sd[[1]]
+    dwells         <- sd[[2]]
+    brst[[1]]      <- segment.create(states,dwells,seg=1,start_time=0,name=util.basename(filename))
     brst           <- bursts.start_times_update(brst,gaps=rep(max_dwells,0))
     return(brst)
 }
