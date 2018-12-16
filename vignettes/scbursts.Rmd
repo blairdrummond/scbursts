@@ -423,7 +423,6 @@ cplot.popen_ts(bursts, xlim=c(0,0.1))
 # Example Workflows
 
 
-
 ## DWT
 
 
@@ -439,7 +438,7 @@ twoplus <- function(seg){
 		return(segment.count_open(seg)>=2)
 }
 bursts_twoplus <- bursts.select(bursts,twoplus)
-head(dwells)
+head(dwells[[1]])
 ```
 
 
@@ -458,7 +457,7 @@ dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
 # Get Header
 header <- evt.extract_header(infile)
 
-head(dwells_c)
+head(dwells_c[[1]])
 ```
 
 
@@ -477,7 +476,7 @@ twoplus <- function(seg){
 		return(segment.count_open(seg)>=2)
 }
 bursts_twoplus <- bursts.select(bursts,twoplus)
-head(dwells)
+head(dwells[[1]])
 ```
 
 
@@ -496,7 +495,7 @@ twoplus <- function(seg){
 		return(segment.count_open(seg)>=2)
 }
 bursts_twoplus <- bursts.select(bursts,twoplus)
-head(dwells)
+head(dwells[[1]])
 ```
 
 
@@ -515,5 +514,5 @@ twoplus <- function(seg) {
     return(segment.count_open(seg)>=2)
 }
 bursts_twoplus <- bursts.select(bursts,twoplus)
-head(dwells)
+head(dwells[[1]])
 ```
