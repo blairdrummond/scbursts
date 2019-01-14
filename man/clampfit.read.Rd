@@ -4,12 +4,14 @@
 \alias{clampfit.read}
 \title{Read a .xlsx file output from clampfit}
 \usage{
-clampfit.read(filename, separating_factor = 1000)
+clampfit.read(filename, separating_factor = 1000, header = FALSE)
 }
 \arguments{
 \item{filename}{Filename to read from}
 
 \item{separating_factor}{In lieu of a known time between segments, seperate with a multple of the longest dwell.}
+
+\item{header}{Does the file include a header?}
 }
 \value{
 A list of bursts (possibly a singleton)

@@ -102,7 +102,6 @@ bursts.defined_by_tcrit <- function(segments, t_crit, units="s") {
     burst_selectors <- Filter(Negate(is.null), sapply(1:length(pauses), find_next))
 
 
-
     ### Select the bursts using the indices
     burst <- function(i) {
 
@@ -343,9 +342,7 @@ bursts.space_out <- function (segments, sep_factor=1000) {
 #' @examples
 #' 
 #' high_popen <- function (seg) {
-#'
 #'     segment.popen(seg) > 0.7
-#' 
 #' }
 #'
 #' infile <- system.file("extdata", "example_corrected.dwt", package = "scbursts")
@@ -393,33 +390,24 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
     }
 
 
-    
-
-
     ## Add the last gap (if necessary)
     last_burst    <-   bursts[[length(bursts)]]
     last_filtered <- filtered[[length(filtered)]]
     if (segment.start_time(last_filtered) != segment.start_time(last_burst)) {
 
-        end <- segment.start_time(last_burst) + segment.duration(last_burst)
-        
+        end <- segment.start_time(last_burst) + segment.duration(last_burst)      
         len <- end - (segment.duration(last_filtered) + segment.start_time(last_filtered))
-        
         gaps <- append(gaps, len)
-        
+
     } 
     
     
-    
-
-    
     faux_segment <- function (dwell) {
-        segment.create(c(0),c(dwell))
+        segment.create(c(0),c(dwell), ignore_errors=TRUE)
     }
 
     ## list of size one dataframes
     faux_segs <- lapply(gaps, faux_segment)
-
 
     ## https://stackoverflow.com/questions/16443260/interleave-lists-in-r
     if (interleave_gaps_first) {
@@ -442,7 +430,7 @@ bursts.select <- function (bursts, func, one_file=FALSE) {
     ## NOTE: I should probably be doing this in a better way
     attr(flat, "name") <- attr(bursts[[1]], "name")
     attr(flat, "seg")  <- 1
-    attr(flat, "start_time")  <- 0
+    attr(flat, "start_time") <- 0
 
     return (flat)
     
