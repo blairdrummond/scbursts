@@ -22,7 +22,7 @@ Data is in seconds.
 }
 \examples{
 
-infile <- system.file("extdata", "example.txt", package = "scbursts")
+infile <- system.file("extdata", "example1_scan.txt", package = "scbursts")
 record <- scan.read(infile)
 head(record)
 
