@@ -8,7 +8,7 @@
 #' @return A list of bursts (possibly a singleton)
 #' @examples
 #' 
-#' infile <- system.file("extdata", "example.xlsx", package = "scbursts")
+#' infile <- system.file("extdata", "example1_clampfit.xlsx", package = "scbursts")
 #' dwells <- clampfit.read(infile)
 #' head(dwells)
 #' 
