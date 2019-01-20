@@ -45,7 +45,6 @@ $$ \tt{evt\ file} \to \tt{Table\ of\ transition\ times} \to \tt{Table\ of\ dwell
 
 In order to import a TAC `evt` file, type:
 
-
 ```{r, fig.show='hold', eval=FALSE, include = TRUE}
 # Load the library
 library(scbursts)
@@ -155,7 +154,6 @@ dwells <- dwt.read(dwt_example)
 length(dwells)
 
 # Transition times and states of first segment (units are in seconds)
-
 head(dwells[[1]])
 ```
 
@@ -180,7 +178,6 @@ There are a number of functions that act on segments. The functions pertaining t
 In the Single Channel community, continuous stretches of open and closed dwells that correspond to the activity of a single ion channel are often referred to as **bursts** of single channel activity. **Bursts** are usually defined by a critical closed duration (\(t_{crit}\)), which is determined from analysis of a closed dwell duration histogram. This \(t_{crit}\) stipulates that openings separated by closings briefer than \(t_{crit}\) originate from the same burst of single-channel activity, while openings separated by closings longer than \(t_{crit}\) originate from different bursts (see Chapter 19, Section 5.5.1 of @colquhoun1995fitting).
 
 An idiosyncrasy of the package has to be mentioned: In scbursts, the scientific notion of **bursts** and the program definition of `bursts` *usually* coincide, but not always. As mentioned, a `segment` denotes a contiguous sequence of idealized dwells, however idealized single channel recordings can be made up of one **or more** segments. Furthermore, each segment can contain multiple **bursts** (in the scientific sense). So the unfortunate side effect of this is that `scbursts` imports data files like `evt`s and `dwt`s as a list of recordings, which is a list of segments, so they "look like" `bursts`. Below is a little example of this: the problem is easily resolved; one just has to pass this list through a burst detector. So, for example, a function like `bursts.defined_by_tcrit` will break up the recordings into lists of bursts (using an input critical time). 
-
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Load the library
@@ -277,11 +274,9 @@ Segment: 1   Dwells: 4181
 
 this is obviously *physically* impossible, but sometimes appears in the data. To correct this, one would separate the recording into bursts (as usual) and then remove the burst where the error occurred.
 
-
 ```{r, eval=TRUE, include=TRUE}
 # library(scbursts)
 infile <- system.file("extdata", "example2_qub.dwt", package = "scbursts")
-
 
 # This will raise a warning message to alert you that the data has problems
 dwells <- dwt.read(infile)
@@ -293,10 +288,7 @@ bad_bursts <- bursts.defined_by_tcrit(dwells_c, 100, units="ms")
 
 length(bad_bursts)
 
-length(bursts)
-
 # This will remove the problems. It will leave only the good bursts.
-
 fixed_bursts <- bursts.select(bad_bursts, segment.verify)
 
 length(fixed_bursts)
