@@ -1,5 +1,5 @@
 PACKAGE = scbursts
-VERSION = 1.0
+VERSION = 1.1
 
 all: deps docs build check
 
