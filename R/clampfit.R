@@ -21,12 +21,10 @@ clampfit.read <- function(filename, separating_factor=1000, header=FALSE) {
     names(i_read)[3] <- 'states'
     names(i_read)[9] <- 'dwells'
     dwells           <- as.vector(i_read[9][,1]) # column 9 are the dwells
-    dwells           <- dwells[2:length(dwells)]
     dwells           <- dwells / 1000 # milliseconds to seconds
     max_dwells       <- separating_factor
     max_dwells       <- max(max(dwells)*separating_factor, max_dwells)
     states           <- as.vector(i_read[3][,1]) # column 3 are the conductance levels
-    states           <- states[2:length(states)]
 
     ## Remove leading 0
     if (states[1] == 0) {
