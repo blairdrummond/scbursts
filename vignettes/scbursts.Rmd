@@ -425,6 +425,8 @@ library(scbursts)
 infile <- system.file("extdata", "example2_tac.evt", package = "scbursts")
 transitions <- evt.read(infile)
 dwells <- evt.to_dwells(transitions)
+
+# Skipping risetime correction
 bursts <- bursts.defined_by_tcrit(dwells,92,units='ms')
 
 # We will be plotting with this
@@ -433,7 +435,7 @@ record <- bursts.recombine(bursts)
 
 **NOTE: If you merge multiple records into one, you might artificially add some --huge-- closed dwells separating bursts. These will add a few high closed-times the histogram.**
 
-## Open times and closed times
+## Open times and closed times (uncorrected)
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 open_dwells <- segment.open_dwells(record)
@@ -454,7 +456,7 @@ cplot.log_root_axes(closed_dwells)
 
 \newpage
 
-## P(Open)
+## P(Open) (uncorrected)
 
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 popens <- bursts.popens(bursts)
@@ -465,7 +467,7 @@ P(Closed) is similar.
 
 \newpage
 
-## Time Series
+## Time Series (uncorrected)
 
 A basic example
 
