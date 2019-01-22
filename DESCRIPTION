@@ -5,7 +5,7 @@ Title: Single Channel Bursts Analysis
 Description: Package for Single Ion-Channel Bursts Analysis. Designed to import and export from several existing pieces of ion-channel analysis software and provide tools for assisting with analysis.
 Author: Blair Drummomd [aut], Mathieu Dextraze [ctb]
 Maintainer: Blair Drummond <bdrum047@uottawa.ca>
-License: MIT + file LICENSE
+License: LGPL-2.1 + file LICENSE
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr,
