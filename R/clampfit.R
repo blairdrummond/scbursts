@@ -13,10 +13,10 @@
 #' head(dwells)
 #' 
 #' @export
-#' @importFrom gdata read.xls
+#' @importFrom readxl read_excel
 clampfit.read <- function(filename, separating_factor=1000, header=FALSE) {
 
-    i_read  <- read.xls(filename,sheet=1, header=header)
+    i_read           <- read_excel(filename,sheet=1,col_names=header) #read in the .xlsx file
 
     names(i_read)[3] <- 'states'
     names(i_read)[9] <- 'dwells'
