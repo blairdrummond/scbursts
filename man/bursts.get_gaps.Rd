@@ -19,9 +19,9 @@ Extract vector of gaps from the bursts. This is done using the start_time attrib
 infile <- system.file("extdata", "example1_tac.evt", package = "scbursts")
 transitions <- evt.read(infile)
 dwells <- evt.to_dwells(transitions)
-dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, units="us")
 
-bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+bursts <- bursts.defined_by_tcrit(dwells_c, 100, units="ms")
 gaps <- bursts.get_gaps(bursts)
 
 head(gaps)

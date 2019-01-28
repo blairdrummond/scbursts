@@ -1,5 +1,5 @@
 Package: scbursts
-Version: 1.2
+Version: 1.3
 Date: 2019-01-21
 Title: Single Channel Bursts Analysis
 Description: Package for Single Ion-Channel Bursts Analysis. Designed to import and export from several existing pieces of ion-channel analysis software and provide tools for assisting with analysis.
@@ -12,4 +12,4 @@ Suggests: knitr,
     rmarkdown,
 	tinytex
 VignetteBuilder: knitr
-Imports: gdata
+Imports: readxl

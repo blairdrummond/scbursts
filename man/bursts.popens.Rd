@@ -19,9 +19,9 @@ Return popens of every burst.
 
 infile <- system.file("extdata", "example1_qub.dwt", package = "scbursts")
 dwells <- dwt.read(infile)
-dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, units="us")
 
-bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+bursts <- bursts.defined_by_tcrit(dwells_c, 100, units="ms")
 
 popens <- bursts.popens(bursts)
 hist(popens)

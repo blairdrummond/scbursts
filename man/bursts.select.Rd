@@ -28,9 +28,9 @@ high_popen <- function (seg) {
 
 infile <- system.file("extdata", "example1_qub.dwt", package = "scbursts")
 dwells <- dwt.read(infile)
-dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, unit="us")
+dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, units="us")
 
-bursts <- bursts.defined_by_tcrit(dwells_c, 1.511842, units="s")
+bursts <- bursts.defined_by_tcrit(dwells_c, 100, units="ms")
 
 subset <- bursts.select(bursts, high_popen)
 
