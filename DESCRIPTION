@@ -1,11 +1,11 @@
 Package: scbursts
 Version: 1.3
-Date: 2019-01-21
+Date: 2019-01-29
 Title: Single Channel Bursts Analysis
 Description: Package for Single Ion-Channel Bursts Analysis. Designed to import and export from several existing pieces of ion-channel analysis software and provide tools for assisting with analysis.
 Author: Blair Drummomd [aut], Mathieu Dextraze [ctb]
 Maintainer: Blair Drummond <blair.robert.drummond@gmail.com>
-License: LGPL-2.1 + file LICENSE
+License: LGPL-2.1
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr,
