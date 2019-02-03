@@ -92,6 +92,7 @@ hst.read <- function (filename, extract="open", raw=FALSE) {
 #' @return A string containing the header
 #' @examples
 #' 
+#' \dontshow{.old_wd <- setwd(tempdir())}
 #' # import some of the data included with the package
 #' infile <- system.file("extdata", "example1_hst.hst", package = "scbursts")
 #'
@@ -102,6 +103,7 @@ hst.read <- function (filename, extract="open", raw=FALSE) {
 #' # Make adjustments to the histogram, if you wish
 #' hst.write(open_table, closed_table, file="output_hist.hst", header=header)
 #' 
+#' \dontshow{setwd(.old_wd)}
 #' @export
 hst.extract_header <- function (filename) {
     # Just return the first line
@@ -121,6 +123,7 @@ hst.extract_header <- function (filename) {
 #' @param fromraw Unless FALSE, assume we need to write a log10(milliseconds)-sqrt(Frequency) plot
 #' @examples
 #'
+#' \dontshow{.old_wd <- setwd(tempdir())}
 #' infile <- system.file("extdata", "example1_hst.hst", package = "scbursts")
 #' 
 #' open = hst.read(infile, extract="open")
@@ -131,6 +134,7 @@ hst.extract_header <- function (filename) {
 #' 
 #' hst.write(open, closed, file="new_histogram.hst", header=header)
 #'
+#' \dontshow{setwd(.old_wd)}
 #' @export
 #' @importFrom utils read.csv
 hst.write <- function (open_hist, closed_hist, file="", header=NULL, fromraw=FALSE) {

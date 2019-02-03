@@ -6,12 +6,14 @@
 #' @param append Add ot the end of a file or overwrite? (defaults to false)
 #' @examples
 #' 
+#' \dontshow{.old_wd <- setwd(tempdir())}
 #' infile <- system.file("extdata", "example1_tac.evt", package = "scbursts")
 #' transitions <- evt.read(infile)
 #' dwells <- evt.to_dwells(transitions)
 #' 
 #' dwt.write(dwells, file="dwells.dwt")
 #' 
+#' \dontshow{setwd(.old_wd)}
 #' @export
 #' @importFrom utils write.table
 dwt.write <- function(segments, file="", seg=1, append=FALSE) {
@@ -65,6 +67,7 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 #' @return A list of bursts (possibly a singleton)
 #' @examples
 #' 
+#' \dontshow{.old_wd <- setwd(tempdir())}
 #' infile <- system.file("extdata", "example1_tac.evt", package = "scbursts")
 #' transitions <- evt.read(infile)
 #' dwells <- evt.to_dwells(transitions)
@@ -75,6 +78,7 @@ dwt.write <- function(segments, file="", seg=1, append=FALSE) {
 #' 
 #' dwells <- dwt.read("dwells.dwt")
 #' 
+#' \dontshow{setwd(.old_wd)}
 #' @export
 #' @importFrom utils read.csv
 dwt.read <- function (filename, separating_factor=1000) {

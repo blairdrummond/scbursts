@@ -16,6 +16,10 @@ header-includes:
 nocite: '@*'
 ---
 
+```{r, fig.show='hold', eval=TRUE, include = FALSE}
+.old_wd <- setwd(tempdir())
+```
+
 **This guide is addressed to developers/programmers who might have to work with or extend scbursts. As programmers/developers can hopefully appreciate, this is a working document that will evolve as `scbursts` evolves. If any bugs are discovered, they can be reported on [the github page](https://github.com/dacostalab/scbursts), where they will hopefully be dealt with promptly.**
 
 This package is designed to extract information on the stochastic properties of single molecules. It was originally designed for dwell time analysis of single ion channel data derived from patch clamp experiments. It contains functions for importing and exporting idealized stochastic events; displaying, analyzing and correcting dwell durations; defining and sorting bursts, or clusters of bursts. `scbursts` can read and write, to and from, a variety of analysis software packages, including:
@@ -363,6 +367,7 @@ mean(sapply(bursts, segment.duration))
 
 Most important functions can be applied either to a single segment, or to a list of segments. For instance, the following two are equivalent:
 
+
 ```{r, fig.show='hold', eval=TRUE, include = TRUE}
 # Correct the risetime
 
@@ -587,6 +592,10 @@ twoplus <- function(seg) {
 }
 bursts_twoplus <- bursts.select(bursts,twoplus)
 head(bursts_twoplus[[1]])
+```
+
+```{r, fig.show='hold', eval=TRUE, include = FALSE}
+setwd(.old_wd)
 ```
 
 \nocite{*}
