@@ -27,6 +27,5 @@ dwells_c <- risetime.correct_gaussian(Tr=35.0052278, dwells, units="us")
 # Get Header
 header <- evt.extract_header(infile)
 
-evt.write(dwells_c, header=header, file="fixed_example1_tac.evt")
-
+evt.write(dwells_c, header=header, file=file.path(tempdir(), "fixed_example1_tac.evt"))
 }

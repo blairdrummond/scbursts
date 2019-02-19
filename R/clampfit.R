@@ -14,7 +14,7 @@
 #' 
 #' @export
 #' @importFrom readxl read_excel 
-#' @importFrom tibble tibble::as_tibble
+#' @importFrom tibble as_tibble
 clampfit.read <- function(filename, separating_factor=1000, header=FALSE) {
 
     i_read           <- read_excel(filename,sheet=1,col_names=header) #read in the .xlsx file

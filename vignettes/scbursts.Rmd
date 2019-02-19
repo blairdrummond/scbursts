@@ -16,10 +16,6 @@ header-includes:
 nocite: '@*'
 ---
 
-```{r, fig.show='hold', eval=TRUE, include = FALSE}
-.old_wd <- setwd(tempdir())
-```
-
 **This guide is addressed to developers/programmers who might have to work with or extend scbursts. As programmers/developers can hopefully appreciate, this is a working document that will evolve as `scbursts` evolves. If any bugs are discovered, they can be reported on [the github page](https://github.com/dacostalab/scbursts), where they will hopefully be dealt with promptly.**
 
 This package is designed to extract information on the stochastic properties of single molecules. It was originally designed for dwell time analysis of single ion channel data derived from patch clamp experiments. It contains functions for importing and exporting idealized stochastic events; displaying, analyzing and correcting dwell durations; defining and sorting bursts, or clusters of bursts. `scbursts` can read and write, to and from, a variety of analysis software packages, including:
@@ -72,7 +68,7 @@ To write an `evt`:
 
 ```{r, fig.show='hold', eval=FALSE, include = TRUE}
 # Write the corrected transition times to disk.
-evt.write(dwells_corrected, file="100uMc.evt")
+evt.write(dwells_corrected, file=file.path(tempdir(), "100uMc.evt"))
 ```
 
 ## Handling QUB `.dwt`s
@@ -89,7 +85,7 @@ dwells <- dwt.read("example1_qub.dwt")
 # 
 # ...
 
-dwt.write(corrected_dwells, file="example1_qub_corrected.dwt")
+dwt.write(corrected_dwells, file=file.path(tempdir(), "example1_qub_corrected.dwt"))
 ```
 
 
@@ -377,7 +373,7 @@ for (i in 1:length(records)) {
 }
 
 # Write the corrected record to a .dwt file
-dwt.write(corrected_records, file="example1_qub_corrected.dwt")
+dwt.write(corrected_records, file=file.path(tempdir(), "example1_qub_corrected.dwt"))
 ```
 
 and this simplified code
@@ -387,7 +383,7 @@ and this simplified code
 records_c <- risetime.correct_gaussian(Tr=35.0052278, records, units="us")
 
 # Write the corrected record to a .dwt file
-dwt.write(records_c, file="example1_qub_corrected.dwt")
+dwt.write(records_c, file=file.path(tempdir(), "example1_qub_corrected.dwt"))
 ```
 
 but this is not always true, and not every function can be made to work on either. You may have to write your own functions, use for loops, or use `sapply` (or `lapply`) in order to do everything that you want to do. 
@@ -414,7 +410,9 @@ records <- evt.to_dwells(tables)
 # Correct the risetime (default time in seconds)
 records_c <- risetime.correct_gaussian(Tr=35.0052278,records, units="us")
 
-evt.write(records_c, file="example_corrected.evt")
+```
+```{r, fig.show='hold', eval=FALSE, include = TRUE}
+evt.write(records_c, file=file.path(tempdir(), "example_corrected.evt"))
 ```
 
 As the name of the function suggests, the current risetime correction attempts to undo the effects of a Gaussian filter. This method might not be optimal, and may be replaced later. For a more detailed explanation, see Section 4.1.1 of @colquhoun1995fitting.
@@ -592,10 +590,6 @@ twoplus <- function(seg) {
 }
 bursts_twoplus <- bursts.select(bursts,twoplus)
 head(bursts_twoplus[[1]])
-```
-
-```{r, fig.show='hold', eval=TRUE, include = FALSE}
-setwd(.old_wd)
 ```
 
 \nocite{*}

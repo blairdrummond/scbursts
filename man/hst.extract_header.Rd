@@ -25,6 +25,6 @@ closed_table <- hst.read(infile, extract="closed")
 header <- hst.extract_header(infile)
 
 # Make adjustments to the histogram, if you wish
-hst.write(open_table, closed_table, file="output_hist.hst", header=header)
+hst.write(open_table, closed_table, file=file.path(tempdir(), "output_hist.hst"), header=header)
 
 }

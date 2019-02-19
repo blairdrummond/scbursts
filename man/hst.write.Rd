@@ -30,7 +30,5 @@ closed = hst.read(infile, extract="closed")
 header = hst.extract_header(infile)
 
 ### Do stuff
-
-hst.write(open, closed, file="new_histogram.hst", header=header)
-
+hst.write(open, closed, file=file.path(tempdir(), "new_histogram.hst"), header=header)
 }

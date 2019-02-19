@@ -68,7 +68,6 @@ evt.read <- function (filename) {
 #' @return A string containing the header
 #' @examples
 #' 
-#' \dontshow{.old_wd <- setwd(tempdir())}
 #' infile <- system.file("extdata", "example1_tac.evt", package = "scbursts")
 #'
 #' # Get Dwells
@@ -79,9 +78,7 @@ evt.read <- function (filename) {
 #' # Get Header
 #' header <- evt.extract_header(infile)
 #'
-#' evt.write(dwells_c, header=header, file="fixed_example1_tac.evt")
-#' 
-#' \dontshow{setwd(.old_wd)}
+#' evt.write(dwells_c, header=header, file=file.path(tempdir(), "fixed_example1_tac.evt"))
 #' @export
 #' @importFrom utils tail
 evt.extract_header <- function (filename) {
@@ -122,7 +119,6 @@ evt.extract_header <- function (filename) {
 #' @param header The header information for the evt file, if available
 #' @examples
 #' 
-#' \dontshow{.old_wd <- setwd(tempdir())}
 #' infile <- system.file("extdata", "example1_tac.evt", package = "scbursts")
 #'
 #' # Get Dwells
@@ -133,9 +129,7 @@ evt.extract_header <- function (filename) {
 #' # Get Header
 #' header <- evt.extract_header(infile)
 #'
-#' evt.write(dwells_c, header=header, file="fixed_example1_tac.evt")
-#' 
-#' \dontshow{setwd(.old_wd)}
+#' evt.write(dwells_c, header=header, file=file.path(tempdir(), "fixed_example1_tac.evt"))
 #' @export
 #' @importFrom utils read.csv
 evt.write <- function (segments, filename="", header=NULL) {
