@@ -1,5 +1,7 @@
 [![DOI](https://zenodo.org/badge/100089287.svg)](https://zenodo.org/badge/latestdoi/100089287)
 
+Available on [CRAN](https://cran.r-project.org/web/packages/scbursts/index.html)
+
 # SCBursts - Single Channel Bursts Analysis
 
 This `R` Package was originally designed for use by the [daCosta lab](http://www.dacosta.net/), but is being provided to the wider Single Ion-Channel analysis community (or whoever else might find use in the package). 
@@ -15,15 +17,7 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 
 # Installation
 
-## From a tarball (easy)
-
-Get the `scbursts_*.*.tar.gz` file from [releases](https://github.com/dacostalab/scbursts/releases). You should then be able to install from this file within R-Commander, R-Studio, or from the command-line with
-
-~~~
-R CMD INSTALL scbursts_*.*.tar.gz
-~~~
-
-## From CRAN (easier)
+## From CRAN
 
 Once the package gets uploaded to CRAN, in `R` you can run
 
@@ -38,6 +32,15 @@ library(scbursts)
 ```
 
 to get started.
+
+
+## From a tarball
+
+Get the `scbursts_*.*.tar.gz` file from [releases](https://github.com/dacostalab/scbursts/releases). You should then be able to install from this file within R-Commander, R-Studio, or from the command-line with
+
+~~~
+R CMD INSTALL scbursts_*.*.tar.gz
+~~~
 
 ## From `R` (with pdf documentation)
 
