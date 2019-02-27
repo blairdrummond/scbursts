@@ -19,7 +19,7 @@ If any features seem wrongfully absent, or if any methods can be improved upon, 
 
 ## From CRAN
 
-Once the package gets uploaded to CRAN, in `R` you can run
+To install the package from CRAN, in `R` you can run
 
 ```
 install.packages("scbursts")
